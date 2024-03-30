@@ -1,14 +1,12 @@
 # Pollify #
 **Contributors:** [wprigel](https://profiles.wordpress.org/wprigel)<br>
-**Tags:** WooCommerce, wc<br>
+**Tags:** poll-creator, poll, survey, vote<br>
 **Requires at least:** 4.4<br>
-**Tested up to:** 5.7<br>
-**WC requires at least:** 3.0<br>
-**WC tested up to:** 5.5.2<br>
-**Requires PHP:** 7.2<br>
+**Tested up to:** 6.4<br>
+**Requires PHP:** 8.0<br>
 **Stable tag:** trunk<br>
-**License:** GPLv2 or later<br>
-**License URI:** http://www.gnu.org/licenses/gpl-2.0.html<br>
+**License:** GPLv3 or later<br>
+**License URI:** http://www.gnu.org/licenses/gpl-3.0.html<br>
 
 Create poll using gutenberg way.
 

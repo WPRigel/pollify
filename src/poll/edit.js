@@ -103,74 +103,11 @@ const Edit = ( props ) => {
 		availableUnits: availableUnits || [ '%', 'px', 'em', 'rem', 'vw' ],
 	} );
 
-	// const getPoll = ( pollId ) => {
-	// 	// Get poll object using apiFetch function via this wp-json/pollify/v1/polls/{pollId} rest api.
-	// 	apiFetch( {
-	// 		path: `/pollify/v1/polls/${pollId}`,
-	// 	} ).then( ( response ) => {
-	// 		// We will push a new option object because of the next option focus.
-	// 		const updatedOptions = [...response.options, { type: 'text', option: '' }];
-
-	// 		// console.log( options );
-
-	// 		setAttributes({
-	// 			pollId: parseInt(response.id),
-	// 			title: response.title,
-	// 			description: response.description,
-	// 			options: updatedOptions,
-	// 		});
-
-	// 		// console.log( options );
-
-	// 		setIsLoading( false );
-	// 	} ).catch( ( error ) => {
-	// 		setIsLoading( false );
-	// 		setErrors( [ error.message ] );
-	// 	});
-	// };
-
-	// const createPoll = () => {
-	// 	// Create a new poll using apiFetch function via this wp-json/pollify/v1/polls rest api.
-	// 	apiFetch( {
-	// 		method: 'POST',
-	// 		path: `/pollify/v1/polls`,
-	// 		data: {
-	// 			title: title,
-	// 			options: options,
-	// 		},
-	// 	} ).then( ( response ) => {
-	// 		// We will push a new option object because of next option focus.
-	// 		response.options.push( {
-	// 			type: 'text',
-	// 			option: '',
-	// 		} );
-
-	// 		setAttributes( {
-	// 			pollId: parseInt(response.id),
-	// 			title: response.title,
-	// 			description: response.description,
-	// 			options: response.options,
-	// 		} );
-	// 		setIsLoading( false );
-	// 	} ).catch( ( error ) => {
-	// 		setIsLoading( false );
-	// 		setErrors( [ error.message ] );
-	// 	});
-	// }
-
 	useEffect( () => {
-		// if ( ! pollId ) {
-		// 	createPoll();
-		// } else {
-		// 	getPoll( pollId );
-		// }
 		// Check if id is 0 or undefined or null. If yes the create a new poll.
 		if ( ! pollClientId ) {
 			setAttributes( { pollClientId: clientId } );
 		}
-
-		console.log( nanoid() );
-		console.log( clientId );
 	}, [] );
 
 	if ( isLoading ) {
@@ -353,7 +290,7 @@ const Edit = ( props ) => {
 					value={title}
 					onChange={ ( title ) => setAttributes( { title } ) }
 					placeholder={ __( 'Enter the poll question', 'pollify' ) }
-					allowedFormats={  [ 'core/bold', 'core/link', 'core/italic' ] }
+					allowedFormats={  [ 'core/bold', 'core/link', 'core/italic', 'core/text-color' ] }
 					className='poll-title'
 				/>
 				<RichText
@@ -361,7 +298,7 @@ const Edit = ( props ) => {
 					value={description}
 					onChange={ ( description ) => setAttributes( { description } ) }
 					placeholder={ __( 'Add a description (optional)', 'pollify' ) }
-					allowedFormats={  [ 'core/bold', 'core/link', 'core/italic' ] }
+					allowedFormats={  [ 'core/bold', 'core/link', 'core/italic', 'core/text-color' ] }
 					className='poll-description'
 				/>
 				<OptionsWrapper

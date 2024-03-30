@@ -73,7 +73,9 @@ $is_already_voted = ( ! empty( $attributes['allowedPerComputerResponse'] ) && $v
 										<input type="checkbox" name="poll-option[]" class="checkbox" id="option-<?php echo esc_attr( $option['option_id'] ); ?>" value="<?php echo esc_attr( $option['option_id'] ); ?>" >
 									<?php endif; ?>
 								</div>
-								<label class="option-label" for="option-<?php echo esc_attr( $option['option_id'] ); ?>"><?php echo esc_html( $option['option'] ); ?></label>
+								<label class="option-label" for="option-<?php echo esc_attr( $option['option_id'] ); ?>">
+									<?php echo wp_kses_post( $option['option'] ); ?>
+								</label>
 							</div>
 						<?php endforeach; ?>
 					</div>

@@ -16,7 +16,6 @@
     "alignWide": true,
     "html": false,
     "class": true,
-    "customClassName": false,
     "color": {
       "background": true,
       "text": true,

@@ -43,7 +43,7 @@ const Option = (
 				onRemove={ handleDelete }
 				onReplace={ undefined }
 				value={option.option}
-				allowedFormats={ [] }
+				allowedFormats={ [ 'core/bold', 'core/italic', 'core/text-color', 'core/link' ] }
 				withoutInteractiveFormatting
 				disableLineBreaks={ true }
 			/>
