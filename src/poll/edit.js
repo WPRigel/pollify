@@ -1,0 +1,393 @@
+import { cloneDeep } from "lodash";
+import { nanoid } from 'nanoid';
+import classnames from 'classnames';
+import { __ } from '@wordpress/i18n';
+import { useEffect, useState, useRef, useMemo } from "@wordpress/element";
+import { subscribe, useSelect, select } from '@wordpress/data';
+import {
+	Button,
+	ButtonGroup,
+	SelectControl,
+	TextareaControl,
+	CheckboxControl,
+	Spinner,
+	ToolbarGroup,
+	ToolbarButton,
+	PanelBody,
+	__experimentalUnitControl as UnitControl,
+	__experimentalUseCustomUnits as useCustomUnits,
+	__experimentalBorderControl as BorderControl,
+} from "@wordpress/components";
+import {
+	RichText,
+	useBlockProps,
+	BlockControls,
+	InspectorControls,
+	PanelColorSettings,
+	useSetting,
+}  from '@wordpress/block-editor';
+import apiFetch from "@wordpress/api-fetch";
+import OptionsWrapper from './options-wrapper';
+
+import './style.scss';
+
+
+/**
+ * Returns `true` if the post is done saving, `false` otherwise.
+ *
+ * @returns {Boolean}
+ */
+const useAfterSave = () => {
+    const [ isPostSaved, setIsPostSaved ] = useState( false );
+    const isPostSavingInProgress = useRef( false );
+    const { isSavingPost, isAutosavingPost } = useSelect( ( __select ) => {
+        return {
+            isSavingPost: __select( 'core/editor' ).isSavingPost(),
+            isAutosavingPost: __select( 'core/editor' ).isAutosavingPost(),
+        }
+    } );
+
+    useEffect( () => {
+        if ( ( isSavingPost || isAutosavingPost ) && ! isPostSavingInProgress.current ) {
+            setIsPostSaved( false );
+            isPostSavingInProgress.current = true;
+        }
+        if ( ! ( isSavingPost || isAutosavingPost ) && isPostSavingInProgress.current ) {
+            // Code to run after post is done saving.
+            setIsPostSaved( true );
+            isPostSavingInProgress.current = false;
+        }
+    }, [ isSavingPost, isAutosavingPost ] );
+
+    return isPostSaved;
+};
+
+
+/**
+ * The edit function describes the structure of your block in the context of the
+ * editor. This represents what the editor will render when the block is used.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
+ *
+ * @return {WPElement} Element to render.
+ */
+const Edit = ( props ) => {
+	const [ isLoading, setIsLoading ] = useState( false );
+	const [ errors, setErrors ] = useState( [] );
+	const { clientId, attributes, setAttributes } = props;
+	const [ isSavingProcess, setSavingProcess ] = useState(false);
+
+	const {
+		pollId,
+		pollClientId,
+		title,
+		description,
+		options,
+		optionType,
+		status,
+		width,
+		submitButtonLabel,
+		submitButtonBgColor,
+		submitButtonTextColor,
+		submitButtonHoverBgColor,
+		submitButtonHoverTextColor,
+		submitButtonWidth,
+		submitButtonAlign,
+		confirmationMessageType,
+		confirmationMessage,
+		allowedPerComputerResponse,
+	} = attributes;
+
+	const availableUnits = useSetting( 'spacing.units' );
+	const units = useCustomUnits( {
+		availableUnits: availableUnits || [ '%', 'px', 'em', 'rem', 'vw' ],
+	} );
+
+	// const getPoll = ( pollId ) => {
+	// 	// Get poll object using apiFetch function via this wp-json/pollify/v1/polls/{pollId} rest api.
+	// 	apiFetch( {
+	// 		path: `/pollify/v1/polls/${pollId}`,
+	// 	} ).then( ( response ) => {
+	// 		// We will push a new option object because of the next option focus.
+	// 		const updatedOptions = [...response.options, { type: 'text', option: '' }];
+
+	// 		// console.log( options );
+
+	// 		setAttributes({
+	// 			pollId: parseInt(response.id),
+	// 			title: response.title,
+	// 			description: response.description,
+	// 			options: updatedOptions,
+	// 		});
+
+	// 		// console.log( options );
+
+	// 		setIsLoading( false );
+	// 	} ).catch( ( error ) => {
+	// 		setIsLoading( false );
+	// 		setErrors( [ error.message ] );
+	// 	});
+	// };
+
+	// const createPoll = () => {
+	// 	// Create a new poll using apiFetch function via this wp-json/pollify/v1/polls rest api.
+	// 	apiFetch( {
+	// 		method: 'POST',
+	// 		path: `/pollify/v1/polls`,
+	// 		data: {
+	// 			title: title,
+	// 			options: options,
+	// 		},
+	// 	} ).then( ( response ) => {
+	// 		// We will push a new option object because of next option focus.
+	// 		response.options.push( {
+	// 			type: 'text',
+	// 			option: '',
+	// 		} );
+
+	// 		setAttributes( {
+	// 			pollId: parseInt(response.id),
+	// 			title: response.title,
+	// 			description: response.description,
+	// 			options: response.options,
+	// 		} );
+	// 		setIsLoading( false );
+	// 	} ).catch( ( error ) => {
+	// 		setIsLoading( false );
+	// 		setErrors( [ error.message ] );
+	// 	});
+	// }
+
+	useEffect( () => {
+		// if ( ! pollId ) {
+		// 	createPoll();
+		// } else {
+		// 	getPoll( pollId );
+		// }
+		// Check if id is 0 or undefined or null. If yes the create a new poll.
+		if ( ! pollClientId ) {
+			setAttributes( { pollClientId: clientId } );
+		}
+
+		console.log( nanoid() );
+		console.log( clientId );
+	}, [] );
+
+	if ( isLoading ) {
+		return (
+			<div { ...useBlockProps( { className: 'poll-form' } ) }>
+				<Spinner />
+			</div>
+		);
+	}
+
+	if ( errors.length ) {
+		return (
+			<div { ...useBlockProps( { className: 'poll-form' } ) }>
+				{ errors.map( ( error, index ) => {
+					return (
+						<div key={ index } className='error'>
+							{ error }
+						</div>
+					);
+				} ) }
+			</div>
+		);
+	}
+
+	const style = {
+		'--pollify-form-width': width,
+		'--pollify-submit-button-bg-color': submitButtonBgColor,
+		'--pollify-submit-button-text-color': submitButtonTextColor,
+		'--pollify-submit-button-hover-bg-color': submitButtonHoverBgColor,
+		'--pollify-submit-button-hover-text-color': submitButtonHoverTextColor,
+	};
+
+	const blockProps = useBlockProps( { className: 'wp-block-pollify-editor-wrapper', style } );
+
+	return (
+		<div { ...blockProps }>
+			<InspectorControls group="settings">
+				<PanelBody title={ __( 'General settings', 'pollify' ) }>
+					<SelectControl
+						label={ __( 'Status', 'pollify' ) }
+						value={ status }
+						options={ [
+							{ label: __( 'Open', 'pollify' ), value: 'publish' },
+							{ label: __( 'Close', 'pollify' ), value: 'draft' },
+						] }
+						onChange={ ( status ) => setAttributes( { status } ) }
+					/>
+				</PanelBody>
+				<PanelBody title={ __( 'Confiramtion message', 'pollify' ) }>
+					<SelectControl
+						label={ __( 'On submission', 'pollify' ) }
+						value={ confirmationMessageType }
+						options={ [
+							{ label: __( 'View results', 'pollify' ), value: 'view-result' },
+							{ label: __( 'View message', 'pollify' ), value: 'view-message' },
+						] }
+						onChange={ ( confirmationMessageType ) => setAttributes( { confirmationMessageType } ) }
+					/>
+
+					{ confirmationMessageType === 'view-message' && (
+						<TextareaControl
+							value={ confirmationMessage || __( 'Thanks for voting!', 'pollify' ) }
+							label={ __( 'Message text', 'crowdsignal-forms' ) }
+							placeholder={ __(
+								'Thanks for voting!',
+								'pollify'
+							) }
+							onChange={ ( confirmationMessage ) => setAttributes( { confirmationMessage } ) }
+						/>
+					) }
+				</PanelBody>
+				<PanelBody title={ __( 'Response settings', 'pollify' ) }>
+					<CheckboxControl
+						label={ __( 'Allowed one response per computer', 'pollify' ) }
+						help={ __( 'If checked, only one response per computer will be allowed.', 'pollify' ) }
+						checked={ allowedPerComputerResponse }
+						onChange={ ( allowedPerComputerResponse ) => setAttributes( { allowedPerComputerResponse } ) }
+					/>
+				</PanelBody>
+
+			</InspectorControls>
+			<InspectorControls group="styles">
+				<PanelColorSettings
+					title={ __( 'Submit button colors', 'pollify' ) }
+					initialOpen={ false }
+					colorSettings={ [
+						{
+							value: submitButtonBgColor,
+							onChange: ( submitButtonBgColor ) => setAttributes( { submitButtonBgColor } ),
+							label: __( 'Background Color', 'pollify' ),
+						},
+						{
+							value: submitButtonTextColor,
+							onChange: ( submitButtonTextColor ) => setAttributes( { submitButtonTextColor } ),
+							label: __( 'Text Color', 'pollify' ),
+						},
+						{
+							value: submitButtonHoverBgColor,
+							onChange: ( submitButtonHoverBgColor ) => setAttributes( { submitButtonHoverBgColor } ),
+							label: __( 'Hover Background Color', 'pollify' ),
+						},
+						{
+							value: submitButtonHoverTextColor,
+							onChange: ( submitButtonHoverTextColor ) => setAttributes( { submitButtonHoverTextColor } ),
+							label: __( 'Hover Text Color', 'pollify' ),
+						},
+					] }
+				>
+					<ButtonGroup aria-label={ __( 'Button width' ) }>
+						<h2>{ __( 'Button width', 'pollify' ) }</h2>
+
+						{ [ 25, 50, 75, 100 ].map( ( widthValue ) => {
+							return (
+								<Button
+									key={ widthValue }
+									size="small"
+									variant={
+										widthValue === submitButtonWidth
+											? 'primary'
+											: undefined
+									}
+									onClick={ () => {
+										// Check if we are toggling the width off
+										const buttonWidth = submitButtonWidth === widthValue ? undefined : widthValue;
+
+										// Update attributes.
+										setAttributes( { submitButtonWidth: buttonWidth } );
+									} }
+								>
+									{ widthValue }%
+								</Button>
+							);
+						} ) }
+
+						{ ( submitButtonWidth && 100 !== submitButtonWidth ) && (
+							<>
+								<h2>{ __( 'Button alignment', 'pollify' ) }</h2>
+
+								{ [ 'left', 'center', 'right' ].map( ( alignValue ) => (
+									<Button
+										key={ alignValue }
+										size="medium"
+										variant={
+											alignValue === submitButtonAlign
+												? 'primary'
+												: undefined
+										}
+										onClick={ () => {
+											// Update attributes.
+											setAttributes( { submitButtonAlign: alignValue } );
+										} }
+									>
+										{ alignValue }
+									</Button>
+								) ) }
+							</>
+						) }
+					</ButtonGroup>
+				</PanelColorSettings>
+			</InspectorControls>
+			<BlockControls>
+				<ToolbarGroup>
+					<ToolbarButton
+						icon='yes'
+						label="Multi check"
+						onClick={ () => setAttributes( { optionType: 'multi-check' } ) }
+						isActive={ optionType === 'multi-check' }
+					/>
+					<ToolbarButton
+						icon='marker'
+						label="Radio button"
+						onClick={ () => setAttributes( { optionType: 'radio' } ) }
+						isActive={ optionType === 'radio' }
+					/>
+				</ToolbarGroup>
+			</BlockControls>
+			<div className='pollify-poll-form'>
+				<RichText
+					tagName='h4'
+					value={title}
+					onChange={ ( title ) => setAttributes( { title } ) }
+					placeholder={ __( 'Enter the poll question', 'pollify' ) }
+					allowedFormats={  [ 'core/bold', 'core/link', 'core/italic' ] }
+					className='poll-title'
+				/>
+				<RichText
+					tagName='p'
+					value={description}
+					onChange={ ( description ) => setAttributes( { description } ) }
+					placeholder={ __( 'Add a description (optional)', 'pollify' ) }
+					allowedFormats={  [ 'core/bold', 'core/link', 'core/italic' ] }
+					className='poll-description'
+				/>
+				<OptionsWrapper
+					attributes={ attributes }
+					setAttributes={ setAttributes }
+				/>
+
+				<div className={ classnames( 'wp-block-button poll-block-button', {
+					[ `align-${ submitButtonAlign }` ]: submitButtonAlign,
+					} ) }>
+					<div className={ classnames( 'submit-button-wrapper', {
+					[ `has-custom-width wp-block-button-width-${ submitButtonWidth }` ]: submitButtonWidth,
+					} ) }>
+						<RichText
+							className="wp-block-button__link submit-button"
+							onChange={ ( submitButtonLabel ) => setAttributes( { submitButtonLabel } ) }
+							value={ submitButtonLabel }
+							allowedFormats={ [] }
+							multiline={ false }
+							disableLineBreaks={ true }
+						/>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+}
+
+export default Edit;

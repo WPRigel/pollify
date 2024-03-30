@@ -1,0 +1,196 @@
+<?php
+/**
+ * Menu class.
+ *
+ * @package UnderDev\Pollify
+ * @since 1.0.0
+ */
+
+declare(strict_types=1);
+
+namespace UnderDev\Pollify\Admin;
+
+use UnderDev\Pollify\Traits\Singleton;
+
+/**
+ * Class Menu
+ */
+class Menu {
+
+	use Singleton;
+
+	/**
+	 * Load class hooks
+	 *
+	 * @return void
+	 */
+	public function __construct() {
+
+		$this->setup_hooks();
+	}
+
+	/**
+	 * Load all hooks.
+	 *
+	 * @return void
+	 */
+	public function setup_hooks(): void {
+		// Register admin menu.
+		add_action( 'admin_menu', [ $this, 'admin_menu' ], 10 );
+
+		// Enqueue scripts and styles for pollify menu.
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
+
+		// Handle actions for pollify menu.
+		add_action( 'admin_init', [ $this, 'handle_actions' ] );
+	}
+
+	/**
+	 * Register menu for rendering poll related things.
+	 *
+	 * @return array
+	 */
+	public function add_metabox(): void {
+		add_meta_box(
+			'pollify_poll_metabox',
+			__( 'Pollify Poll', 'pollify' ),
+			[ $this, 'render_metabox' ],
+			'?page=pollify',
+			'normal',
+			'high'
+		);
+	}
+
+	/**
+	 * Register menu for rendering poll related things.
+	 *
+	 * @return array
+	 */
+	public function admin_menu(): void {
+		global $pollify_menu;
+
+		$pollify_menu = add_menu_page(
+			__( 'Pollify', 'pollify' ),
+			__( 'Pollify', 'pollify' ),
+			'manage_options',
+			'pollify',
+			[ $this, 'render_polls' ],
+			'dashicons-chart-bar',
+			'26'
+		);
+
+		add_action( 'load-' . $pollify_menu, [ $this, 'add_screen_option' ] );
+	}
+
+	/**
+	 * Enqueue scripts and styles for pollify menu.
+	 *
+	 * @return void
+	 */
+	public function enqueue_scripts() : void {
+		// Check if the page is pollify menu or not.
+		global $pollify_menu;
+
+		$screen = get_current_screen();
+
+		if ( $screen->id !== $pollify_menu ) {
+			return;
+		}
+
+		// Enqueue styles and script.
+		wp_enqueue_style( 'pollify-admin' );
+		wp_enqueue_script( 'pollify-admin' );
+
+		$action = pollify_filter_input( INPUT_GET, 'action', POLLIFY_FILTER_SANITIZE_STRING );
+
+		if ( ! empty( $action ) ) {
+			wp_enqueue_style( 'pollify-flag-icons' );
+			wp_enqueue_script( 'pollify-geo-chart' );
+		}
+	}
+
+	/**
+	 * Render Polls.
+	 *
+	 * @return void
+	 */
+	public function render_polls(): void {
+		// Get the page.
+		$page = pollify_filter_input( INPUT_GET, 'page', POLLIFY_FILTER_SANITIZE_STRING );
+		$action = pollify_filter_input( INPUT_GET, 'action', POLLIFY_FILTER_SANITIZE_STRING );
+
+		if ( 'pollify' === $page && 'view_results' === $action ) {
+			$poll_id = pollify_filter_input( INPUT_GET, 'poll_id', POLLIFY_FILTER_SANITIZE_STRING );
+
+			$poll = \UnderDev\Pollify\Polls::get_instance()->get( $poll_id );
+
+			if ( is_wp_error( $poll ) ) {
+				wp_die( esc_html( $poll->get_error_message() ) );
+			}
+
+			// Load poll results template.
+			pollify_load_template( 'admin/overview.php', false, [ 'poll_id' => $poll_id, 'poll' => $poll ] );
+		} else {
+			// Load poll lists template.
+			pollify_load_template( 'admin/polls.php' );
+		}
+
+	}
+
+	/**
+	 * Add screen option for polls.
+	 *
+	 * @return void
+	 */
+	public function add_screen_option(): void {
+		global $pollify_menu;
+
+		$screen = get_current_screen();
+
+		// Bail out of here if we are not on our pollify page.
+		if ( ! is_object( $screen ) || $screen->id !== $pollify_menu ) {
+			return;
+		}
+
+		$action = pollify_filter_input( INPUT_GET, 'action', POLLIFY_FILTER_SANITIZE_STRING );
+
+		// Check if has action and the value is view_results or reset_results. Then return.
+		if ( $action && in_array( $action, [ 'view_results', 'reset_results' ], true ) ) {
+			return;
+		}
+
+		$args = [
+			'label'   => __( 'Polls per page', 'pollify' ),
+			'default' => 10,
+			'option'  => 'polls_per_page',
+		];
+
+		add_screen_option( 'per_page', $args );
+	}
+
+	/**
+	 * Handle actions.
+	 *
+	 * @return void
+	 */
+	public function handle_actions(): void {
+		$page   = pollify_filter_input( INPUT_GET, 'page', POLLIFY_FILTER_SANITIZE_STRING );
+		$action = pollify_filter_input( INPUT_GET, 'action', POLLIFY_FILTER_SANITIZE_STRING );
+		$nonce  = pollify_filter_input( INPUT_GET, '_nonce', POLLIFY_FILTER_SANITIZE_STRING );
+
+		if ( 'pollify' !== $page || empty( $action ) ) {
+			return;
+		}
+
+		if ( 'reset_results' === $action && wp_verify_nonce( $nonce, 'pollify_reset_results' ) ) {
+			$client_id = pollify_filter_input( INPUT_GET, 'poll_id', POLLIFY_FILTER_SANITIZE_STRING );
+
+			if ( ! empty( $client_id ) ) {
+				\UnderDev\Pollify\Votes::get_instance()->reset_results( $client_id );
+				wp_safe_redirect( admin_url( 'admin.php?page=pollify&updated=1' ) );
+			}
+		}
+
+	}
+
+}

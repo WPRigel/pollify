@@ -1,0 +1,183 @@
+<?php
+/**
+ * Main plugin class.
+ *
+ * @package UnderDev\Pollify
+ * @since 1.0.0
+ */
+
+declare(strict_types=1);
+
+namespace UnderDev\Pollify;
+
+use UnderDev\Pollify\Model\Poll;
+use UnderDev\Pollify\Polls;
+use UnderDev\Pollify\Traits\Singleton;
+
+/**
+ * Class Plugin.
+ *
+ * @package UnderDev\Pollify
+ */
+class Blocks {
+
+	use Singleton;
+
+	/**
+	 * Plugin constructor.
+	 */
+	public function __construct() {
+		add_action( 'init', [ $this, 'init_blocks' ] );
+		add_action( 'save_post', [ $this, 'save_polls' ], 10, 3 );
+
+		// Add localize script for nonces.
+		add_action( 'wp_enqueue_scripts', [ $this, 'localize_script' ] );
+	}
+
+	/**
+	 * Initialize blocks.
+	 */
+	public function init_blocks() {
+		register_block_type(
+			POLLIFY_PATH . '/build/poll',
+			array(
+				'render_callback' => [ $this, 'render_block' ],
+			)
+		);
+	}
+
+	/**
+	 * Render block.
+	 *
+	 * @param array $attributes Block attributes.
+	 *
+	 * @return string|null
+	 */
+	public function render_block( $attributes ): ?string {
+		$poll_client_id = $attributes['pollClientId'] ?? 0;
+
+		if ( empty( $poll_client_id ) ) {
+			return null;
+		}
+
+		ob_start();
+		include plugin()->path . '/templates/poll.php';
+		$content = ob_get_clean();
+
+		return $content;
+	}
+
+	/**
+	 * Save polls.
+	 *
+	 * @param int     $post_id Post ID.
+	 * @param WP_Post $post    Post object.
+	 * @param bool    $update  Whether this is an existing post being updated or not.
+	 */
+	public function save_polls( $post_id, $post, $update ) {
+		if (
+			wp_is_post_autosave( $post_id )
+			|| wp_is_post_revision( $post_id )
+			|| 'trash' === $post->post_status
+			|| 'auto-draft' === $post->post_status
+		) {
+			return;
+		}
+
+		if ( ! $update ) {
+			return;
+		}
+
+		// Return if not a post request from the editor.
+		if ( empty( $_POST ) ) {
+			return;
+		}
+
+		$blocks = parse_blocks( $post->post_content );
+
+		$polls = array_filter( $blocks, function( $block ) {
+			return 'pollify/poll' === $block['blockName'];
+		} );
+
+		if ( empty( $polls ) ) {
+			return;
+		}
+
+		// Get all attributes and update the poll.
+		foreach ( $polls as $poll ) {
+			$poll_client_id = $poll['attrs']['pollClientId'] ?? '';
+
+			if ( empty( $poll_client_id ) ) {
+				continue;
+			}
+
+			$data              = $poll['attrs'] ?? [];
+			$data['client_id'] = $poll_client_id;
+			$skipped_field     = [ 'pollId', 'pollClientId', 'options', 'title', 'description', 'style' ];
+
+			unset(
+				$poll['attrs']['pollId'],
+				$poll['attrs']['pollClientId'],
+				$poll['attrs']['options'],
+				$poll['attrs']['title'],
+				$poll['attrs']['description'],
+				$poll['attrs']['style']
+			);
+
+			// Get block.json attributes.
+			$json             = file_get_contents( plugin()->path . '/build/poll/block.json' );
+			$json_data        = json_decode( $json, true );
+			$block_attributes = $json_data['attributes'] ?? [];
+
+			// Loop through all block attributes and check if it's not set then set it to default value.
+			foreach ( $block_attributes as $key => $value ) {
+				if ( ! in_array( $key, $skipped_field, true ) && ! isset( $poll['attrs'][ $key ] ) ) {
+					$poll['attrs'][ $key ] = $value['default'] ?? '';
+				}
+			}
+
+			$data['reference'] = $post_id;
+			$data['settings']  = serialize_block_attributes( $poll['attrs'] );
+
+			Polls::get_instance()->save( $data );
+		}
+
+		$poll_ids = array_map( function( $poll ) {
+			return $poll['attrs']['pollClientId'];
+		}, $polls );
+
+		// Check if poll id is not in saved meta, then delete it.
+		$saved_poll_ids = get_post_meta( $post_id, '_pollify_poll_client_ids', true );
+
+		if ( ! empty( $saved_poll_ids ) ) {
+			foreach ( $saved_poll_ids as $saved_poll_id ) {
+				if ( ! in_array( $saved_poll_id, $poll_ids, true ) ) {
+					Polls::get_instance()->delete( $saved_poll_id );
+				}
+			}
+		}
+
+		update_post_meta( $post_id, '_pollify_poll_client_ids', $poll_ids );
+	}
+
+	/**
+	 * Localize script.
+	 */
+	public function localize_script() {
+		wp_localize_script(
+			'wp-api-fetch',
+			'pollify',
+			array(
+				'nonce' => wp_create_nonce( 'pollify-vote' ),
+			)
+		);
+	}
+
+	public function get_block_attributes() {
+		$json      = file_get_contents( plugin()->path . '/build/poll/block.json' );
+		$json_data = json_decode( $json, true );
+
+		return $json_data['attributes'] ?? [];
+	}
+
+}
