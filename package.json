@@ -16,6 +16,7 @@
 		"start:custom": "wp-scripts start src/global/js/admin.js --output-path=assets/build",
 		"test:unit": "wp-scripts test-unit-js"
 	},
+	"files": [ "assets", "build", "includes", "templates", "vendor", "pollify.php", "readme.txt" ],
 	"devDependencies": {
 		"@wordpress/api-fetch": "^6.41.0",
 		"@wordpress/block-editor": "^12.5.0",

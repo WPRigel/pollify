@@ -31,8 +31,5 @@
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
-    },
-    "require": {
-        "rinvex/countries": "^9.0"
     }
 }

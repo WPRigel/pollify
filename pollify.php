@@ -1,6 +1,6 @@
 <?php
 /**
-Plugin Name: Pollify
+Plugin Name: Pollify-main
 Plugin URI: https://github.com/sabbir1991
 Description: Create poll using gutenberg way.
 Version: 1.0.0

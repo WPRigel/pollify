@@ -98,7 +98,7 @@ class Installer {
 		global $wpdb;
 
 		$charset_collate = $wpdb->get_charset_collate();
-		$table_name      = $wpdb->prefix . 'pollify_poll_option';
+		$table_name      = $wpdb->prefix . 'pollify_poll_options';
 
 		$sql = "CREATE TABLE IF NOT EXISTS $table_name (
 			`id` int NOT NULL AUTO_INCREMENT,

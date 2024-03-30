@@ -158,8 +158,6 @@ class PollsController extends WP_REST_Controller {
 
 		$poll = Polls::get_instance()->get( $params['id'] );
 
-		error_log( print_r( $poll, true ) );
-
 		if ( is_wp_error( $poll ) ) {
 			return $poll;
 		}

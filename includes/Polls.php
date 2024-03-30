@@ -404,18 +404,8 @@ class Polls {
 			ARRAY_A
 		);
 
-		error_log( print_r( 'Existing options', true ) );
-		error_log( print_r( $poll_options, true ) );
-
-		error_log( print_r( 'All submitted options------------------', true ) );
-		error_log( print_r( $options, true ) );
-
-
 		// Find those options which are not in $options array.
 		$deleted_options = array_diff( array_column( $poll_options, 'option_id' ), array_column( $options, 'option_id' ) );
-
-		error_log( print_r( 'Deleted options------------------', true ) );
-		error_log( print_r( $deleted_options, true ) );
 
 		// Delete those options if has any in a single query.
 		if ( count( $deleted_options ) ) {
@@ -435,9 +425,6 @@ class Polls {
 				return ! in_array( $option['option_id'], $option_ids, true );
 			}
 		);
-
-		error_log( print_r( 'New options------------------', true ) );
-		error_log( print_r( $new_options, true ) );
 
 		// If we have new options then insert those option using foreach loop.
 		if ( count( $new_options ) ) {
@@ -470,9 +457,6 @@ class Polls {
 				}
 			}
 		);
-
-		error_log( print_r( 'Updated options------------------', true ) );
-		error_log( print_r( $update_options, true ) );
 
 		// If we have updated options then update those options using foreach loop.
 		if ( count( $update_options ) ) {
