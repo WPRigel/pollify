@@ -35,7 +35,6 @@ class Votes {
 	 * Set a vote for a poll.
 	 *
 	 * @param array $args
-	 *
 	 */
 	public function vote( array $args = [] ) {
 		global $wpdb;
@@ -155,7 +154,7 @@ class Votes {
 	 *
 	 * @return array|int
 	 */
-	public function get_votes( $args = [] ) : array|int {
+	public function get_votes( $args = [] ): array|int {
 		global $wpdb;
 
 		$default = [
@@ -177,17 +176,17 @@ class Votes {
 
 		// Check if client_id is empty or not.
 		if ( ! empty( $args['client_id'] ) ) {
-			$where .= $wpdb->prepare( " AND v.client_id = %s", $args['client_id'] );
+			$where .= $wpdb->prepare( ' AND v.client_id = %s', $args['client_id'] );
 		}
 
 		// Check if location is avaialbe or not.
 		if ( ! empty( $args['location'] ) ) {
-			$where .= $wpdb->prepare( " AND v.user_location = %s", $args['location'] );
+			$where .= $wpdb->prepare( ' AND v.user_location = %s', $args['location'] );
 		}
 
 		// Check if option is avaible for filter.
 		if ( ! empty( $args['option'] ) ) {
-			$where .= $wpdb->prepare( " AND o.option_id = %s", $args['option'] );
+			$where .= $wpdb->prepare( ' AND o.option_id = %s', $args['option'] );
 		}
 
 		// If search is set then add where condition for search.
@@ -326,12 +325,12 @@ class Votes {
 
 		// Check if client_id is empty or not.
 		if ( ! empty( $args['client_id'] ) ) {
-			$where .= $wpdb->prepare( " AND v.client_id = %s", $args['client_id'] );
+			$where .= $wpdb->prepare( ' AND v.client_id = %s', $args['client_id'] );
 		}
 
 		// Check if client_id is empty or not.
 		if ( ! empty( $args['location'] ) ) {
-			$where .= $wpdb->prepare( " AND v.user_location = %s", $args['location'] );
+			$where .= $wpdb->prepare( ' AND v.user_location = %s', $args['location'] );
 		}
 
 		// If search is set then add where condition for search.
@@ -415,5 +414,4 @@ class Votes {
 
 		return (bool) $deleted;
 	}
-
 }

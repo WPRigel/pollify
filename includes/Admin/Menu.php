@@ -87,7 +87,7 @@ class Menu {
 	 *
 	 * @return void
 	 */
-	public function enqueue_scripts() : void {
+	public function enqueue_scripts(): void {
 		// Check if the page is pollify menu or not.
 		global $pollify_menu;
 
@@ -116,7 +116,7 @@ class Menu {
 	 */
 	public function render_polls(): void {
 		// Get the page.
-		$page = pollify_filter_input( INPUT_GET, 'page', POLLIFY_FILTER_SANITIZE_STRING );
+		$page   = pollify_filter_input( INPUT_GET, 'page', POLLIFY_FILTER_SANITIZE_STRING );
 		$action = pollify_filter_input( INPUT_GET, 'action', POLLIFY_FILTER_SANITIZE_STRING );
 
 		if ( 'poll-creator' === $page && 'view_results' === $action ) {
@@ -129,12 +129,18 @@ class Menu {
 			}
 
 			// Load poll results template.
-			pollify_load_template( 'admin/overview.php', false, [ 'poll_id' => $poll_id, 'poll' => $poll ] );
+			pollify_load_template(
+				'admin/overview.php',
+				false,
+				[
+					'poll_id' => $poll_id,
+					'poll'    => $poll,
+				]
+			);
 		} else {
 			// Load poll lists template.
 			pollify_load_template( 'admin/polls.php' );
 		}
-
 	}
 
 	/**
@@ -190,7 +196,5 @@ class Menu {
 				wp_safe_redirect( admin_url( 'admin.php?page=pollify&updated=1' ) );
 			}
 		}
-
 	}
-
 }

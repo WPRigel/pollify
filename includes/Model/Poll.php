@@ -169,7 +169,7 @@ class Poll {
 		foreach ( $options as $option_id ) {
 			$poll_option = array_filter(
 				$this->get_options(),
-				function( $option ) use ( $option_id ) {
+				function ( $option ) use ( $option_id ) {
 					return $option['option_id'] === $option_id;
 				}
 			);
@@ -318,5 +318,4 @@ class Poll {
 
 		return $result;
 	}
-
 }

@@ -54,33 +54,35 @@ class PollsController extends WP_REST_Controller {
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => [ $this, 'get_items' ],
 					'args'                => $this->get_collection_params(),
-					'permission_callback' => function() {
+					'permission_callback' => function () {
 						return current_user_can( 'edit_posts' );
 					},
 				],
 				[
-                    'methods'             => WP_REST_Server::CREATABLE,
-                    'callback'            => [ $this, 'create_item' ],
-                    'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::CREATABLE ),
-                    'permission_callback' => function() {
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => [ $this, 'create_item' ],
+					'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::CREATABLE ),
+					'permission_callback' => function () {
 						return current_user_can( 'edit_posts' );
 					},
-                ],
+				],
 			]
 		);
 
 		register_rest_route(
-            $this->namespace, '/' . $this->action . '/(?P<id>[\d]+)/', [
+			$this->namespace,
+			'/' . $this->action . '/(?P<id>[\d]+)/',
+			[
 				'args' => [
 					'id' => [
-						'description'       => __( 'Unique identifier for the object.', 'poll-creator' ),
-						'type'              => 'integer',
+						'description' => __( 'Unique identifier for the object.', 'poll-creator' ),
+						'type'        => 'integer',
 					],
 				],
 				[
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => [ $this, 'get_item' ],
-					'permission_callback' => function() {
+					'permission_callback' => function () {
 						return current_user_can( 'edit_posts' );
 					},
 				],
@@ -88,20 +90,20 @@ class PollsController extends WP_REST_Controller {
 					'methods'             => WP_REST_Server::EDITABLE,
 					'callback'            => [ $this, 'update_item' ],
 					'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::EDITABLE ),
-					'permission_callback' => function() {
+					'permission_callback' => function () {
 						return current_user_can( 'edit_posts' );
 					},
 				],
 				[
 					'methods'             => WP_REST_Server::DELETABLE,
 					'callback'            => [ $this, 'delete_item' ],
-					'permission_callback' => function() {
+					'permission_callback' => function () {
 						return current_user_can( 'edit_posts' );
 					},
 				],
 
 			]
-        );
+		);
 	}
 
 	/**
@@ -119,9 +121,9 @@ class PollsController extends WP_REST_Controller {
 		$polls = Polls::get_instance()->all( $params );
 
 		foreach ( $polls as $poll ) {
-            $item   = $this->prepare_item_for_response( $poll, $request );
-            $data[] = $this->prepare_response_for_collection( $item );
-        }
+			$item   = $this->prepare_item_for_response( $poll, $request );
+			$data[] = $this->prepare_response_for_collection( $item );
+		}
 
 		return rest_ensure_response( $data );
 	}
@@ -202,124 +204,126 @@ class PollsController extends WP_REST_Controller {
 			return $poll;
 		}
 
-		return rest_ensure_response( [
-			'success' => true,
-			'message' => __( 'Poll deleted successfully', 'poll-creator' ),
-		] );
+		return rest_ensure_response(
+			[
+				'success' => true,
+				'message' => __( 'Poll deleted successfully', 'poll-creator' ),
+			]
+		);
 	}
 
 	/**
-     * Prepare data for response
-     *
-     * @since 1.0.0
-     *
-     * @return WP_REST_Response|WP_Error
-     */
-    public function prepare_item_for_response( $data, $request ) {
-        if ( empty( $data['id'] ) ) {
+	 * Prepare data for response
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return WP_REST_Response|WP_Error
+	 */
+	public function prepare_item_for_response( $data, $request ) {
+		if ( empty( $data['id'] ) ) {
 			return new WP_Error( 'rest_invalid_id', __( 'Invalid resource id.' ), [ 'status' => 404 ] );
 		}
 
-        $response = rest_ensure_response( $data, $request );
-        $response->add_links( $this->prepare_links( $data, $request ) );
+		$response = rest_ensure_response( $data, $request );
+		$response->add_links( $this->prepare_links( $data, $request ) );
 
-        return apply_filters( 'pollify_rest_prepare_poll_object', $response, $data, $request );
-    }
-
-	/**
-     * Prepare links for the request.
-     *
-     * @param Poll $data               Object data.
-     * @param WP_REST_Request $request Request object.
-     *
-     * @return array Links for the given post.
-     */
-    protected function prepare_links( $data, $request ) {
-        $links = [
-            'self' => [
-                'href' => rest_url( sprintf( '/%s/%s/%d', $this->namespace, $this->action, $data['id'] ) ),
-            ],
-            'collection' => [
-                'href' => rest_url( sprintf( '/%s/%s', $this->namespace, $this->action ) ),
-            ],
-        ];
-
-        return $links;
-    }
+		return apply_filters( 'pollify_rest_prepare_poll_object', $response, $data, $request );
+	}
 
 	/**
-     * Item schema
-     *
-     * @since 1.0.0
-     *
-     * @return array
-     */
-    public function get_item_schema() {
-        $schema = [
-            '$schema'    => 'http://json-schema.org/draft-04/schema#',
-            'title'      => 'Poll',
-            'type'       => 'array',
-            'properties' => [
-                'id' => [
-                    'description' => __( 'Unique identifier for the object.', 'poll-creator' ),
-                    'type'        => 'integer',
-                    'context'     => [ 'view' ],
-                    'readonly'    => true,
-                ],
-                'title' => [
-                    'description' => __( 'Poll title', 'poll-creator' ),
-                    'type'        => 'string',
-                    'context'     => [ 'view', 'edit' ],
-                    'readonly'    => true,
-                ],
-                'description' => [
-                    'required'    => false,
-                    'description' => __( 'Poll description', 'poll-creator' ),
-                    'type'        => 'string',
-                    'context'     => [ 'view', 'edit' ],
-                ],
-                'type' => [
-                    'required'    => true,
-                    'description' => __( 'The poll type. It can be normal poll, quize or NPS', 'poll-creator' ),
-                    'type'        => 'string',
-                    'context'     => [ 'view', 'edit' ],
+	 * Prepare links for the request.
+	 *
+	 * @param Poll            $data               Object data.
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return array Links for the given post.
+	 */
+	protected function prepare_links( $data, $request ) {
+		$links = [
+			'self'       => [
+				'href' => rest_url( sprintf( '/%s/%s/%d', $this->namespace, $this->action, $data['id'] ) ),
+			],
+			'collection' => [
+				'href' => rest_url( sprintf( '/%s/%s', $this->namespace, $this->action ) ),
+			],
+		];
+
+		return $links;
+	}
+
+	/**
+	 * Item schema
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return array
+	 */
+	public function get_item_schema() {
+		$schema = [
+			'$schema'    => 'http://json-schema.org/draft-04/schema#',
+			'title'      => 'Poll',
+			'type'       => 'array',
+			'properties' => [
+				'id'           => [
+					'description' => __( 'Unique identifier for the object.', 'poll-creator' ),
+					'type'        => 'integer',
+					'context'     => [ 'view' ],
+					'readonly'    => true,
+				],
+				'title'        => [
+					'description' => __( 'Poll title', 'poll-creator' ),
+					'type'        => 'string',
+					'context'     => [ 'view', 'edit' ],
+					'readonly'    => true,
+				],
+				'description'  => [
+					'required'    => false,
+					'description' => __( 'Poll description', 'poll-creator' ),
+					'type'        => 'string',
+					'context'     => [ 'view', 'edit' ],
+				],
+				'type'         => [
+					'required'    => true,
+					'description' => __( 'The poll type. It can be normal poll, quize or NPS', 'poll-creator' ),
+					'type'        => 'string',
+					'context'     => [ 'view', 'edit' ],
 					'default'     => 'poll',
-                ],
-                'status' => [
-                    'required'    => true,
-                    'description' => __( 'Poll status', 'poll-creator' ),
-                    'type'        => 'string',
-                    'enum'        => [ 'draft', 'publish', 'trash', 'delete' ],
-                    'context'     => [ 'view', 'edit' ],
-                    'default'     => 'publish',
-                ],
-                'reference' => [
-                    'required'    => false,
-                    'description' => __( 'From where the poll was created', 'poll-creator' ),
-                    'type'        => 'string',
-                    'context'     => [ 'view', 'edit' ],
-                ],
-                'options' => [
-                    'required'    => false,
-                    'description' => __( 'Poll options', 'poll-creator' ),
-                    'type'        => 'array',
-                    'context'     => [ 'view', 'edit' ],
-                ],
+				],
+				'status'       => [
+					'required'    => true,
+					'description' => __( 'Poll status', 'poll-creator' ),
+					'type'        => 'string',
+					'enum'        => [ 'draft', 'publish', 'trash', 'delete' ],
+					'context'     => [ 'view', 'edit' ],
+					'default'     => 'publish',
+				],
+				'reference'    => [
+					'required'    => false,
+					'description' => __( 'From where the poll was created', 'poll-creator' ),
+					'type'        => 'string',
+					'context'     => [ 'view', 'edit' ],
+				],
+				'options'      => [
+					'required'    => false,
+					'description' => __( 'Poll options', 'poll-creator' ),
+					'type'        => 'array',
+					'context'     => [ 'view', 'edit' ],
+				],
 				'created_date' => [
-                    'description' => __( "The date the withdraw request has beed created in the site's timezone.", 'poll-creator' ),
-                    'type'        => 'date-time',
-                    'context'     => [ 'view', 'edit' ],
-                    'readonly'    => true,
-                ],
+					'description' => __( "The date the withdraw request has beed created in the site's timezone.", 'poll-creator' ),
+					'type'        => 'date-time',
+					'context'     => [ 'view', 'edit' ],
+					'readonly'    => true,
+				],
 				'updated_date' => [
-                    'description' => __( "The date the withdraw request has beed updated in the site's timezone.", 'poll-creator' ),
-                    'type'        => 'date-time',
-                    'context'     => [ 'view', 'edit' ],
-                    'readonly'    => true,
-                ],
-            ],
-        ];
+					'description' => __( "The date the withdraw request has beed updated in the site's timezone.", 'poll-creator' ),
+					'type'        => 'date-time',
+					'context'     => [ 'view', 'edit' ],
+					'readonly'    => true,
+				],
+			],
+		];
 
-        return $this->add_additional_fields_schema( $schema );
-    }
+		return $this->add_additional_fields_schema( $schema );
+	}
 }

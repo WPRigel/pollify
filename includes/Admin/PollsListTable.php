@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace UnderDev\Pollify\Admin;
 
 if ( ! class_exists( '\WP_List_Table' ) ) {
-	require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
+	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 
 /**
@@ -44,7 +44,7 @@ class PollsListTable extends \WP_List_Table {
 	 * @return array
 	 */
 	public function get_columns(): array {
-		 $columns = array(
+		$columns = array(
 			'cb'         => '<input type = "checkbox" />',
 			'title'      => __( 'Title', 'pollifty' ),
 			'type'       => __( 'Type', 'pollifty' ),
@@ -60,13 +60,13 @@ class PollsListTable extends \WP_List_Table {
 	/**
 	 * Render the column cb.
 	 *
-	 * @param array $item The current item.
+	 * @param array  $item The current item.
 	 * @param string $column_name The current column name.
 	 *
 	 * @return string
 	 */
 	public function column_default( $item, $column_name ) {
-		switch ($column_name) {
+		switch ( $column_name ) {
 			case 'id':
 			case 'client_id':
 			case 'title':
@@ -76,7 +76,7 @@ class PollsListTable extends \WP_List_Table {
 			case 'response':
 			case 'created_at':
 			default:
-				return $item[$column_name];
+				return $item[ $column_name ];
 		}
 	}
 
@@ -122,13 +122,13 @@ class PollsListTable extends \WP_List_Table {
 		$actions = array(
 			'view'  => sprintf( '<a href="?page=%s&action=%s&poll_id=%s">' . __( 'View results', 'poll-creator' ) . '</a>', $page, 'view_results', $item['client_id'] ),
 			'trash' => sprintf( '<a class="submitdelete" onclick="return confirm(\'%s\')" href="?page=%s&action=%s&poll_id=%s&_nonce=%s">' . __( 'Reset Results', 'poll-creator' ) . '</a>', $confirm_text, $page, 'reset_results', $item['client_id'], $nocne ),
-        );
+		);
 
 		// Wrap the title with view result link.
 		$title = sprintf( '<a href="?page=%s&action=%s&poll_id=%s">%s</a>', $page, 'view_results', $item['client_id'], $item['title'] );
 
-        return sprintf( '<strong>%1$s</strong> %2$s', $title, $this->row_actions( $actions ) );
-    }
+		return sprintf( '<strong>%1$s</strong> %2$s', $title, $this->row_actions( $actions ) );
+	}
 
 	/**
 	 * Render the column type using icon.
@@ -158,7 +158,7 @@ class PollsListTable extends \WP_List_Table {
 
 			if ( ! empty( $id ) ) {
 				$post_title = get_the_title( $item['reference'] );
-				$reference = sprintf( '<a href="%s">%s</a>', get_edit_post_link( $id ), $post_title );
+				$reference  = sprintf( '<a href="%s">%s</a>', get_edit_post_link( $id ), $post_title );
 			}
 		} else {
 			$reference = $item['reference'];
@@ -324,11 +324,13 @@ class PollsListTable extends \WP_List_Table {
 		$total_items   = intval( $this->get_table_data( $args ) );
 
 		// Set the pagination.
-		$this->set_pagination_args( [
-			'total_items' => $total_items, // total number of items
-			'per_page'    => $this->per_page, // items to show on a page
-			'total_pages' => ceil( $total_items / $this->per_page ) // use ceil to round up
-		] );
+		$this->set_pagination_args(
+			[
+				'total_items' => $total_items, // total number of items
+				'per_page'    => $this->per_page, // items to show on a page
+				'total_pages' => ceil( $total_items / $this->per_page ), // use ceil to round up
+			]
+		);
 
 		// Set the final items for dispalying.
 		$this->items = $this->table_data;
@@ -342,5 +344,4 @@ class PollsListTable extends \WP_List_Table {
 	private function get_table_data( $args ) {
 		return \UnderDev\Pollify\Polls::get_instance()->all( $args );
 	}
-
 }

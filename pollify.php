@@ -1,14 +1,14 @@
 <?php
 /**
-* Plugin Name: Pollify
-* Plugin URI: https://github.com/sabbir1991
-* Description: Create poll using gutenberg way.
-* Version: 1.0.0
-* Author: wprigel
-* Author URI: http://wprigel.com/
-* License: GPL2
-* Text Domain: poll-creator
-*/
+ * Plugin Name: Pollify
+ * Plugin URI: https://github.com/sabbir1991
+ * Description: Create poll using gutenberg way.
+ * Version: 1.0.0
+ * Author: wprigel
+ * Author URI: http://wprigel.com/
+ * License: GPL2
+ * Text Domain: poll-creator
+ */
 
 /**
  * Copyright (c) YEAR WPRigel (email: info@wprigel.com). All rights reserved.
@@ -110,7 +110,7 @@ function plugin(): Plugin {
  */
 add_action(
 	'plugins_loaded',
-	function() {
+	function () {
 		plugin()->run();
 	}
 );

@@ -26,10 +26,10 @@ $navigations = pollify_poll_results_page_nav();
 	<div class="navigation">
 		<ul>
 			<?php foreach ( $navigations as $navigation ) : ?>
-			<li <?php echo $navigation['slug'] === $nav_tab ? 'class="active"' : '' ?>>
+			<li <?php echo $navigation['slug'] === $nav_tab ? 'class="active"' : ''; ?>>
 				<a href="<?php echo esc_url( $navigation['link'] ); ?>">
 					<span class="icon dashicons <?php echo esc_attr( $navigation['icon'] ); ?>"></span>
-					<span class="text"><?php echo wp_kses_post( $navigation['title'] ) ?></span>
+					<span class="text"><?php echo wp_kses_post( $navigation['title'] ); ?></span>
 				</a>
 			</li>
 			<?php endforeach; ?>
@@ -82,7 +82,7 @@ $navigations = pollify_poll_results_page_nav();
 						$location_votes = $poll->get_ip_votes(
 							[
 								'per_page' => 20,
-								'orderby' => 'votes'
+								'orderby'  => 'votes',
 							]
 						);
 						?>
@@ -167,7 +167,19 @@ $navigations = pollify_poll_results_page_nav();
 								</table>
 
 								<div class="see-more-link">
-									<a href="<?php echo add_query_arg( [ 'page' => 'poll-creator', 'action' => 'view_results', 'tab' => 'ip-details', 'poll_id' => $poll->get_client_id() ], admin_url( 'admin.php' ) ); ?>"><?php esc_html_e( 'See all IP\'s', 'poll-creator' ); ?> &#8594;</a>
+									<a href="
+									<?php
+									echo add_query_arg(
+										[
+											'page'    => 'poll-creator',
+											'action'  => 'view_results',
+											'tab'     => 'ip-details',
+											'poll_id' => $poll->get_client_id(),
+										],
+										admin_url( 'admin.php' )
+									);
+									?>
+												"><?php esc_html_e( 'See all IP\'s', 'poll-creator' ); ?> &#8594;</a>
 								</div>
 							<?php else : ?>
 								<p class="no-data-text"><?php esc_html_e( 'No location data found for this poll', 'poll-creator' ); ?></p>
@@ -188,7 +200,8 @@ $navigations = pollify_poll_results_page_nav();
 						?>
 						<?php if ( ! empty( $recent_votes ) ) : ?>
 						<ul class="vote-list">
-							<?php foreach ( $recent_votes as $recent_vote ) {
+							<?php
+							foreach ( $recent_votes as $recent_vote ) {
 								?>
 								<li>
 									<div class="vote-info">
@@ -215,10 +228,23 @@ $navigations = pollify_poll_results_page_nav();
 									</div>
 								</li>
 								<?php
-							} ?>
+							}
+							?>
 
 							<li class="see-more-link">
-								<a href="<?php echo add_query_arg( [ 'page' => 'poll-creator', 'action' => 'view_results', 'tab' => 'votes', 'poll_id' => $poll->get_client_id() ], admin_url( 'admin.php' ) ); ?>"><?php esc_html_e( 'See all votes', 'poll-creator' ); ?> &#8594;</a>
+								<a href="
+								<?php
+								echo add_query_arg(
+									[
+										'page'    => 'poll-creator',
+										'action'  => 'view_results',
+										'tab'     => 'votes',
+										'poll_id' => $poll->get_client_id(),
+									],
+									admin_url( 'admin.php' )
+								);
+								?>
+											"><?php esc_html_e( 'See all votes', 'poll-creator' ); ?> &#8594;</a>
 							</li>
 						</ul>
 						<?php else : ?>
@@ -246,7 +272,7 @@ $navigations = pollify_poll_results_page_nav();
 					$table->display();
 
 					echo '</form>';
-					?>
+				?>
 			</div>
 		<?php elseif ( 'ip-details' === $nav_tab ) : ?>
 			<div class="ips-table">
@@ -265,7 +291,7 @@ $navigations = pollify_poll_results_page_nav();
 					$table->display();
 
 					echo '</form>';
-					?>
+				?>
 			</div>
 		<?php else : ?>
 			<?php

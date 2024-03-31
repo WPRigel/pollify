@@ -17,8 +17,8 @@
     <arg name="extensions" value="php"/>
 
     <rule ref="WordPress-Core">
-        <exclude name="Generic.Arrays.DisallowShortArraySyntax" />
-        <exclude name="WordPress.PHP.DisallowShortTernary" />
+        <exclude name="Universal.Arrays.DisallowShortArraySyntax" />
+        <exclude name="Universal.Operators.DisallowShortTernary" />
     </rule>
 
     <rule ref="WordPress-Docs">
@@ -30,10 +30,6 @@
 		<exclude name="WordPress.Files.FileName" />
 		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
 	</rule>
-
-    <rule ref="WordPress-VIP-Go">
-        <exclude-pattern>tests/*</exclude-pattern>
-    </rule>
 
     <rule ref="WordPress.WP.I18n">
         <properties>
@@ -47,4 +43,6 @@
 
     <exclude-pattern>*/vendor/*</exclude-pattern>
     <exclude-pattern>/lib/*</exclude-pattern>
+    <exclude-pattern>/assets/*</exclude-pattern>
+    <exclude-pattern>/build/*</exclude-pattern>
 </ruleset>

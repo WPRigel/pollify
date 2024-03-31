@@ -53,7 +53,7 @@ if ( ! function_exists( 'pollify_load_template' ) ) {
  */
 function pollify_filter_input( $type, $variable_name, $filter = FILTER_DEFAULT, $options = 0 ) {
 	switch ( $filter ) {
-		case POLLIFY_FILTER_SANITIZE_STRING :
+		case POLLIFY_FILTER_SANITIZE_STRING:
 			$sanitized_variable = sanitize_text_field( filter_input( $type, $variable_name, FILTER_UNSAFE_RAW, $options ) );
 			break;
 		default:
@@ -355,20 +355,43 @@ function pollify_poll_results_page_nav() {
 		[
 			'title' => __( 'Overview', 'poll-creator' ),
 			'slug'  => 'overview',
-			'icon' => 'dashicons-dashboard',
-			'link'  => add_query_arg( [ 'page' => 'poll-creator', 'action' => 'view_results', 'poll_id' => $poll_id ], admin_url( 'admin.php' ) ),
+			'icon'  => 'dashicons-dashboard',
+			'link'  => add_query_arg(
+				[
+					'page'    => 'poll-creator',
+					'action'  => 'view_results',
+					'poll_id' => $poll_id,
+				],
+				admin_url( 'admin.php' )
+			),
 		],
 		[
 			'title' => __( 'Votes', 'poll-creator' ),
 			'slug'  => 'votes',
-			'icon' => 'dashicons-thumbs-up',
-			'link'  => add_query_arg( [ 'page' => 'poll-creator', 'action' => 'view_results', 'tab' => 'votes', 'poll_id' => $poll_id ], admin_url( 'admin.php' ) ),
+			'icon'  => 'dashicons-thumbs-up',
+			'link'  => add_query_arg(
+				[
+					'page'    => 'poll-creator',
+					'action'  => 'view_results',
+					'tab'     => 'votes',
+					'poll_id' => $poll_id,
+				],
+				admin_url( 'admin.php' )
+			),
 		],
 		[
 			'title' => __( 'IP Details', 'poll-creator' ),
 			'slug'  => 'ip-details',
-			'icon' => 'dashicons-chart-area',
-			'link'  => add_query_arg( [ 'page' => 'poll-creator', 'action' => 'view_results', 'tab' => 'ip-details', 'poll_id' => $poll_id ], admin_url( 'admin.php' ) ),
+			'icon'  => 'dashicons-chart-area',
+			'link'  => add_query_arg(
+				[
+					'page'    => 'poll-creator',
+					'action'  => 'view_results',
+					'tab'     => 'ip-details',
+					'poll_id' => $poll_id,
+				],
+				admin_url( 'admin.php' )
+			),
 		],
 	];
 }

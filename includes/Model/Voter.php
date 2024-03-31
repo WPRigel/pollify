@@ -64,7 +64,7 @@ class Voter {
 		if ( ! empty( $_SERVER['HTTP_CLIENT_IP'] ) ) {
 			// Check IP from internet.
 			$ip = $_SERVER['HTTP_CLIENT_IP'];
-		} else if ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
+		} elseif ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
 			// Check IP is passed from proxy.
 			$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
 		} else {
@@ -135,5 +135,4 @@ class Voter {
 	public function is_already_voted( string $poll_id ): bool {
 		return ! empty( $this->get_votes( $poll_id ) );
 	}
-
 }

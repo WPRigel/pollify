@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace UnderDev\Pollify\Admin;
 
 if ( ! class_exists( '\WP_List_Table' ) ) {
-	require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
+	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 
 /**
@@ -51,15 +51,17 @@ class VotesListTable extends \WP_List_Table {
 		if ( ! empty( $poll ) && is_object( $poll ) ) {
 			$this->poll = $poll;
 		} else {
-			$poll_id = pollify_filter_input( INPUT_GET, 'poll_id', POLLIFY_FILTER_SANITIZE_STRING );
+			$poll_id    = pollify_filter_input( INPUT_GET, 'poll_id', POLLIFY_FILTER_SANITIZE_STRING );
 			$this->poll = \UnderDev\Pollify\Polls::get_instance()->get( $poll_id );
 		}
 
-		parent::__construct( [
-			'singular' => __( 'Vote', 'poll-creator' ),
-			'plural'   => __( 'Votess', 'poll-creator' ),
-			'ajax'     => false,
-		] );
+		parent::__construct(
+			[
+				'singular' => __( 'Vote', 'poll-creator' ),
+				'plural'   => __( 'Votess', 'poll-creator' ),
+				'ajax'     => false,
+			]
+		);
 	}
 
 	/**
@@ -69,26 +71,26 @@ class VotesListTable extends \WP_List_Table {
 	 */
 	public function get_columns(): array {
 		$columns = array(
-		   'name'       => __( 'Name', 'pollifty' ),
-		   'location'   => __( 'Location', 'pollifty' ),
-		   'ip_address' => __( 'IP Address', 'pollifty' ),
-		   'vote'       => __( 'Vote answer', 'pollifty' ),
-		   'created_at' => __( 'Vote date', 'pollifty' ),
-	   );
+			'name'       => __( 'Name', 'pollifty' ),
+			'location'   => __( 'Location', 'pollifty' ),
+			'ip_address' => __( 'IP Address', 'pollifty' ),
+			'vote'       => __( 'Vote answer', 'pollifty' ),
+			'created_at' => __( 'Vote date', 'pollifty' ),
+		);
 
-	   return $columns;
-   }
+		return $columns;
+	}
 
-   /**
+	/**
 	 * Render the column cb.
 	 *
-	 * @param array $item The current item.
+	 * @param array  $item The current item.
 	 * @param string $column_name The current column name.
 	 *
 	 * @return string
 	 */
 	public function column_default( $item, $column_name ) {
-		switch ($column_name) {
+		switch ( $column_name ) {
 			case 'id':
 			case 'name':
 			case 'location':
@@ -99,7 +101,7 @@ class VotesListTable extends \WP_List_Table {
 				return $item['option'];
 			case 'created_at':
 			default:
-				return $item[$column_name];
+				return $item[ $column_name ];
 		}
 	}
 
@@ -146,7 +148,6 @@ class VotesListTable extends \WP_List_Table {
 			esc_html( strtolower( $item['user_location'] ) ),
 			esc_html( pollify_get_country_name( $item['user_location'] ) )
 		);
-
 	}
 
 	/**
@@ -255,11 +256,13 @@ class VotesListTable extends \WP_List_Table {
 		$total_items   = intval( $this->get_table_data( $args ) );
 
 		// Set the pagination.
-		$this->set_pagination_args( [
-			'total_items' => $total_items, // total number of items
-			'per_page'    => $this->per_page, // items to show on a page
-			'total_pages' => ceil( $total_items / $this->per_page ) // use ceil to round up
-		] );
+		$this->set_pagination_args(
+			[
+				'total_items' => $total_items, // total number of items
+				'per_page'    => $this->per_page, // items to show on a page
+				'total_pages' => ceil( $total_items / $this->per_page ), // use ceil to round up
+			]
+		);
 
 		// Set the final items for dispalying.
 		$this->items = $this->table_data;
@@ -273,5 +276,4 @@ class VotesListTable extends \WP_List_Table {
 	private function get_table_data( $args ) {
 		return $this->poll->get_votes( $args );
 	}
-
 }

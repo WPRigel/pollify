@@ -58,7 +58,7 @@ class Apis {
 	public function register_rest_routes(): void {
 		foreach ( $this->map_classes() as $class ) {
 			if ( class_exists( $class ) ) {
-				$class_instance = new $class;
+				$class_instance = new $class();
 
 				if ( method_exists( $class_instance, 'register_routes' ) ) {
 					$class_instance->register_routes();
@@ -71,5 +71,4 @@ class Apis {
 		 */
 		do_action( 'pollify_rest_api_init' );
 	}
-
 }

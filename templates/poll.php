@@ -32,7 +32,7 @@ if ( ! empty( $attributes['submitButtonHoverBgColor'] ) ) {
 // Filter poll options from attribute which value is empty.
 $poll_options = array_filter(
 	$attributes['options'],
-	function( $option ) {
+	function ( $option ) {
 		return ! empty( $option['option'] );
 	}
 );
@@ -45,7 +45,7 @@ $is_already_voted = ( ! empty( $attributes['allowedPerComputerResponse'] ) && $v
 	<div class='pollify-poll-form'>
 		<h4 class="poll-title rich-text"><?php echo wp_kses_post( $attributes['title'] ); ?></h4>
 		<?php if ( ! empty( $attributes['description'] ) ) : ?>
-			<p class="poll-description rich-text"><?php echo esc_html( $attributes['description'] ) ?></p>
+			<p class="poll-description rich-text"><?php echo esc_html( $attributes['description'] ); ?></p>
 		<?php endif; ?>
 
 		<?php if ( $is_already_voted && ! empty( $attributes['confirmationMessageType'] ) && 'view-result' === $attributes['confirmationMessageType'] ) : ?>

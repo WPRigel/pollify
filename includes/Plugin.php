@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace UnderDev\Pollify;
 
-use \UnderDev\Pollify\Admin\Menu;
+use UnderDev\Pollify\Admin\Menu;
 
 /**
  * Class Plugin.
@@ -53,8 +53,8 @@ class Plugin {
 	 * @return void
 	 */
 	public function run(): void {
-		$this->path       = dirname( __FILE__, 2 );
-		$this->url        = plugin_dir_url( trailingslashit( dirname( __FILE__, 2 ) ) . 'pollify.php' );
+		$this->path       = dirname( __DIR__, 1 );
+		$this->url        = plugin_dir_url( trailingslashit( dirname( __DIR__, 1 ) ) . 'pollify.php' );
 		$this->assets_dir = trailingslashit( $this->path ) . 'assets/';
 
 		$this->load();

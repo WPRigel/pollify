@@ -48,7 +48,9 @@ class VotesController extends WP_REST_Controller {
 	public function register_routes(): void {
 
 		register_rest_route(
-				$this->namespace, '/' . $this->action . '/(?P<client_id>[^/]+)/', [
+			$this->namespace,
+			'/' . $this->action . '/(?P<client_id>[^/]+)/',
+			[
 				'args' => [
 					'client_id' => [
 						'description' => __( 'Unique identifier for the object for poll', 'poll-creator' ),
@@ -99,40 +101,39 @@ class VotesController extends WP_REST_Controller {
 	}
 
 	/**
-     * Item schema
-     *
-     * @since DOKAN_LITE
-     *
-     * @return array
-     */
-    public function get_item_schema() {
-        $schema = [
-            '$schema'    => 'http://json-schema.org/draft-04/schema#',
-            'title'      => 'Vote',
-            'type'       => 'array',
-            'properties' => [
-                'id' => [
-                    'description' => __( 'Unique identifier for the object.', 'poll-creator' ),
-                    'type'        => 'integer',
-                    'context'     => [ 'view' ],
-                    'readonly'    => true,
-                ],
-                'options' => [
-                    'required'    => true,
-                    'description' => __( 'Option IDs', 'poll-creator' ),
-                    'type'        => 'array',
-                    'context'     => [ 'view', 'edit' ],
-                ],
+	 * Item schema
+	 *
+	 * @since DOKAN_LITE
+	 *
+	 * @return array
+	 */
+	public function get_item_schema() {
+		$schema = [
+			'$schema'    => 'http://json-schema.org/draft-04/schema#',
+			'title'      => 'Vote',
+			'type'       => 'array',
+			'properties' => [
+				'id'          => [
+					'description' => __( 'Unique identifier for the object.', 'poll-creator' ),
+					'type'        => 'integer',
+					'context'     => [ 'view' ],
+					'readonly'    => true,
+				],
+				'options'     => [
+					'required'    => true,
+					'description' => __( 'Option IDs', 'poll-creator' ),
+					'type'        => 'array',
+					'context'     => [ 'view', 'edit' ],
+				],
 				'with_result' => [
-                    'description' => __( "Return with result or not", 'poll-creator' ),
-                    'type'        => 'boolean',
-                    'context'     => [ 'view' ],
-                    'readonly'    => true,
-                ],
-            ],
-        ];
+					'description' => __( 'Return with result or not', 'poll-creator' ),
+					'type'        => 'boolean',
+					'context'     => [ 'view' ],
+					'readonly'    => true,
+				],
+			],
+		];
 
-        return $this->add_additional_fields_schema( $schema );
-    }
-
+		return $this->add_additional_fields_schema( $schema );
+	}
 }

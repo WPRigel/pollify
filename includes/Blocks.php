@@ -95,9 +95,12 @@ class Blocks {
 
 		$blocks = parse_blocks( $post->post_content );
 
-		$polls = array_filter( $blocks, function( $block ) {
-			return 'pollify/poll' === $block['blockName'];
-		} );
+		$polls = array_filter(
+			$blocks,
+			function ( $block ) {
+				return 'pollify/poll' === $block['blockName'];
+			}
+		);
 
 		if ( empty( $polls ) ) {
 			return;
@@ -142,9 +145,12 @@ class Blocks {
 			Polls::get_instance()->save( $data );
 		}
 
-		$poll_ids = array_map( function( $poll ) {
-			return $poll['attrs']['pollClientId'];
-		}, $polls );
+		$poll_ids = array_map(
+			function ( $poll ) {
+				return $poll['attrs']['pollClientId'];
+			},
+			$polls
+		);
 
 		// Check if poll id is not in saved meta, then delete it.
 		$saved_poll_ids = get_post_meta( $post_id, '_pollify_poll_client_ids', true );
@@ -166,7 +172,7 @@ class Blocks {
 	public function localize_script() {
 		wp_localize_script(
 			'wp-api-fetch',
-			'poll-creator',
+			'pollify',
 			array(
 				'nonce' => wp_create_nonce( 'pollify-vote' ),
 			)
@@ -179,5 +185,4 @@ class Blocks {
 
 		return $json_data['attributes'] ?? [];
 	}
-
 }

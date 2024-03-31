@@ -47,11 +47,11 @@ class Polls {
 		global $wpdb;
 
 		$default = [
-			'per_page'   => '10',
-			'page'       => 1,
-			'status'     => 'publish',
-			'orderby'    => 'id',
-			'order'      => 'DESC',
+			'per_page' => '10',
+			'page'     => 1,
+			'status'   => 'publish',
+			'orderby'  => 'id',
+			'order'    => 'DESC',
 		];
 
 		// @TODO::Need to handle those args for querying data.
@@ -112,19 +112,22 @@ class Polls {
 	public function save( $args ) {
 		global $wpdb;
 
-		$args = wp_parse_args( $args, [
-			'id'          => 0,
-			'client_id'   => '',
-			'title'       => '',
-			'description' => '',
-			'type'        => 'poll',
-			'status'      => 'publish',
-			'reference'   => null,
-			'options'     => [],
-			'created_at'  => current_time( 'mysql' ),
-			'updated_at'  => current_time( 'mysql' ),
-			'settings'    => null,
-		] );
+		$args = wp_parse_args(
+			$args,
+			[
+				'id'          => 0,
+				'client_id'   => '',
+				'title'       => '',
+				'description' => '',
+				'type'        => 'poll',
+				'status'      => 'publish',
+				'reference'   => null,
+				'options'     => [],
+				'created_at'  => current_time( 'mysql' ),
+				'updated_at'  => current_time( 'mysql' ),
+				'settings'    => null,
+			]
+		);
 
 		// Checking title, type and status is empty or not. If empty return WP_Error.
 		foreach ( $args as $key => $value ) {
@@ -147,9 +150,12 @@ class Polls {
 		// - type: text|image
 		// - option: Text|Image object(id/url)
 
-		$args['options'] = array_filter( $args['options'] ?? [], function( $option ) {
-			return ! empty( $option['option'] );
-		} );
+		$args['options'] = array_filter(
+			$args['options'] ?? [],
+			function ( $option ) {
+				return ! empty( $option['option'] );
+			}
+		);
 
 		foreach ( $args['options'] ?? [] as $option ) {
 			// Checking if options is array of array or not. If yes then
@@ -164,7 +170,6 @@ class Polls {
 				}
 			}
 		}
-
 
 		// Now all set. If we have valid poll ID then update the poll data. Otherwise create a new poll.
 		if ( ! preg_match( '/^[a-f\d]{8}(-[a-f\d]{4}){4}[a-f\d]{8}$/i', $args['client_id'] ) ) {
@@ -194,7 +199,10 @@ class Polls {
 					'updated_at'  => current_time( 'mysql' ),
 					'settings'    => $args['settings'],
 				],
-				[ 'client_id' => $args['client_id'], 'id' => $poll['id'] ],
+				[
+					'client_id' => $args['client_id'],
+					'id'        => $poll['id'],
+				],
 				[
 					'%s',
 					'%s',
@@ -214,10 +222,9 @@ class Polls {
 			$option_saved = $this->save_options( $poll['id'], $args['options'] );
 
 			// If option not saved then return WP_Error.
-			if ( is_wp_error( $option_saved )  ) {
+			if ( is_wp_error( $option_saved ) ) {
 				return $option_saved;
 			}
-
 		} else {
 			// If poll ID is empty then create a new poll.
 			$inserted = $wpdb->insert(
@@ -245,7 +252,7 @@ class Polls {
 			$option_saved = $this->save_options( $args['id'], $args['options'] );
 
 			// If option not saved then return WP_Error.
-			if ( is_wp_error( $option_saved )  ) {
+			if ( is_wp_error( $option_saved ) ) {
 				return $option_saved;
 			}
 		}
@@ -316,7 +323,6 @@ class Polls {
 		if ( ! $deleted ) {
 			return new WP_Error( 'deletion-failed', __( 'Poll not deleted successfully', 'poll-creator' ), [ 'status' => 422 ] );
 		}
-
 
 		$deleted = $wpdb->delete(
 			$wpdb->prefix . 'pollify_poll_options',
@@ -410,17 +416,21 @@ class Polls {
 		// Delete those options if has any in a single query.
 		if ( count( $deleted_options ) ) {
 			$wpdb->query(
-				str_replace( '\\', '', $wpdb->prepare(
-					"DELETE FROM {$wpdb->prefix}pollify_poll_options WHERE option_id IN (%s)",
-					implode( "','", $deleted_options )
-				) )
+				str_replace(
+					'\\',
+					'',
+					$wpdb->prepare(
+						"DELETE FROM {$wpdb->prefix}pollify_poll_options WHERE option_id IN (%s)",
+						implode( "','", $deleted_options )
+					)
+				)
 			);
 		}
 
 		// Filter those array from $options where id key is not set or id is 0 or null.
 		$new_options = array_filter(
 			$options,
-			function ( $option ) use( $poll_options ) {
+			function ( $option ) use ( $poll_options ) {
 				$option_ids = wp_list_pluck( $poll_options, 'option_id' );
 				return ! in_array( $option['option_id'], $option_ids, true );
 			}
