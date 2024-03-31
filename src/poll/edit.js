@@ -290,7 +290,7 @@ const Edit = ( props ) => {
 					value={title}
 					onChange={ ( title ) => setAttributes( { title } ) }
 					placeholder={ __( 'Enter the poll question', 'poll-creator' ) }
-					allowedFormats={  [ 'core/bold', 'core/link', 'core/italic', 'core/text-color' ] }
+					allowedFormats={  [ 'core/bold', 'core/link', 'core/italic' ] }
 					className='poll-title'
 				/>
 				<RichText
@@ -298,7 +298,7 @@ const Edit = ( props ) => {
 					value={description}
 					onChange={ ( description ) => setAttributes( { description } ) }
 					placeholder={ __( 'Add a description (optional)', 'poll-creator' ) }
-					allowedFormats={  [ 'core/bold', 'core/link', 'core/italic', 'core/text-color' ] }
+					allowedFormats={  [ 'core/bold', 'core/link', 'core/italic' ] }
 					className='poll-description'
 				/>
 				<OptionsWrapper
