@@ -353,22 +353,22 @@ function pollify_poll_results_page_nav() {
 
 	return [
 		[
-			'title' => __( 'Overview', 'pollify' ),
+			'title' => __( 'Overview', 'poll-creator' ),
 			'slug'  => 'overview',
 			'icon' => 'dashicons-dashboard',
-			'link'  => add_query_arg( [ 'page' => 'pollify', 'action' => 'view_results', 'poll_id' => $poll_id ], admin_url( 'admin.php' ) ),
+			'link'  => add_query_arg( [ 'page' => 'poll-creator', 'action' => 'view_results', 'poll_id' => $poll_id ], admin_url( 'admin.php' ) ),
 		],
 		[
-			'title' => __( 'Votes', 'pollify' ),
+			'title' => __( 'Votes', 'poll-creator' ),
 			'slug'  => 'votes',
 			'icon' => 'dashicons-thumbs-up',
-			'link'  => add_query_arg( [ 'page' => 'pollify', 'action' => 'view_results', 'tab' => 'votes', 'poll_id' => $poll_id ], admin_url( 'admin.php' ) ),
+			'link'  => add_query_arg( [ 'page' => 'poll-creator', 'action' => 'view_results', 'tab' => 'votes', 'poll_id' => $poll_id ], admin_url( 'admin.php' ) ),
 		],
 		[
-			'title' => __( 'IP Details', 'pollify' ),
+			'title' => __( 'IP Details', 'poll-creator' ),
 			'slug'  => 'ip-details',
 			'icon' => 'dashicons-chart-area',
-			'link'  => add_query_arg( [ 'page' => 'pollify', 'action' => 'view_results', 'tab' => 'ip-details', 'poll_id' => $poll_id ], admin_url( 'admin.php' ) ),
+			'link'  => add_query_arg( [ 'page' => 'poll-creator', 'action' => 'view_results', 'tab' => 'ip-details', 'poll_id' => $poll_id ], admin_url( 'admin.php' ) ),
 		],
 	];
 }

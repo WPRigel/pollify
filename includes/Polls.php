@@ -134,7 +134,7 @@ class Polls {
 				return new WP_Error(
 					'empty-data',
 					wp_sprintf(
-						__( 'Error: %s cannot be left empty. Please fill the required information', 'pollify' ),
+						__( 'Error: %s cannot be left empty. Please fill the required information', 'poll-creator' ),
 						$key
 					),
 					[ 'status' => 400 ]
@@ -155,12 +155,12 @@ class Polls {
 			// Checking if options is array of array or not. If yes then
 			if ( is_array( $option ) ) {
 				if ( ( ! array_key_exists( 'option', $option ) || ! array_key_exists( 'type', $option ) ) ) {
-					return new WP_Error( 'not-formatted-options', __( 'Options must contain type and option value', 'pollify' ), [ 'status' => 400 ] );
+					return new WP_Error( 'not-formatted-options', __( 'Options must contain type and option value', 'poll-creator' ), [ 'status' => 400 ] );
 				}
 			} else {
 				// Options array is single array key value.
 				if ( ( ! array_key_exists( 'option', $args['options'] ) || ! array_key_exists( 'type', $args['options'] ) ) ) {
-					return new WP_Error( 'not-formatted-options', __( 'Options must contain type and option value', 'pollify' ), [ 'status' => 400 ] );
+					return new WP_Error( 'not-formatted-options', __( 'Options must contain type and option value', 'poll-creator' ), [ 'status' => 400 ] );
 				}
 			}
 		}
@@ -168,7 +168,7 @@ class Polls {
 
 		// Now all set. If we have valid poll ID then update the poll data. Otherwise create a new poll.
 		if ( ! preg_match( '/^[a-f\d]{8}(-[a-f\d]{4}){4}[a-f\d]{8}$/i', $args['client_id'] ) ) {
-			return new WP_Error( 'invalid-client-id', __( 'Client id is not valid', 'pollify' ), [ 'status' => 400 ] );
+			return new WP_Error( 'invalid-client-id', __( 'Client id is not valid', 'poll-creator' ), [ 'status' => 400 ] );
 		}
 
 		// Get poll data using client_id
@@ -208,7 +208,7 @@ class Polls {
 			);
 
 			if ( ! $updated ) {
-				return new WP_Error( 'update-failed', __( 'Poll not updated successfully', 'pollify' ), [ 'status' => 422 ] );
+				return new WP_Error( 'update-failed', __( 'Poll not updated successfully', 'poll-creator' ), [ 'status' => 422 ] );
 			}
 
 			$option_saved = $this->save_options( $poll['id'], $args['options'] );
@@ -237,7 +237,7 @@ class Polls {
 			);
 
 			if ( ! $inserted ) {
-				return new WP_Error( 'insert-failed', __( 'Poll not created successfully', 'pollify' ), [ 'status' => 422 ] );
+				return new WP_Error( 'insert-failed', __( 'Poll not created successfully', 'poll-creator' ), [ 'status' => 422 ] );
 			}
 
 			$args['id'] = $wpdb->insert_id;
@@ -272,7 +272,7 @@ class Polls {
 		);
 
 		if ( ! $poll ) {
-			return new WP_Error( 'not-found', __( 'Poll not found', 'pollify' ), [ 'status' => 404 ] );
+			return new WP_Error( 'not-found', __( 'Poll not found', 'poll-creator' ), [ 'status' => 404 ] );
 		}
 
 		$poll_options = $wpdb->get_results(
@@ -314,7 +314,7 @@ class Polls {
 		);
 
 		if ( ! $deleted ) {
-			return new WP_Error( 'deletion-failed', __( 'Poll not deleted successfully', 'pollify' ), [ 'status' => 422 ] );
+			return new WP_Error( 'deletion-failed', __( 'Poll not deleted successfully', 'poll-creator' ), [ 'status' => 422 ] );
 		}
 
 
@@ -325,7 +325,7 @@ class Polls {
 		);
 
 		if ( ! $deleted ) {
-			return new WP_Error( 'deletion-failed', __( 'Poll not deleted successfully', 'pollify' ), [ 'status' => 422 ] );
+			return new WP_Error( 'deletion-failed', __( 'Poll not deleted successfully', 'poll-creator' ), [ 'status' => 422 ] );
 		}
 
 		return true;
@@ -392,7 +392,7 @@ class Polls {
 		global $wpdb;
 
 		if ( empty( $poll_id ) ) {
-			return new WP_Error( 'empty-poll-id', __( 'Poll ID cannot be empty', 'pollify' ), [ 'status' => 400 ] );
+			return new WP_Error( 'empty-poll-id', __( 'Poll ID cannot be empty', 'poll-creator' ), [ 'status' => 400 ] );
 		}
 
 		// Get all poll options using $poll_id.

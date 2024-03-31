@@ -53,7 +53,7 @@ class Menu {
 	public function add_metabox(): void {
 		add_meta_box(
 			'pollify_poll_metabox',
-			__( 'Pollify Poll', 'pollify' ),
+			__( 'Pollify Poll', 'poll-creator' ),
 			[ $this, 'render_metabox' ],
 			'?page=pollify',
 			'normal',
@@ -70,10 +70,10 @@ class Menu {
 		global $pollify_menu;
 
 		$pollify_menu = add_menu_page(
-			__( 'Pollify', 'pollify' ),
-			__( 'Pollify', 'pollify' ),
+			__( 'Pollify', 'poll-creator' ),
+			__( 'Pollify', 'poll-creator' ),
 			'manage_options',
-			'pollify',
+			'poll-creator',
 			[ $this, 'render_polls' ],
 			'dashicons-chart-bar',
 			'26'
@@ -119,7 +119,7 @@ class Menu {
 		$page = pollify_filter_input( INPUT_GET, 'page', POLLIFY_FILTER_SANITIZE_STRING );
 		$action = pollify_filter_input( INPUT_GET, 'action', POLLIFY_FILTER_SANITIZE_STRING );
 
-		if ( 'pollify' === $page && 'view_results' === $action ) {
+		if ( 'poll-creator' === $page && 'view_results' === $action ) {
 			$poll_id = pollify_filter_input( INPUT_GET, 'poll_id', POLLIFY_FILTER_SANITIZE_STRING );
 
 			$poll = \UnderDev\Pollify\Polls::get_instance()->get( $poll_id );
@@ -160,7 +160,7 @@ class Menu {
 		}
 
 		$args = [
-			'label'   => __( 'Polls per page', 'pollify' ),
+			'label'   => __( 'Polls per page', 'poll-creator' ),
 			'default' => 10,
 			'option'  => 'polls_per_page',
 		];
@@ -178,7 +178,7 @@ class Menu {
 		$action = pollify_filter_input( INPUT_GET, 'action', POLLIFY_FILTER_SANITIZE_STRING );
 		$nonce  = pollify_filter_input( INPUT_GET, '_nonce', POLLIFY_FILTER_SANITIZE_STRING );
 
-		if ( 'pollify' !== $page || empty( $action ) ) {
+		if ( 'poll-creator' !== $page || empty( $action ) ) {
 			return;
 		}
 

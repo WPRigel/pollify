@@ -194,7 +194,7 @@ class Poll {
 
 		// Check if options is empty or not.
 		if ( empty( $options ) ) {
-			return new WP_Error( 'empty-options', __( 'Options are empty.', 'pollify' ), [ 'status' => 400 ] );
+			return new WP_Error( 'empty-options', __( 'Options are empty.', 'poll-creator' ), [ 'status' => 400 ] );
 		}
 
 		// Get the voter details from Voter model class.
@@ -205,7 +205,7 @@ class Poll {
 			! empty( $settings['allowedPerComputerResponse'] )
 			&& $voter->is_already_voted( $this->get_client_id() )
 		) {
-			return new WP_Error( 'already-voted', __( 'You have already voted.', 'pollify' ), [ 'status' => 400 ] );
+			return new WP_Error( 'already-voted', __( 'You have already voted.', 'poll-creator' ), [ 'status' => 400 ] );
 		}
 
 		// Save the vote data.

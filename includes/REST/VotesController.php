@@ -51,7 +51,7 @@ class VotesController extends WP_REST_Controller {
 				$this->namespace, '/' . $this->action . '/(?P<client_id>[^/]+)/', [
 				'args' => [
 					'client_id' => [
-						'description' => __( 'Unique identifier for the object for poll', 'pollify' ),
+						'description' => __( 'Unique identifier for the object for poll', 'poll-creator' ),
 						'type'        => 'string',
 					],
 				],
@@ -76,17 +76,17 @@ class VotesController extends WP_REST_Controller {
 		$args = $request->get_params();
 
 		if ( ! wp_verify_nonce( $args['nonce'], 'pollify-vote' ) ) {
-			return new WP_Error( 'invalid_nonce', __( 'Invalid nonce.', 'pollify' ), [ 'status' => 403 ] );
+			return new WP_Error( 'invalid_nonce', __( 'Invalid nonce.', 'poll-creator' ), [ 'status' => 403 ] );
 		}
 
 		if ( empty( $args['client_id'] ) ) {
-			return new WP_Error( 'no-poll-id', __( 'Invalid poll', 'pollify' ), [ 'status' => 404 ] );
+			return new WP_Error( 'no-poll-id', __( 'Invalid poll', 'poll-creator' ), [ 'status' => 404 ] );
 		}
 
 		$poll = Polls::get_instance()->get( $args['client_id'] );
 
 		if ( is_wp_error( $poll ) ) {
-			return new WP_Error( 'no-poll', __( 'Invalid poll', 'pollify' ), [ 'status' => 404 ] );
+			return new WP_Error( 'no-poll', __( 'Invalid poll', 'poll-creator' ), [ 'status' => 404 ] );
 		}
 
 		$data = $poll->vote( $args['options'] ?? [] );
@@ -112,19 +112,19 @@ class VotesController extends WP_REST_Controller {
             'type'       => 'array',
             'properties' => [
                 'id' => [
-                    'description' => __( 'Unique identifier for the object.', 'pollify' ),
+                    'description' => __( 'Unique identifier for the object.', 'poll-creator' ),
                     'type'        => 'integer',
                     'context'     => [ 'view' ],
                     'readonly'    => true,
                 ],
                 'options' => [
                     'required'    => true,
-                    'description' => __( 'Option IDs', 'pollify' ),
+                    'description' => __( 'Option IDs', 'poll-creator' ),
                     'type'        => 'array',
                     'context'     => [ 'view', 'edit' ],
                 ],
 				'with_result' => [
-                    'description' => __( "Return with result or not", 'pollify' ),
+                    'description' => __( "Return with result or not", 'poll-creator' ),
                     'type'        => 'boolean',
                     'context'     => [ 'view' ],
                     'readonly'    => true,

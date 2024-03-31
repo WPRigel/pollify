@@ -15,9 +15,9 @@ $reseted = pollify_filter_input( INPUT_GET, 'updated', FILTER_VALIDATE_BOOL );
 
 	<?php if ( $reseted ) : ?>
 	<div id="message" class="notice is-dismissible updated">
-		<p><?php esc_html_e( 'Poll results has been reseted.', 'pollify' ); ?></p>
+		<p><?php esc_html_e( 'Poll results has been reseted.', 'poll-creator' ); ?></p>
 		<button type="button" class="notice-dismiss">
-			<span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'pollify' ); ?></span>
+			<span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'poll-creator' ); ?></span>
 		</button>
 	</div>
 	<?php endif; ?>
@@ -32,7 +32,7 @@ $reseted = pollify_filter_input( INPUT_GET, 'updated', FILTER_VALIDATE_BOOL );
 		$table->prepare_items();
 
 		// Search form
-		$table->search_box( __( 'Search by title', 'pollify' ), 'pollify_poll_search_id' );
+		$table->search_box( __( 'Search by title', 'poll-creator' ), 'pollify_poll_search_id' );
 
 		// Display table
 		$table->display();

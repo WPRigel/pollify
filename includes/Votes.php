@@ -53,19 +53,19 @@ class Votes {
 
 		// Check if poll_id and option_id empty or not.
 		if ( empty( $args['client_id'] ) || empty( $args['option_ids'] ) ) {
-			return new WP_Error( 'empty_poll_id_or_option_id', __( 'Poll ID or Option ID is empty.', 'pollify' ) );
+			return new WP_Error( 'empty_poll_id_or_option_id', __( 'Poll ID or Option ID is empty.', 'poll-creator' ) );
 		}
 
 		$poll = Polls::get_instance()->get( $args['client_id'] );
 
 		// Checking if poll exist or not.
 		if ( ! $poll || is_wp_error( $poll ) ) {
-			return new WP_Error( 'poll_not_exist', __( 'Invalid poll data.', 'pollify' ) );
+			return new WP_Error( 'poll_not_exist', __( 'Invalid poll data.', 'poll-creator' ) );
 		}
 
 		// Checking if valid poll option or not.
 		if ( ! is_array( $args['option_ids'] ) || ! $poll->is_valid_poll_option( (array) $args['option_ids'] ) ) {
-			return new WP_Error( 'invalid_poll_option', __( 'Invalid poll option.', 'pollify' ) );
+			return new WP_Error( 'invalid_poll_option', __( 'Invalid poll option.', 'poll-creator' ) );
 		}
 
 		// Get user data from Voter class.
@@ -103,7 +103,7 @@ class Votes {
 			);
 
 			if ( ! $inserted ) {
-				return new WP_Error( 'vote_not_inserted', __( 'Sorry vote not accepted.', 'pollify' ) );
+				return new WP_Error( 'vote_not_inserted', __( 'Sorry vote not accepted.', 'poll-creator' ) );
 			}
 		}
 

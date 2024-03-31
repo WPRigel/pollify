@@ -73,7 +73,7 @@ class PollsController extends WP_REST_Controller {
             $this->namespace, '/' . $this->action . '/(?P<id>[\d]+)/', [
 				'args' => [
 					'id' => [
-						'description'       => __( 'Unique identifier for the object.', 'pollify' ),
+						'description'       => __( 'Unique identifier for the object.', 'poll-creator' ),
 						'type'              => 'integer',
 					],
 				],
@@ -204,7 +204,7 @@ class PollsController extends WP_REST_Controller {
 
 		return rest_ensure_response( [
 			'success' => true,
-			'message' => __( 'Poll deleted successfully', 'pollify' ),
+			'message' => __( 'Poll deleted successfully', 'poll-creator' ),
 		] );
 	}
 
@@ -261,33 +261,33 @@ class PollsController extends WP_REST_Controller {
             'type'       => 'array',
             'properties' => [
                 'id' => [
-                    'description' => __( 'Unique identifier for the object.', 'pollify' ),
+                    'description' => __( 'Unique identifier for the object.', 'poll-creator' ),
                     'type'        => 'integer',
                     'context'     => [ 'view' ],
                     'readonly'    => true,
                 ],
                 'title' => [
-                    'description' => __( 'Poll title', 'pollify' ),
+                    'description' => __( 'Poll title', 'poll-creator' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit' ],
                     'readonly'    => true,
                 ],
                 'description' => [
                     'required'    => false,
-                    'description' => __( 'Poll description', 'pollify' ),
+                    'description' => __( 'Poll description', 'poll-creator' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit' ],
                 ],
                 'type' => [
                     'required'    => true,
-                    'description' => __( 'The poll type. It can be normal poll, quize or NPS', 'pollify' ),
+                    'description' => __( 'The poll type. It can be normal poll, quize or NPS', 'poll-creator' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit' ],
 					'default'     => 'poll',
                 ],
                 'status' => [
                     'required'    => true,
-                    'description' => __( 'Poll status', 'pollify' ),
+                    'description' => __( 'Poll status', 'poll-creator' ),
                     'type'        => 'string',
                     'enum'        => [ 'draft', 'publish', 'trash', 'delete' ],
                     'context'     => [ 'view', 'edit' ],
@@ -295,24 +295,24 @@ class PollsController extends WP_REST_Controller {
                 ],
                 'reference' => [
                     'required'    => false,
-                    'description' => __( 'From where the poll was created', 'pollify' ),
+                    'description' => __( 'From where the poll was created', 'poll-creator' ),
                     'type'        => 'string',
                     'context'     => [ 'view', 'edit' ],
                 ],
                 'options' => [
                     'required'    => false,
-                    'description' => __( 'Poll options', 'pollify' ),
+                    'description' => __( 'Poll options', 'poll-creator' ),
                     'type'        => 'array',
                     'context'     => [ 'view', 'edit' ],
                 ],
 				'created_date' => [
-                    'description' => __( "The date the withdraw request has beed created in the site's timezone.", 'pollify' ),
+                    'description' => __( "The date the withdraw request has beed created in the site's timezone.", 'poll-creator' ),
                     'type'        => 'date-time',
                     'context'     => [ 'view', 'edit' ],
                     'readonly'    => true,
                 ],
 				'updated_date' => [
-                    'description' => __( "The date the withdraw request has beed updated in the site's timezone.", 'pollify' ),
+                    'description' => __( "The date the withdraw request has beed updated in the site's timezone.", 'poll-creator' ),
                     'type'        => 'date-time',
                     'context'     => [ 'view', 'edit' ],
                     'readonly'    => true,

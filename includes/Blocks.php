@@ -166,7 +166,7 @@ class Blocks {
 	public function localize_script() {
 		wp_localize_script(
 			'wp-api-fetch',
-			'pollify',
+			'poll-creator',
 			array(
 				'nonce' => wp_create_nonce( 'pollify-vote' ),
 			)

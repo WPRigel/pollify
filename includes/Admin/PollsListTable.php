@@ -115,13 +115,13 @@ class PollsListTable extends \WP_List_Table {
 	 */
 	public function column_title( $item ) {
 		$page         = pollify_filter_input( INPUT_GET, 'page', POLLIFY_FILTER_SANITIZE_STRING );
-		$confirm_text = __( 'Are you sure you want to reset the results? If you do reset, the results are not achievable again.', 'pollify' );
+		$confirm_text = __( 'Are you sure you want to reset the results? If you do reset, the results are not achievable again.', 'poll-creator' );
 
 		$nocne = wp_create_nonce( 'pollify_reset_results' );
 
 		$actions = array(
-			'view'  => sprintf( '<a href="?page=%s&action=%s&poll_id=%s">' . __( 'View results', 'pollify' ) . '</a>', $page, 'view_results', $item['client_id'] ),
-			'trash' => sprintf( '<a class="submitdelete" onclick="return confirm(\'%s\')" href="?page=%s&action=%s&poll_id=%s&_nonce=%s">' . __( 'Reset Results', 'pollify' ) . '</a>', $confirm_text, $page, 'reset_results', $item['client_id'], $nocne ),
+			'view'  => sprintf( '<a href="?page=%s&action=%s&poll_id=%s">' . __( 'View results', 'poll-creator' ) . '</a>', $page, 'view_results', $item['client_id'] ),
+			'trash' => sprintf( '<a class="submitdelete" onclick="return confirm(\'%s\')" href="?page=%s&action=%s&poll_id=%s&_nonce=%s">' . __( 'Reset Results', 'poll-creator' ) . '</a>', $confirm_text, $page, 'reset_results', $item['client_id'], $nocne ),
         );
 
 		// Wrap the title with view result link.
@@ -176,9 +176,9 @@ class PollsListTable extends \WP_List_Table {
 	 */
 	public function column_status( $item ) {
 		$statuses = [
-			'publish' => __( 'Open', 'pollify' ),
-			'draft'   => __( 'Closed', 'pollify' ),
-			'trash'   => __( 'Trash', 'pollify' ),
+			'publish' => __( 'Open', 'poll-creator' ),
+			'draft'   => __( 'Closed', 'poll-creator' ),
+			'trash'   => __( 'Trash', 'poll-creator' ),
 		];
 
 		// Wrap the status with span tag so later I can style it.
@@ -196,7 +196,7 @@ class PollsListTable extends \WP_List_Table {
 		// Get link for view-results page.
 		$view_results_link = add_query_arg(
 			[
-				'page'    => 'pollify',
+				'page'    => 'poll-creator',
 				'action'  => 'view_results',
 				'poll_id' => $item['client_id'],
 			],
@@ -208,7 +208,7 @@ class PollsListTable extends \WP_List_Table {
 		<div class="post-com-count-wrapper">
 			<a href="<?php echo esc_url( $view_results_link ); ?>" class="post-com-count post-com-count-approved">
 				<span class="comment-count-approved" aria-hidden="true"><?php echo $item['response'] ?? 0; ?></span>
-				<span class="screen-reader-text"><?php echo wp_sprintf( __( '%s votes', 'pollify' ), $item['response'] ); ?></span>
+				<span class="screen-reader-text"><?php echo wp_sprintf( __( '%s votes', 'poll-creator' ), $item['response'] ); ?></span>
 			</a>
 		</div>
 		<?php
@@ -233,10 +233,10 @@ class PollsListTable extends \WP_List_Table {
 	 */
 	protected function get_views() {
 		$views = [
-			'all'     => '<a href="' . admin_url( 'admin.php?page=pollify' ) . '" class="' . ( empty( pollify_filter_input( INPUT_GET, 'status', POLLIFY_FILTER_SANITIZE_STRING ) ) ? 'current' : '' ) . '">' . __( 'All', 'pollify' ) . '</a>',
-			'publish' => '<a href="' . admin_url( 'admin.php?page=pollify&status=publish' ) . '" class="' . ( 'publish' === pollify_filter_input( INPUT_GET, 'status', POLLIFY_FILTER_SANITIZE_STRING ) ? 'current' : '' ) . '">' . __( 'Open', 'pollify' ) . '</a>',
-			'draft'   => '<a href="' . admin_url( 'admin.php?page=pollify&status=draft' ) . '" class="' . ( 'draft' === pollify_filter_input( INPUT_GET, 'status', POLLIFY_FILTER_SANITIZE_STRING ) ? 'current' : '' ) . '">' . __( 'Closed', 'pollify' ) . '</a>',
-			'trash'   => '<a href="' . admin_url( 'admin.php?page=pollify&status=trash' ) . '" class="' . ( 'trash' === pollify_filter_input( INPUT_GET, 'status', POLLIFY_FILTER_SANITIZE_STRING ) ? 'current' : '' ) . '">' . __( 'Trash', 'pollify' ) . '</a>',
+			'all'     => '<a href="' . admin_url( 'admin.php?page=pollify' ) . '" class="' . ( empty( pollify_filter_input( INPUT_GET, 'status', POLLIFY_FILTER_SANITIZE_STRING ) ) ? 'current' : '' ) . '">' . __( 'All', 'poll-creator' ) . '</a>',
+			'publish' => '<a href="' . admin_url( 'admin.php?page=pollify&status=publish' ) . '" class="' . ( 'publish' === pollify_filter_input( INPUT_GET, 'status', POLLIFY_FILTER_SANITIZE_STRING ) ? 'current' : '' ) . '">' . __( 'Open', 'poll-creator' ) . '</a>',
+			'draft'   => '<a href="' . admin_url( 'admin.php?page=pollify&status=draft' ) . '" class="' . ( 'draft' === pollify_filter_input( INPUT_GET, 'status', POLLIFY_FILTER_SANITIZE_STRING ) ? 'current' : '' ) . '">' . __( 'Closed', 'poll-creator' ) . '</a>',
+			'trash'   => '<a href="' . admin_url( 'admin.php?page=pollify&status=trash' ) . '" class="' . ( 'trash' === pollify_filter_input( INPUT_GET, 'status', POLLIFY_FILTER_SANITIZE_STRING ) ? 'current' : '' ) . '">' . __( 'Trash', 'poll-creator' ) . '</a>',
 		];
 
 		return $views;
@@ -255,11 +255,11 @@ class PollsListTable extends \WP_List_Table {
 			?>
 			<div class="alignleft actions bulkactions">
 				<select name="type" id="poll-type" >
-					<option value="all" <?php selected( 'all', $type, true ); ?>><?php esc_html_e( 'All types', 'pollify' ); ?></option>
-					<option value="poll" <?php selected( 'poll', $type, true ); ?>><?php esc_html_e( 'Poll', 'pollify' ); ?></option>
+					<option value="all" <?php selected( 'all', $type, true ); ?>><?php esc_html_e( 'All types', 'poll-creator' ); ?></option>
+					<option value="poll" <?php selected( 'poll', $type, true ); ?>><?php esc_html_e( 'Poll', 'poll-creator' ); ?></option>
 				</select>
 				<?php
-				submit_button( __( 'Filter', 'pollify' ), '', 'filter_action', false, [ 'id' => 'pollify-filter-action-button' ] );
+				submit_button( __( 'Filter', 'poll-creator' ), '', 'filter_action', false, [ 'id' => 'pollify-filter-action-button' ] );
 				?>
 			</div>
 			<?php

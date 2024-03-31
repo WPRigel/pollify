@@ -1,12 +1,13 @@
 <?php
 /**
-Plugin Name: Pollify-main
-Plugin URI: https://github.com/sabbir1991
-Description: Create poll using gutenberg way.
-Version: 1.0.0
-Author: wprigel
-Author URI: http://wprigel.com/
-License: GPL2
+* Plugin Name: Pollify
+* Plugin URI: https://github.com/sabbir1991
+* Description: Create poll using gutenberg way.
+* Version: 1.0.0
+* Author: wprigel
+* Author URI: http://wprigel.com/
+* License: GPL2
+* Text Domain: poll-creator
 */
 
 /**

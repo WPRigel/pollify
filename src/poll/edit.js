@@ -145,44 +145,44 @@ const Edit = ( props ) => {
 	return (
 		<div { ...blockProps }>
 			<InspectorControls group="settings">
-				<PanelBody title={ __( 'General settings', 'pollify' ) }>
+				<PanelBody title={ __( 'General settings', 'poll-creator' ) }>
 					<SelectControl
-						label={ __( 'Status', 'pollify' ) }
+						label={ __( 'Status', 'poll-creator' ) }
 						value={ status }
 						options={ [
-							{ label: __( 'Open', 'pollify' ), value: 'publish' },
-							{ label: __( 'Close', 'pollify' ), value: 'draft' },
+							{ label: __( 'Open', 'poll-creator' ), value: 'publish' },
+							{ label: __( 'Close', 'poll-creator' ), value: 'draft' },
 						] }
 						onChange={ ( status ) => setAttributes( { status } ) }
 					/>
 				</PanelBody>
-				<PanelBody title={ __( 'Confiramtion message', 'pollify' ) }>
+				<PanelBody title={ __( 'Confiramtion message', 'poll-creator' ) }>
 					<SelectControl
-						label={ __( 'On submission', 'pollify' ) }
+						label={ __( 'On submission', 'poll-creator' ) }
 						value={ confirmationMessageType }
 						options={ [
-							{ label: __( 'View results', 'pollify' ), value: 'view-result' },
-							{ label: __( 'View message', 'pollify' ), value: 'view-message' },
+							{ label: __( 'View results', 'poll-creator' ), value: 'view-result' },
+							{ label: __( 'View message', 'poll-creator' ), value: 'view-message' },
 						] }
 						onChange={ ( confirmationMessageType ) => setAttributes( { confirmationMessageType } ) }
 					/>
 
 					{ confirmationMessageType === 'view-message' && (
 						<TextareaControl
-							value={ confirmationMessage || __( 'Thanks for voting!', 'pollify' ) }
+							value={ confirmationMessage || __( 'Thanks for voting!', 'poll-creator' ) }
 							label={ __( 'Message text', 'crowdsignal-forms' ) }
 							placeholder={ __(
 								'Thanks for voting!',
-								'pollify'
+								'poll-creator'
 							) }
 							onChange={ ( confirmationMessage ) => setAttributes( { confirmationMessage } ) }
 						/>
 					) }
 				</PanelBody>
-				<PanelBody title={ __( 'Response settings', 'pollify' ) }>
+				<PanelBody title={ __( 'Response settings', 'poll-creator' ) }>
 					<CheckboxControl
-						label={ __( 'Allowed one response per computer', 'pollify' ) }
-						help={ __( 'If checked, only one response per computer will be allowed.', 'pollify' ) }
+						label={ __( 'Allowed one response per computer', 'poll-creator' ) }
+						help={ __( 'If checked, only one response per computer will be allowed.', 'poll-creator' ) }
 						checked={ allowedPerComputerResponse }
 						onChange={ ( allowedPerComputerResponse ) => setAttributes( { allowedPerComputerResponse } ) }
 					/>
@@ -191,33 +191,33 @@ const Edit = ( props ) => {
 			</InspectorControls>
 			<InspectorControls group="styles">
 				<PanelColorSettings
-					title={ __( 'Submit button colors', 'pollify' ) }
+					title={ __( 'Submit button colors', 'poll-creator' ) }
 					initialOpen={ false }
 					colorSettings={ [
 						{
 							value: submitButtonBgColor,
 							onChange: ( submitButtonBgColor ) => setAttributes( { submitButtonBgColor } ),
-							label: __( 'Background Color', 'pollify' ),
+							label: __( 'Background Color', 'poll-creator' ),
 						},
 						{
 							value: submitButtonTextColor,
 							onChange: ( submitButtonTextColor ) => setAttributes( { submitButtonTextColor } ),
-							label: __( 'Text Color', 'pollify' ),
+							label: __( 'Text Color', 'poll-creator' ),
 						},
 						{
 							value: submitButtonHoverBgColor,
 							onChange: ( submitButtonHoverBgColor ) => setAttributes( { submitButtonHoverBgColor } ),
-							label: __( 'Hover Background Color', 'pollify' ),
+							label: __( 'Hover Background Color', 'poll-creator' ),
 						},
 						{
 							value: submitButtonHoverTextColor,
 							onChange: ( submitButtonHoverTextColor ) => setAttributes( { submitButtonHoverTextColor } ),
-							label: __( 'Hover Text Color', 'pollify' ),
+							label: __( 'Hover Text Color', 'poll-creator' ),
 						},
 					] }
 				>
 					<ButtonGroup aria-label={ __( 'Button width' ) }>
-						<h2>{ __( 'Button width', 'pollify' ) }</h2>
+						<h2>{ __( 'Button width', 'poll-creator' ) }</h2>
 
 						{ [ 25, 50, 75, 100 ].map( ( widthValue ) => {
 							return (
@@ -244,7 +244,7 @@ const Edit = ( props ) => {
 
 						{ ( submitButtonWidth && 100 !== submitButtonWidth ) && (
 							<>
-								<h2>{ __( 'Button alignment', 'pollify' ) }</h2>
+								<h2>{ __( 'Button alignment', 'poll-creator' ) }</h2>
 
 								{ [ 'left', 'center', 'right' ].map( ( alignValue ) => (
 									<Button
@@ -289,7 +289,7 @@ const Edit = ( props ) => {
 					tagName='h4'
 					value={title}
 					onChange={ ( title ) => setAttributes( { title } ) }
-					placeholder={ __( 'Enter the poll question', 'pollify' ) }
+					placeholder={ __( 'Enter the poll question', 'poll-creator' ) }
 					allowedFormats={  [ 'core/bold', 'core/link', 'core/italic', 'core/text-color' ] }
 					className='poll-title'
 				/>
@@ -297,7 +297,7 @@ const Edit = ( props ) => {
 					tagName='p'
 					value={description}
 					onChange={ ( description ) => setAttributes( { description } ) }
-					placeholder={ __( 'Add a description (optional)', 'pollify' ) }
+					placeholder={ __( 'Add a description (optional)', 'poll-creator' ) }
 					allowedFormats={  [ 'core/bold', 'core/link', 'core/italic', 'core/text-color' ] }
 					className='poll-description'
 				/>

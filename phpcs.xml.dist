@@ -1,12 +1,13 @@
 <?xml version="1.0" ?>
-<ruleset name="Starter Plugin Coding Standards Rules">
+<ruleset name="Pollify plugin Coding Standards Rules">
     <config name="minimum_supported_wp_version" value="5.4" />
 	<!-- Check for PHP cross-version compatibility. -->
-	<config name="testVersion" value="7.2-"/>
+	<config name="testVersion" value="7.4-"/>
 	<rule ref="PHPCompatibilityWP"/>
 
     <file>includes</file>
-    <file>plugins.php</file>
+    <file>templates</file>
+    <file>pollify.php</file>
 
     <!-- Show progress and sniff codes in all reports. -->
     <arg value="ps"/>
@@ -37,7 +38,7 @@
     <rule ref="WordPress.WP.I18n">
         <properties>
             <property name="text_domain" type="array">
-                <element value="starter-plugin" />
+                <element value="poll-creator" />
             </property>
         </properties>
     </rule>

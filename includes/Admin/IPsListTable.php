@@ -56,8 +56,8 @@ class IPsListTable extends \WP_List_Table {
 		}
 
 		parent::__construct( [
-			'singular' => __( 'IP', 'pollify' ),
-			'plural'   => __( 'IP\'s', 'pollify' ),
+			'singular' => __( 'IP', 'poll-creator' ),
+			'plural'   => __( 'IP\'s', 'poll-creator' ),
 			'ajax'     => false,
 		] );
 	}
@@ -89,7 +89,10 @@ class IPsListTable extends \WP_List_Table {
 		switch ($column_name) {
 			case 'id':
 			case 'ip':
+				return ! empty( $item['ip'] ) ? $item['ip'] : __( 'N/A', 'poll-creator' );
 			case 'location':
+				var_dump( $item[$column_name] );
+				return ! empty( $item[$column_name] ) ? $item[$column_name] : __( 'N/A', 'poll-creator' );
 			case 'votes':
 			default:
 				return $item[$column_name];
@@ -126,14 +129,14 @@ class IPsListTable extends \WP_List_Table {
 			?>
 			<div class="alignleft actions bulkactions">
 				<select name="location" id="vote-location" >
-					<option value="" <?php selected( '', $selected_location, true ); ?>><?php esc_html_e( 'All countries', 'pollify' ); ?></option>
+					<option value="" <?php selected( '', $selected_location, true ); ?>><?php esc_html_e( 'All countries', 'poll-creator' ); ?></option>
 
 					<?php foreach ( $locations as $location ) : ?>
 						<option value="<?php echo esc_attr( $location['location'] ); ?>" <?php selected( $location['location'], $selected_location, true ); ?>><?php echo esc_html( pollify_get_country_name( $location['location'] ) ); ?></option>
 					<?php endforeach; ?>
 				</select>
 				<?php
-				submit_button( __( 'Filter', 'pollify' ), '', 'filter_action', false, [ 'id' => 'pollify-filter-action-button' ] );
+				submit_button( __( 'Filter', 'poll-creator' ), '', 'filter_action', false, [ 'id' => 'pollify-filter-action-button' ] );
 				?>
 			</div>
 			<?php

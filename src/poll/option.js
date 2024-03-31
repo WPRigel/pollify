@@ -35,7 +35,7 @@ const Option = (
 			<RichText
 				tagName='label'
 				className='option-label'
-				placeholder={ __( 'Enter option', 'pollify' ) }
+				placeholder={ __( 'Enter option', 'poll-creator' ) }
 				multiline={ false }
 				preserveWhiteSpace={ false }
 				onChange={ handleChange }

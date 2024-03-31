@@ -112,7 +112,7 @@ $is_already_voted = ( ! empty( $attributes['allowedPerComputerResponse'] ) && $v
 					echo (
 						! empty( $attributes['confirmationMessageType'] )
 						&& 'view-message' === $attributes['confirmationMessageType']
-					) ? esc_html( $attributes['confirmationMessage'] ) : __( 'Thank you for voting!', 'pollify' );
+					) ? esc_html( $attributes['confirmationMessage'] ) : __( 'Thank you for voting!', 'poll-creator' );
 				?>
 			</div>
 			<?php endif; ?>

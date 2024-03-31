@@ -18,8 +18,8 @@ $navigations = pollify_poll_results_page_nav();
 			<span class="dashicons dashicons-chart-bar"></span>
 			<span><?php echo wp_kses_post( $poll->get_title() ); ?></span>
 		</h1>
-		<a href="<?php echo esc_url( add_query_arg( [ 'page' => 'pollify' ], admin_url( 'admin.php' ) ) ); ?>" class="page-title-action">
-			<?php esc_html_e( 'Back to list', 'pollify' ); ?>
+		<a href="<?php echo esc_url( add_query_arg( [ 'page' => 'poll-creator' ], admin_url( 'admin.php' ) ) ); ?>" class="page-title-action">
+			<?php esc_html_e( 'Back to list', 'poll-creator' ); ?>
 		</a>
 	</div>
 
@@ -42,7 +42,7 @@ $navigations = pollify_poll_results_page_nav();
 			<div class="meta-card-column">
 				<div class="result-overview meta-card">
 					<div class="heading">
-						<h2><?php esc_html_e( 'At a glance', 'pollify' ); ?></h2>
+						<h2><?php esc_html_e( 'At a glance', 'poll-creator' ); ?></h2>
 					</div>
 
 					<div class="meta-card-content">
@@ -54,19 +54,19 @@ $navigations = pollify_poll_results_page_nav();
 								<div class="horizointal-bar-chart__bar">
 									<div class="horizointal-bar-chart__bar-label">
 										<span class="text"><?php echo wp_kses_post( $result_option['option'] ?? '' ); ?></span>
-										<span class="count"><?php echo esc_html( wp_sprintf( __( '%s votes', 'pollify' ), $result_option['votes'] ) ); ?></span>
-										<span class="percentage"><?php echo esc_html( wp_sprintf( __( '%s%', 'pollify' ), $result_option['percentage'] ) ); ?></span>
+										<span class="count"><?php echo esc_html( wp_sprintf( __( '%s votes', 'poll-creator' ), $result_option['votes'] ) ); ?></span>
+										<span class="percentage"><?php echo esc_html( wp_sprintf( __( '%s%', 'poll-creator' ), $result_option['percentage'] ) ); ?></span>
 									</div>
 									<div class="horizointal-bar-chart__bar-indicator">
-										<div class="bar-fill" style="width:<?php echo esc_html( wp_sprintf( __( '%s%', 'pollify' ), $result_option['percentage'] ) ); ?>"></div>
+										<div class="bar-fill" style="width:<?php echo esc_html( wp_sprintf( __( '%s%', 'poll-creator' ), $result_option['percentage'] ) ); ?>"></div>
 									</div>
 								</div>
 								<?php endforeach; ?>
 								<div class="horizointal-bar-chart__total-count">
-									<span class="count"><?php echo esc_html( wp_sprintf( __( 'Total votes: %s', 'pollify' ), $poll_results['total_votes'] ) ); ?></span>
+									<span class="count"><?php echo esc_html( wp_sprintf( __( 'Total votes: %s', 'poll-creator' ), $poll_results['total_votes'] ) ); ?></span>
 								</div>
 							<?php else : ?>
-								<p><?php esc_html_e( 'No results found for this poll', 'pollify' ); ?></p>
+								<p><?php esc_html_e( 'No results found for this poll', 'poll-creator' ); ?></p>
 							<?php endif; ?>
 						</div>
 					</div>
@@ -74,7 +74,7 @@ $navigations = pollify_poll_results_page_nav();
 
 				<div class="popular-location meta-card">
 					<div class="heading">
-						<h2><?php esc_html_e( 'Popular Location', 'pollify' ); ?></h2>
+						<h2><?php esc_html_e( 'Popular Location', 'poll-creator' ); ?></h2>
 					</div>
 
 					<div class="meta-card-content location-data">
@@ -126,14 +126,14 @@ $navigations = pollify_poll_results_page_nav();
 									</div>
 								<?php endforeach; ?>
 							<?php else : ?>
-								<p class="no-data-text"><?php esc_html_e( 'No location data found for this poll', 'pollify' ); ?></p>
+								<p class="no-data-text"><?php esc_html_e( 'No location data found for this poll', 'poll-creator' ); ?></p>
 							<?php endif; ?>
 						</div>
 					</div>
 				</div>
 				<div class="ip-details meta-card">
 					<div class="heading">
-						<h2><?php esc_html_e( 'IP overviews', 'pollify' ); ?></h2>
+						<h2><?php esc_html_e( 'IP overviews', 'poll-creator' ); ?></h2>
 					</div>
 
 					<div class="meta-card-content ip-overview">
@@ -149,9 +149,9 @@ $navigations = pollify_poll_results_page_nav();
 								<table class="ips-table wp-list-table widefat table-view-list">
 									<thead>
 										<tr>
-											<th><?php esc_html_e( 'Location', 'pollify' ); ?></th>
-											<th><?php esc_html_e( 'IP Address', 'pollify' ); ?></th>
-											<th><?php esc_html_e( 'Vote count', 'pollify' ); ?></th>
+											<th><?php esc_html_e( 'Location', 'poll-creator' ); ?></th>
+											<th><?php esc_html_e( 'IP Address', 'poll-creator' ); ?></th>
+											<th><?php esc_html_e( 'Vote count', 'poll-creator' ); ?></th>
 										</tr>
 									</thead>
 									<?php foreach ( $location_votes as $location_vote ) : ?>
@@ -167,10 +167,10 @@ $navigations = pollify_poll_results_page_nav();
 								</table>
 
 								<div class="see-more-link">
-									<a href="<?php echo add_query_arg( [ 'page' => 'pollify', 'action' => 'view_results', 'tab' => 'ip-details', 'poll_id' => $poll->get_client_id() ], admin_url( 'admin.php' ) ); ?>"><?php esc_html_e( 'See all IP\'s', 'pollify' ); ?> &#8594;</a>
+									<a href="<?php echo add_query_arg( [ 'page' => 'poll-creator', 'action' => 'view_results', 'tab' => 'ip-details', 'poll_id' => $poll->get_client_id() ], admin_url( 'admin.php' ) ); ?>"><?php esc_html_e( 'See all IP\'s', 'poll-creator' ); ?> &#8594;</a>
 								</div>
 							<?php else : ?>
-								<p class="no-data-text"><?php esc_html_e( 'No location data found for this poll', 'pollify' ); ?></p>
+								<p class="no-data-text"><?php esc_html_e( 'No location data found for this poll', 'poll-creator' ); ?></p>
 							<?php endif; ?>
 						</div>
 					</div>
@@ -179,7 +179,7 @@ $navigations = pollify_poll_results_page_nav();
 			<div class="meta-card-column secondary">
 				<div class="latest-votes meta-card">
 					<div class="heading">
-						<h2><?php esc_html_e( 'Recent votes', 'pollify' ); ?></h2>
+						<h2><?php esc_html_e( 'Recent votes', 'poll-creator' ); ?></h2>
 					</div>
 
 					<div class="meta-card-content recent-votes">
@@ -201,7 +201,7 @@ $navigations = pollify_poll_results_page_nav();
 										<?php if ( ! empty( $user ) ) : ?>
 											<div class="user-name"><?php echo esc_html( $user->display_name ); ?></div>
 										<?php else : ?>
-											<div class="user-name"><?php esc_html_e( 'Guest', 'pollify' ); ?></div>
+											<div class="user-name"><?php esc_html_e( 'Guest', 'poll-creator' ); ?></div>
 										<?php endif; ?>
 
 										<div class="other-details">
@@ -218,11 +218,11 @@ $navigations = pollify_poll_results_page_nav();
 							} ?>
 
 							<li class="see-more-link">
-								<a href="<?php echo add_query_arg( [ 'page' => 'pollify', 'action' => 'view_results', 'tab' => 'votes', 'poll_id' => $poll->get_client_id() ], admin_url( 'admin.php' ) ); ?>"><?php esc_html_e( 'See all votes', 'pollify' ); ?> &#8594;</a>
+								<a href="<?php echo add_query_arg( [ 'page' => 'poll-creator', 'action' => 'view_results', 'tab' => 'votes', 'poll_id' => $poll->get_client_id() ], admin_url( 'admin.php' ) ); ?>"><?php esc_html_e( 'See all votes', 'poll-creator' ); ?> &#8594;</a>
 							</li>
 						</ul>
 						<?php else : ?>
-							<p class="no-data-text"><?php esc_html_e( 'No recent votes found for this poll', 'pollify' ); ?></p>
+							<p class="no-data-text"><?php esc_html_e( 'No recent votes found for this poll', 'poll-creator' ); ?></p>
 						<?php endif; ?>
 					</div>
 				</div>
@@ -240,7 +240,7 @@ $navigations = pollify_poll_results_page_nav();
 					$table->prepare_items();
 
 					// Search form
-					$table->search_box( __( 'Search by IP', 'pollify' ), 'pollify_vote_search_id' );
+					$table->search_box( __( 'Search by IP', 'poll-creator' ), 'pollify_vote_search_id' );
 
 					// Display table
 					$table->display();
@@ -259,7 +259,7 @@ $navigations = pollify_poll_results_page_nav();
 					$table->prepare_items();
 
 					// Search form
-					$table->search_box( __( 'Search by IP', 'pollify' ), 'pollify_ip_search_id' );
+					$table->search_box( __( 'Search by IP', 'poll-creator' ), 'pollify_ip_search_id' );
 
 					// Display table
 					$table->display();

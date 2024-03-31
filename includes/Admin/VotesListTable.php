@@ -56,8 +56,8 @@ class VotesListTable extends \WP_List_Table {
 		}
 
 		parent::__construct( [
-			'singular' => __( 'Vote', 'pollify' ),
-			'plural'   => __( 'Votess', 'pollify' ),
+			'singular' => __( 'Vote', 'poll-creator' ),
+			'plural'   => __( 'Votess', 'poll-creator' ),
 			'ajax'     => false,
 		] );
 	}
@@ -130,7 +130,7 @@ class VotesListTable extends \WP_List_Table {
 			$user = get_user_by( 'ID', $user_id );
 		}
 
-		return $user ? esc_html( $user->display_name ) : esc_html__( 'Guest', 'pollify' );
+		return $user ? esc_html( $user->display_name ) : esc_html__( 'Guest', 'poll-creator' );
 	}
 
 	/**
@@ -176,7 +176,7 @@ class VotesListTable extends \WP_List_Table {
 			?>
 			<div class="alignleft actions bulkactions">
 				<select name="location" id="vote-location" >
-					<option value="" <?php selected( '', $selected_location, true ); ?>><?php esc_html_e( 'All countries', 'pollify' ); ?></option>
+					<option value="" <?php selected( '', $selected_location, true ); ?>><?php esc_html_e( 'All countries', 'poll-creator' ); ?></option>
 
 					<?php foreach ( $locations as $location ) : ?>
 						<option value="<?php echo esc_attr( $location['location'] ); ?>" <?php selected( $location['location'], $selected_location, true ); ?>><?php echo esc_html( pollify_get_country_name( $location['location'] ) ); ?></option>
@@ -184,14 +184,14 @@ class VotesListTable extends \WP_List_Table {
 				</select>
 
 				<select name="poll_option" id="vote-option" >
-					<option value="" <?php selected( '', $selected_option, true ); ?>><?php esc_html_e( 'All answers', 'pollify' ); ?></option>
+					<option value="" <?php selected( '', $selected_option, true ); ?>><?php esc_html_e( 'All answers', 'poll-creator' ); ?></option>
 
 					<?php foreach ( $this->poll->get_options() as $option ) : ?>
 						<option value="<?php echo esc_attr( $option['option_id'] ); ?>" <?php selected( $option['option_id'], $selected_option, true ); ?>><?php echo wp_kses_post( $option['option'] ); ?></option>
 					<?php endforeach; ?>
 				</select>
 				<?php
-				submit_button( __( 'Filter', 'pollify' ), '', 'filter_action', false, [ 'id' => 'pollify-filter-action-button' ] );
+				submit_button( __( 'Filter', 'poll-creator' ), '', 'filter_action', false, [ 'id' => 'pollify-filter-action-button' ] );
 				?>
 			</div>
 			<?php
