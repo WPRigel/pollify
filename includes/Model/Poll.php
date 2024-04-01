@@ -44,7 +44,7 @@ class Poll {
 	 *
 	 * @param array $args Poll arguments.
 	 */
-	public function __construct( $args = [] ) {
+	public function __construct( array $args = [] ) {
 		// Need to set $data array with $args array in such way like only $data array keys will be set
 		// which are exists in $args array.
 		$this->data = array_merge(
@@ -63,7 +63,7 @@ class Poll {
 	 *
 	 * @return int
 	 */
-	public function get_id() {
+	public function get_id(): int {
 		return intval( $this->data['id'] );
 	}
 
@@ -72,7 +72,7 @@ class Poll {
 	 *
 	 * @return string
 	 */
-	public function get_client_id() {
+	public function get_client_id(): string {
 		return $this->data['client_id'];
 	}
 
@@ -81,7 +81,7 @@ class Poll {
 	 *
 	 * @return string
 	 */
-	public function get_title() {
+	public function get_title(): string {
 		return $this->data['title'];
 	}
 
@@ -90,7 +90,7 @@ class Poll {
 	 *
 	 * @return string
 	 */
-	public function get_description() {
+	public function get_description(): string {
 		return $this->data['description'];
 	}
 
@@ -99,7 +99,7 @@ class Poll {
 	 *
 	 * @return string
 	 */
-	public function get_type() {
+	public function get_type(): string {
 		return $this->data['type'];
 	}
 
@@ -108,7 +108,7 @@ class Poll {
 	 *
 	 * @return string
 	 */
-	public function get_status() {
+	public function get_status(): string {
 		return $this->data['status'];
 	}
 
@@ -117,7 +117,7 @@ class Poll {
 	 *
 	 * @return string
 	 */
-	public function get_reference() {
+	public function get_reference(): string {
 		return $this->data['reference'];
 	}
 
@@ -126,7 +126,7 @@ class Poll {
 	 *
 	 * @return array
 	 */
-	public function get_options() {
+	public function get_options(): array {
 		return $this->data['options'];
 	}
 
@@ -135,7 +135,7 @@ class Poll {
 	 *
 	 * @return string
 	 */
-	public function get_created_at() {
+	public function get_created_at(): string {
 		return $this->data['created_at'];
 	}
 
@@ -144,7 +144,7 @@ class Poll {
 	 *
 	 * @return array
 	 */
-	public function get_data() {
+	public function get_data(): array {
 		return $this->data;
 	}
 
@@ -153,16 +153,18 @@ class Poll {
 	 *
 	 * @return array
 	 */
-	public function get_settings() {
+	public function get_settings(): array {
 		return maybe_unserialize( $this->data['settings'] );
 	}
 
 	/**
 	 * Check all options is valid which is passed by arguments.
 	 *
+	 * @param array $options Options.
+	 *
 	 * @return bool
 	 */
-	public function is_valid_poll_option( array $options = [] ) {
+	public function is_valid_poll_option( array $options = [] ): bool {
 		$valid = true;
 
 		// Want to check each option id is valid or not.
@@ -187,8 +189,10 @@ class Poll {
 	 * Do vote.
 	 *
 	 * @param array $options Vote options.
+	 *
+	 * @return array|WP_Error
 	 */
-	public function vote( $options = [] ) {
+	public function vote( array $options = [] ): array|WP_Error {
 		// Get poll settings.
 		$settings = $this->get_settings();
 
@@ -281,20 +285,6 @@ class Poll {
 
 		// Get the vote result.
 		$result = Votes::get_instance()->get_votes( $args );
-
-		return $result;
-	}
-
-	/**
-	 * Get the poll data.
-	 *
-	 * @param int|null $no_of_list Number of list.
-	 *
-	 * @return array
-	 */
-	public function get_vote_locations( $no_of_list = null ) {
-		// Get the vote result.
-		$result = Votes::get_instance()->get_votes_group_by_location( $this->get_client_id(), $no_of_list );
 
 		return $result;
 	}

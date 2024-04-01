@@ -54,6 +54,8 @@ class Polls {
 			'order'    => 'DESC',
 		];
 
+		$table_name = $wpdb->prefix . $this->poll_table_name;
+
 		// @TODO::Need to handle those args for querying data.
 		$args = wp_parse_args( $args, $default );
 
@@ -83,19 +85,21 @@ class Polls {
 		// Set pagination in query.
 		$limit = $wpdb->prepare( 'LIMIT %d, %d', $offset, $per_page );
 
-		// Join with wp_pollify_vote table and get the total count of votes related to client id
+		// Join with wp_pollify_vote table and get the total count of votes related to client id.
 		$join = "LEFT JOIN {$wpdb->prefix}pollify_vote AS vote ON vote.client_id = poll.client_id";
 
 		// If we pass count parament true in args then just count the polls and return the count.
 		if ( ! empty( $args['count'] ) && $args['count'] ) {
-			$count = $wpdb->get_var( "SELECT COUNT(`id`) FROM {$wpdb->prefix}{$this->poll_table_name} {$where}" );
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$count = $wpdb->get_var( "SELECT COUNT(`id`) FROM {$table_name} {$where}" );
 
 			return intval( $count );
 		}
 
 		// Get all polls from database.
 		$polls = $wpdb->get_results(
-			"SELECT poll.*, COUNT(vote.id) as response FROM {$wpdb->prefix}{$this->poll_table_name} AS poll {$join} {$where} GROUP BY poll.id ORDER BY poll.{$args['orderby']} {$args['order']} {$limit}",
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			"SELECT poll.*, COUNT(vote.id) as response FROM {$table_name} AS poll {$join} {$where} GROUP BY poll.id ORDER BY poll.{$args['orderby']} {$args['order']} {$limit}",
 			ARRAY_A
 		);
 
@@ -137,6 +141,7 @@ class Polls {
 				return new WP_Error(
 					'empty-data',
 					wp_sprintf(
+						/* translators: %s: Field name */
 						__( 'Error: %s cannot be left empty. Please fill the required information', 'poll-creator' ),
 						$key
 					),
@@ -146,9 +151,9 @@ class Polls {
 		}
 
 		// Handle the poll options.
-		// - id
-		// - type: text|image
-		// - option: Text|Image object(id/url)
+		// - id.
+		// - type: text|image.
+		// - option: Text|Image object(id/url).
 
 		$args['options'] = array_filter(
 			$args['options'] ?? [],
@@ -158,16 +163,13 @@ class Polls {
 		);
 
 		foreach ( $args['options'] ?? [] as $option ) {
-			// Checking if options is array of array or not. If yes then
+			// Checking if options is array of array or not. If yes then.
 			if ( is_array( $option ) ) {
 				if ( ( ! array_key_exists( 'option', $option ) || ! array_key_exists( 'type', $option ) ) ) {
 					return new WP_Error( 'not-formatted-options', __( 'Options must contain type and option value', 'poll-creator' ), [ 'status' => 400 ] );
 				}
-			} else {
-				// Options array is single array key value.
-				if ( ( ! array_key_exists( 'option', $args['options'] ) || ! array_key_exists( 'type', $args['options'] ) ) ) {
+			} elseif ( ( ! array_key_exists( 'option', $args['options'] ) || ! array_key_exists( 'type', $args['options'] ) ) ) {
 					return new WP_Error( 'not-formatted-options', __( 'Options must contain type and option value', 'poll-creator' ), [ 'status' => 400 ] );
-				}
 			}
 		}
 
@@ -176,9 +178,10 @@ class Polls {
 			return new WP_Error( 'invalid-client-id', __( 'Client id is not valid', 'poll-creator' ), [ 'status' => 400 ] );
 		}
 
-		// Get poll data using client_id
+		// Get poll data using client_id.
 		$poll = $wpdb->get_row(
 			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				"SELECT * FROM {$wpdb->prefix}{$this->poll_table_name} WHERE client_id = %s",
 				$args['client_id'],
 			),
@@ -272,6 +275,7 @@ class Polls {
 
 		$poll = $wpdb->get_row(
 			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				"SELECT * FROM {$wpdb->prefix}{$this->poll_table_name} WHERE client_id = %s",
 				$client_id,
 			),
@@ -284,6 +288,7 @@ class Polls {
 
 		$poll_options = $wpdb->get_results(
 			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				"SELECT `id`,`option_id`,`type`,`option` FROM {$wpdb->prefix}pollify_poll_options WHERE poll_id = %d",
 				intval( $poll['id'] )
 			),
@@ -309,6 +314,7 @@ class Polls {
 		// Get poll id from poll client ID.
 		$poll_id = $wpdb->get_var(
 			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				"SELECT id FROM {$wpdb->prefix}{$this->poll_table_name} WHERE client_id = %s",
 				$client_id
 			)
@@ -349,6 +355,7 @@ class Polls {
 
 		$poll = $wpdb->get_row(
 			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				"SELECT * FROM {$wpdb->prefix}{$this->poll_table_name} WHERE client_id = %s",
 				$client_id
 			),
@@ -360,8 +367,13 @@ class Polls {
 
 	/**
 	 * Check if poll with valid options.
+	 *
+	 * @param string $client_id Poll client ID.
+	 * @param array  $option_ids Poll option IDs.
+	 *
+	 * @return bool
 	 */
-	public function is_valid_poll_option( string $client_id, array $option_ids ) {
+	public function is_valid_poll_option( string $client_id, array $option_ids ): bool {
 		global $wpdb;
 
 		$valid = true;
@@ -370,6 +382,7 @@ class Polls {
 		foreach ( $option_ids as $option_id ) {
 			$poll_option = $wpdb->get_row(
 				$wpdb->prepare(
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 					"SELECT * FROM {$wpdb->prefix}{$this->poll_option_table_name} WHERE option_id = %s AND client_id = %s",
 					$option_id,
 					$client_id
@@ -389,12 +402,12 @@ class Polls {
 	/**
 	 * Save poll options.
 	 *
-	 * @param int   $poll_client_id Poll ID.
+	 * @param int   $poll_id Poll ID.
 	 * @param array $options Poll options.
 	 *
 	 * @return array|WP_Error
 	 */
-	public function save_options( $poll_id, $options ) {
+	public function save_options( int $poll_id, array $options ): array|WP_Error {
 		global $wpdb;
 
 		if ( empty( $poll_id ) ) {
@@ -404,6 +417,7 @@ class Polls {
 		// Get all poll options using $poll_id.
 		$poll_options = $wpdb->get_results(
 			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				"SELECT `id`,`option_id`,`type`,`option` FROM {$wpdb->prefix}pollify_poll_options WHERE poll_id = %d",
 				$poll_id
 			),
@@ -416,10 +430,12 @@ class Polls {
 		// Delete those options if has any in a single query.
 		if ( count( $deleted_options ) ) {
 			$wpdb->query(
+				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 				str_replace(
 					'\\',
 					'',
 					$wpdb->prepare(
+						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 						"DELETE FROM {$wpdb->prefix}pollify_poll_options WHERE option_id IN (%s)",
 						implode( "','", $deleted_options )
 					)

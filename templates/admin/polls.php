@@ -28,13 +28,13 @@ $reseted = pollify_filter_input( INPUT_GET, 'updated', FILTER_VALIDATE_BOOL );
 
 		echo '<form method="post">';
 
-		// Prepare table
+		// Prepare table.
 		$table->prepare_items();
 
-		// Search form
+		// Search form.
 		$table->search_box( __( 'Search by title', 'poll-creator' ), 'pollify_poll_search_id' );
 
-		// Display table
+		// Display table.
 		$table->display();
 
 		echo '</form>';

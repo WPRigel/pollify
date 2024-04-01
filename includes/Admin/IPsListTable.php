@@ -46,6 +46,8 @@ class IPsListTable extends \WP_List_Table {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param object $poll Poll object.
 	 */
 	public function __construct( $poll = null ) {
 		if ( ! empty( $poll ) && is_object( $poll ) ) {
@@ -71,9 +73,9 @@ class IPsListTable extends \WP_List_Table {
 	 */
 	public function get_columns(): array {
 		$columns = array(
-			'ip'       => __( 'IP', 'pollifty' ),
-			'location' => __( 'Location', 'pollifty' ),
-			'votes'    => __( 'Votes', 'pollifty' ),
+			'ip'       => __( 'IP', 'poll-creator' ),
+			'location' => __( 'Location', 'poll-creator' ),
+			'votes'    => __( 'Votes', 'poll-creator' ),
 		);
 
 		return $columns;
@@ -93,8 +95,7 @@ class IPsListTable extends \WP_List_Table {
 			case 'ip':
 				return ! empty( $item['ip'] ) ? $item['ip'] : __( 'N/A', 'poll-creator' );
 			case 'location':
-				var_dump( $item[ $column_name ] );
-				return ! empty( $item[ $column_name ] ) ? $item[ $column_name ] : __( 'N/A', 'poll-creator' );
+				return ! empty( $item['location'] ) ? $item['location'] : __( 'N/A', 'poll-creator' );
 			case 'votes':
 			default:
 				return $item[ $column_name ];
@@ -199,9 +200,9 @@ class IPsListTable extends \WP_List_Table {
 		// Set the pagination.
 		$this->set_pagination_args(
 			[
-				'total_items' => $total_items, // total number of items
-				'per_page'    => $this->per_page, // items to show on a page
-				'total_pages' => ceil( $total_items / $this->per_page ), // use ceil to round up
+				'total_items' => $total_items, // total number of items.
+				'per_page'    => $this->per_page, // items to show on a page.
+				'total_pages' => ceil( $total_items / $this->per_page ), // use ceil to round up.
 			]
 		);
 
@@ -211,6 +212,8 @@ class IPsListTable extends \WP_List_Table {
 
 	/**
 	 * Get data from tables.
+	 *
+	 * @param array $args Arguments for getting the data.
 	 *
 	 * @return array|int
 	 */

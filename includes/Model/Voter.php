@@ -31,8 +31,6 @@ class Voter {
 
 	/**
 	 * Voter constructor.
-	 *
-	 * @param array $args
 	 */
 	public function __construct() {
 		// Check if user is logged in or not.
@@ -128,7 +126,7 @@ class Voter {
 	/**
 	 * Is user already voted or not.
 	 *
-	 * @param string $poll_id
+	 * @param string $poll_id Poll client ID.
 	 *
 	 * @return boolean
 	 */

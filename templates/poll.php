@@ -2,10 +2,18 @@
 /**
  * Poll template for frontend rendering.
  *
+ * This template can be overridden by copying it to yourtheme/pollify/poll.php.
+ *
+ * @var array $attributes
+ *
  * @package UnderDev\Pollify
+ *
+ * @since 1.0.0
  */
 
 declare(strict_types=1);
+
+$attributes = ! empty( $attributes ) ? $attributes : [];
 
 $styles = '';
 
@@ -41,7 +49,17 @@ $voter            = new \UnderDev\Pollify\Model\Voter();
 $results          = \UnderDev\Pollify\Votes::get_instance()->get_results( $attributes['pollClientId'] );
 $is_already_voted = ( ! empty( $attributes['allowedPerComputerResponse'] ) && $voter->is_already_voted( $attributes['pollClientId'] ) );
 ?>
-<div <?php echo get_block_wrapper_attributes( [ 'style' => esc_attr( $styles ) ] ); ?>>
+<div
+<?php
+echo wp_kses(
+	get_block_wrapper_attributes( [ 'style' => esc_attr( $styles ) ] ),
+	array(
+		'class' => array(),
+		'style' => array(),
+	)
+);
+?>
+>
 	<div class='pollify-poll-form'>
 		<h4 class="poll-title rich-text"><?php echo wp_kses_post( $attributes['title'] ); ?></h4>
 		<?php if ( ! empty( $attributes['description'] ) ) : ?>
@@ -112,7 +130,7 @@ $is_already_voted = ( ! empty( $attributes['allowedPerComputerResponse'] ) && $v
 					echo (
 						! empty( $attributes['confirmationMessageType'] )
 						&& 'view-message' === $attributes['confirmationMessageType']
-					) ? esc_html( $attributes['confirmationMessage'] ) : __( 'Thank you for voting!', 'poll-creator' );
+					) ? esc_html( $attributes['confirmationMessage'] ) : esc_html__( 'Thank you for voting!', 'poll-creator' );
 				?>
 			</div>
 			<?php endif; ?>

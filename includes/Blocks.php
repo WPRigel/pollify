@@ -89,6 +89,7 @@ class Blocks {
 		}
 
 		// Return if not a post request from the editor.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( empty( $_POST ) ) {
 			return;
 		}

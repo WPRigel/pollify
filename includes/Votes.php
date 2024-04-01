@@ -34,7 +34,7 @@ class Votes {
 	/**
 	 * Set a vote for a poll.
 	 *
-	 * @param array $args
+	 * @param array $args Arguments for setting a vote.
 	 */
 	public function vote( array $args = [] ) {
 		global $wpdb;
@@ -135,6 +135,7 @@ class Votes {
 		// Get vote data.
 		$votes = $wpdb->get_results(
 			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				"SELECT * FROM {$wpdb->prefix}{$this->table_name} WHERE client_id = %s AND (user_id = %d OR user_ip = %s) ORDER BY created_at DESC",
 				$client_id,
 				$user_id,
@@ -199,15 +200,17 @@ class Votes {
 		if ( ! empty( $args['count'] ) && $args['count'] ) {
 			// Get vote data.
 			$votes = $wpdb->get_var(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				"SELECT COUNT(v.id), o.option, o.option_id FROM {$wpdb->prefix}{$this->table_name} v LEFT JOIN {$wpdb->prefix}pollify_poll_options o ON v.option_id = o.option_id {$where}",
 			);
 
 			return intval( $votes ) ?? 0;
 		}
 
-		// Prepare the sql query
+		// Prepare the sql query.
 		$votes = $wpdb->get_results(
 			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				"SELECT v.*, o.option, o.option_id FROM {$wpdb->prefix}{$this->table_name} v LEFT JOIN {$wpdb->prefix}pollify_poll_options o ON v.option_id = o.option_id {$where} ORDER BY v.{$args['orderby']} {$args['order']} LIMIT %d OFFSET %d",
 				$args['per_page'],
 				$offset
@@ -235,6 +238,7 @@ class Votes {
 		// Get vote data.
 		$votes = $wpdb->get_results(
 			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				"SELECT option_id, COUNT(*) as votes FROM {$wpdb->prefix}{$this->table_name} WHERE client_id = %s GROUP BY option_id",
 				$client_id
 			),
@@ -287,6 +291,7 @@ class Votes {
 		// Get vote data.
 		$votes = $wpdb->get_results(
 			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				"SELECT user_location as location, COUNT(*) as votes FROM {$wpdb->prefix}{$this->table_name} WHERE client_id = %d GROUP BY user_location ORDER BY votes DESC {$limit}",
 				$client_id
 			),
@@ -299,7 +304,7 @@ class Votes {
 	/**
 	 * Get votes group by IP.
 	 *
-	 * @param string $client_id Poll client ID.
+	 * @param array $args Arguments for getting votes.
 	 *
 	 * @return array|int
 	 */
@@ -343,14 +348,10 @@ class Votes {
 		// If count is exist then return the count.
 		if ( ! empty( $args['count'] ) && $args['count'] ) {
 			// Get vote data.
+
 			$votes = $wpdb->get_var(
-				"SELECT COUNT(*) AS total_rows
-				FROM (
-					SELECT user_ip
-					FROM {$wpdb->prefix}{$this->table_name} v
-					{$where}
-					GROUP BY user_ip
-				) AS grouped_ips",
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"SELECT COUNT(*) AS total_rows FROM ( SELECT user_ip FROM {$wpdb->prefix}{$this->table_name} v {$where} GROUP BY user_ip ) AS grouped_ips",
 			);
 
 			return intval( $votes ) ?? 0;
@@ -359,6 +360,7 @@ class Votes {
 		// Get vote data.
 		$votes = $wpdb->get_results(
 			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				"SELECT user_ip as ip, user_location as location, COUNT(*) as votes FROM {$wpdb->prefix}{$this->table_name} v {$where} GROUP BY user_ip ORDER BY {$args['orderby']} {$args['order']} LIMIT %d OFFSET %d",
 				$args['per_page'],
 				$offset
@@ -382,6 +384,7 @@ class Votes {
 		// Get vote data.
 		$locations = $wpdb->get_results(
 			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				"SELECT DISTINCT user_location as location FROM {$wpdb->prefix}{$this->table_name} WHERE client_id = %s",
 				$client_id
 			),

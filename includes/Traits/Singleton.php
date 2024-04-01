@@ -32,7 +32,7 @@ trait Singleton {
 	 * of the class for which it is called. This method is set
 	 * as final intentionally, it is not meant to be overridden.
 	 *
-	 * @param mixed $args Optional arguments to pass when instantiating the class.
+	 * @param mixed ...$args Optional arguments to pass when instantiating the class.
 	 *
 	 * @return object Singleton instance of the class.
 	 */

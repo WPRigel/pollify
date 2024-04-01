@@ -45,4 +45,5 @@
     <exclude-pattern>/lib/*</exclude-pattern>
     <exclude-pattern>/assets/*</exclude-pattern>
     <exclude-pattern>/build/*</exclude-pattern>
+    <exclude-pattern>/node_modules/*</exclude-pattern>
 </ruleset>

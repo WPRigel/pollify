@@ -7,8 +7,9 @@
 
 declare( strict_types = 1 );
 
-$nav_tab = pollify_filter_input( INPUT_GET, 'tab', POLLIFY_FILTER_SANITIZE_STRING ) ?: 'overview';
-
+$poll_id     = pollify_filter_input( INPUT_GET, 'poll_id', POLLIFY_FILTER_SANITIZE_STRING );
+$poll        = ! empty( $poll ) ? $poll : \UnderDev\Pollify\Polls::get_instance()->get( $poll_id );
+$nav_tab     = pollify_filter_input( INPUT_GET, 'tab', POLLIFY_FILTER_SANITIZE_STRING ) ?: 'overview';
 $navigations = pollify_poll_results_page_nav();
 ?>
 
@@ -54,16 +55,35 @@ $navigations = pollify_poll_results_page_nav();
 								<div class="horizointal-bar-chart__bar">
 									<div class="horizointal-bar-chart__bar-label">
 										<span class="text"><?php echo wp_kses_post( $result_option['option'] ?? '' ); ?></span>
-										<span class="count"><?php echo esc_html( wp_sprintf( __( '%s votes', 'poll-creator' ), $result_option['votes'] ) ); ?></span>
-										<span class="percentage"><?php echo esc_html( wp_sprintf( __( '%s%', 'poll-creator' ), $result_option['percentage'] ) ); ?></span>
+										<span class="count">
+											<?php
+												/* translators: %s: votes count */
+												echo esc_html( wp_sprintf( __( '%s votes', 'poll-creator' ), $result_option['votes'] ) );
+											?>
+										</span>
+										<span class="percentage">
+											<?php
+												/* translators: %s: percentage */
+												echo esc_html( wp_sprintf( __( '%s%', 'poll-creator' ), $result_option['percentage'] ) );
+											?>
+										</span>
 									</div>
 									<div class="horizointal-bar-chart__bar-indicator">
-										<div class="bar-fill" style="width:<?php echo esc_html( wp_sprintf( __( '%s%', 'poll-creator' ), $result_option['percentage'] ) ); ?>"></div>
+										<?php
+											/* translators: %s: percentage */
+											$percentage_width = wp_sprintf( __( '%s%', 'poll-creator' ), $result_option['percentage'] );
+										?>
+										<div class="bar-fill" style="width:<?php echo esc_html( $percentage_width ); ?>"></div>
 									</div>
 								</div>
 								<?php endforeach; ?>
 								<div class="horizointal-bar-chart__total-count">
-									<span class="count"><?php echo esc_html( wp_sprintf( __( 'Total votes: %s', 'poll-creator' ), $poll_results['total_votes'] ) ); ?></span>
+									<span class="count">
+										<?php
+											/* translators: %s: total votes */
+											echo esc_html( wp_sprintf( __( 'Total votes: %s', 'poll-creator' ), $poll_results['total_votes'] ) );
+										?>
+									</span>
 								</div>
 							<?php else : ?>
 								<p><?php esc_html_e( 'No results found for this poll', 'poll-creator' ); ?></p>
@@ -160,7 +180,7 @@ $navigations = pollify_poll_results_page_nav();
 												<span class="flag-icon fi fi-<?php echo esc_html( strtolower( $location_vote['location'] ) ); ?> fib"></span>
 												<span class="country-name"><?php echo wp_kses_post( pollify_get_country_name( $location_vote['location'] ) ); ?></span>
 											</td>
-											<td class="ip-address"><?php echo $location_vote['ip']; ?></td>
+											<td class="ip-address"><?php echo esc_html( $location_vote['ip'] ); ?></td>
 											<td class="count"><?php echo esc_html( $location_vote['votes'] ); ?></td>
 										</tr>
 									<?php endforeach; ?>
@@ -169,14 +189,16 @@ $navigations = pollify_poll_results_page_nav();
 								<div class="see-more-link">
 									<a href="
 									<?php
-									echo add_query_arg(
-										[
-											'page'    => 'poll-creator',
-											'action'  => 'view_results',
-											'tab'     => 'ip-details',
-											'poll_id' => $poll->get_client_id(),
-										],
-										admin_url( 'admin.php' )
+									echo esc_url(
+										add_query_arg(
+											[
+												'page'    => 'poll-creator',
+												'action'  => 'view_results',
+												'tab'     => 'ip-details',
+												'poll_id' => $poll->get_client_id(),
+											],
+											admin_url( 'admin.php' )
+										)
 									);
 									?>
 												"><?php esc_html_e( 'See all IP\'s', 'poll-creator' ); ?> &#8594;</a>
@@ -224,7 +246,7 @@ $navigations = pollify_poll_results_page_nav();
 									</div>
 									<div class="vote-details">
 										<span class="option"><?php echo wp_kses_post( $recent_vote['option'] ); ?></span>
-										<span class="time"><?php echo date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $recent_vote['created_at'] ) ); ?></span>
+										<span class="time"><?php echo esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $recent_vote['created_at'] ) ) ); ?></span>
 									</div>
 								</li>
 								<?php
@@ -234,14 +256,16 @@ $navigations = pollify_poll_results_page_nav();
 							<li class="see-more-link">
 								<a href="
 								<?php
-								echo add_query_arg(
-									[
-										'page'    => 'poll-creator',
-										'action'  => 'view_results',
-										'tab'     => 'votes',
-										'poll_id' => $poll->get_client_id(),
-									],
-									admin_url( 'admin.php' )
+								echo esc_url(
+									add_query_arg(
+										[
+											'page'    => 'poll-creator',
+											'action'  => 'view_results',
+											'tab'     => 'votes',
+											'poll_id' => $poll->get_client_id(),
+										],
+										admin_url( 'admin.php' )
+									)
 								);
 								?>
 											"><?php esc_html_e( 'See all votes', 'poll-creator' ); ?> &#8594;</a>
@@ -256,42 +280,37 @@ $navigations = pollify_poll_results_page_nav();
 		</div>
 		<?php elseif ( 'votes' === $nav_tab ) : ?>
 			<div class="votes-table">
+				<form method="post">
 				<?php
 					$table = new \UnderDev\Pollify\Admin\VotesListTable( $poll );
-					// $table->views();
 
-					echo '<form method="post">';
-
-					// Prepare table
+					// Prepare table.
 					$table->prepare_items();
 
-					// Search form
+					// Search form.
 					$table->search_box( __( 'Search by IP', 'poll-creator' ), 'pollify_vote_search_id' );
 
-					// Display table
+					// Display table.
 					$table->display();
-
-					echo '</form>';
 				?>
+				</form>
 			</div>
 		<?php elseif ( 'ip-details' === $nav_tab ) : ?>
 			<div class="ips-table">
+				<form method="post">
 				<?php
 					$table = new \UnderDev\Pollify\Admin\IPsListTable( $poll );
 
-					echo '<form method="post">';
-
-					// Prepare table
+					// Prepare table.
 					$table->prepare_items();
 
-					// Search form
+					// Search form.
 					$table->search_box( __( 'Search by IP', 'poll-creator' ), 'pollify_ip_search_id' );
 
-					// Display table
+					// Display table.
 					$table->display();
-
-					echo '</form>';
 				?>
+				</form>
 			</div>
 		<?php else : ?>
 			<?php

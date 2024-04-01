@@ -215,17 +215,18 @@ class PollsController extends WP_REST_Controller {
 	/**
 	 * Prepare data for response
 	 *
-	 * @since 1.0.0
+	 * @param array           $data Object data.
+	 * @param WP_REST_Request $request Request object.
 	 *
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function prepare_item_for_response( $data, $request ) {
 		if ( empty( $data['id'] ) ) {
-			return new WP_Error( 'rest_invalid_id', __( 'Invalid resource id.' ), [ 'status' => 404 ] );
+			return new WP_Error( 'rest_invalid_id', __( 'Invalid resource id.', 'poll-creator' ), [ 'status' => 404 ] );
 		}
 
 		$response = rest_ensure_response( $data, $request );
-		$response->add_links( $this->prepare_links( $data, $request ) );
+		$response->add_links( $this->prepare_links( $data ) );
 
 		return apply_filters( 'pollify_rest_prepare_poll_object', $response, $data, $request );
 	}
@@ -233,12 +234,11 @@ class PollsController extends WP_REST_Controller {
 	/**
 	 * Prepare links for the request.
 	 *
-	 * @param Poll            $data               Object data.
-	 * @param WP_REST_Request $request Request object.
+	 * @param Poll $data Object data.
 	 *
 	 * @return array Links for the given post.
 	 */
-	protected function prepare_links( $data, $request ) {
+	protected function prepare_links( $data ) {
 		$links = [
 			'self'       => [
 				'href' => rest_url( sprintf( '/%s/%s/%d', $this->namespace, $this->action, $data['id'] ) ),

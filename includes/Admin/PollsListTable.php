@@ -46,12 +46,12 @@ class PollsListTable extends \WP_List_Table {
 	public function get_columns(): array {
 		$columns = array(
 			'cb'         => '<input type = "checkbox" />',
-			'title'      => __( 'Title', 'pollifty' ),
-			'type'       => __( 'Type', 'pollifty' ),
-			'reference'  => __( 'Source', 'pollifty' ),
-			'status'     => __( 'Status', 'pollifty' ),
-			'response'   => __( 'Total Response', 'pollifty' ),
-			'created_at' => __( 'Created at', 'pollifty' ),
+			'title'      => __( 'Title', 'poll-creator' ),
+			'type'       => __( 'Type', 'poll-creator' ),
+			'reference'  => __( 'Source', 'poll-creator' ),
+			'status'     => __( 'Status', 'poll-creator' ),
+			'response'   => __( 'Total Response', 'poll-creator' ),
+			'created_at' => __( 'Created at', 'poll-creator' ),
 		);
 
 		return $columns;
@@ -110,6 +110,8 @@ class PollsListTable extends \WP_List_Table {
 
 	/**
 	 * Add row actions with column title.
+	 *
+	 * @param array $item The current item.
 	 *
 	 * @return array
 	 */
@@ -207,8 +209,13 @@ class PollsListTable extends \WP_List_Table {
 		?>
 		<div class="post-com-count-wrapper">
 			<a href="<?php echo esc_url( $view_results_link ); ?>" class="post-com-count post-com-count-approved">
-				<span class="comment-count-approved" aria-hidden="true"><?php echo $item['response'] ?? 0; ?></span>
-				<span class="screen-reader-text"><?php echo wp_sprintf( __( '%s votes', 'poll-creator' ), $item['response'] ); ?></span>
+				<span class="comment-count-approved" aria-hidden="true"><?php echo esc_html( $item['response'] ) ?? 0; ?></span>
+				<span class="screen-reader-text">
+					<?php
+						/* translators: %s: number of votes */
+						echo esc_html( wp_sprintf( __( '%s votes', 'poll-creator' ), $item['response'] ) );
+					?>
+				</span>
 			</a>
 		</div>
 		<?php
@@ -326,9 +333,9 @@ class PollsListTable extends \WP_List_Table {
 		// Set the pagination.
 		$this->set_pagination_args(
 			[
-				'total_items' => $total_items, // total number of items
-				'per_page'    => $this->per_page, // items to show on a page
-				'total_pages' => ceil( $total_items / $this->per_page ), // use ceil to round up
+				'total_items' => $total_items, // total number of items.
+				'per_page'    => $this->per_page, // items to show on a page.
+				'total_pages' => ceil( $total_items / $this->per_page ), // use ceil to round up.
 			]
 		);
 
@@ -338,6 +345,8 @@ class PollsListTable extends \WP_List_Table {
 
 	/**
 	 * Get data from tables.
+	 *
+	 * @param array $args The arguments for getting the data.
 	 *
 	 * @return array|int
 	 */

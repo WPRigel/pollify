@@ -8,6 +8,8 @@
  * Author URI: http://wprigel.com/
  * License: GPL2
  * Text Domain: poll-creator
+ *
+ * @package UnderDev\Pollify
  */
 
 /**

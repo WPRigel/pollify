@@ -8,10 +8,13 @@
 declare(strict_types=1);
 
 if ( ! function_exists( 'pollify_load_template' ) ) {
+
 	/**
-	 * Get block wrapper attributes.
+	 * Load template from specific directory.
 	 *
-	 * @param array $attributes Attributes array.
+	 * @param string $template_name Template name.
+	 * @param bool   $load_once     Load once or not.
+	 * @param array  $args          Arguments to pass.
 	 *
 	 * @return void
 	 */
@@ -27,6 +30,11 @@ if ( ! function_exists( 'pollify_load_template' ) ) {
 		if ( file_exists( $template_path ) ) {
 			// extract args.
 			if ( ! empty( $args ) ) {
+				/**
+				 * This is used becuase of no alternative way to extract variables
+				 * for loading the templates.
+				 */
+				// phpcs:ignore WordPress.PHP.DontExtract.extract_extract
 				extract( $args );
 			}
 
@@ -67,7 +75,7 @@ function pollify_filter_input( $type, $variable_name, $filter = FILTER_DEFAULT, 
 /**
  * Get country code and name array.
  *
- * @param array $country_code Country code
+ * @param array $country_code Country code.
  *
  * @return string
  */

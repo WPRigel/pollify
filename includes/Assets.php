@@ -2,7 +2,8 @@
 /**
  * Main plugin class.
  *
- * @package UnderDev\Automator
+ * @package UnderDev\Pollify
+ *
  * @since 1.0.0
  */
 
@@ -12,6 +13,11 @@ namespace UnderDev\Pollify;
 
 use UnderDev\Pollify\Traits\Singleton;
 
+/**
+ * Assets class.
+ *
+ * @package UnderDev\Pollify
+ */
 class Assets {
 
 	use Singleton;

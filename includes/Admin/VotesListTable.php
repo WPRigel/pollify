@@ -46,6 +46,8 @@ class VotesListTable extends \WP_List_Table {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param object $poll Poll object.
 	 */
 	public function __construct( $poll = null ) {
 		if ( ! empty( $poll ) && is_object( $poll ) ) {
@@ -71,11 +73,11 @@ class VotesListTable extends \WP_List_Table {
 	 */
 	public function get_columns(): array {
 		$columns = array(
-			'name'       => __( 'Name', 'pollifty' ),
-			'location'   => __( 'Location', 'pollifty' ),
-			'ip_address' => __( 'IP Address', 'pollifty' ),
-			'vote'       => __( 'Vote answer', 'pollifty' ),
-			'created_at' => __( 'Vote date', 'pollifty' ),
+			'name'       => __( 'Name', 'poll-creator' ),
+			'location'   => __( 'Location', 'poll-creator' ),
+			'ip_address' => __( 'IP Address', 'poll-creator' ),
+			'vote'       => __( 'Vote answer', 'poll-creator' ),
+			'created_at' => __( 'Vote date', 'poll-creator' ),
 		);
 
 		return $columns;
@@ -258,9 +260,9 @@ class VotesListTable extends \WP_List_Table {
 		// Set the pagination.
 		$this->set_pagination_args(
 			[
-				'total_items' => $total_items, // total number of items
-				'per_page'    => $this->per_page, // items to show on a page
-				'total_pages' => ceil( $total_items / $this->per_page ), // use ceil to round up
+				'total_items' => $total_items, // total number of items.
+				'per_page'    => $this->per_page, // items to show on a page.
+				'total_pages' => ceil( $total_items / $this->per_page ), // use ceil to round up.
 			]
 		);
 
@@ -270,6 +272,8 @@ class VotesListTable extends \WP_List_Table {
 
 	/**
 	 * Get data from tables.
+	 *
+	 * @param array $args Arguments.
 	 *
 	 * @return array|int
 	 */

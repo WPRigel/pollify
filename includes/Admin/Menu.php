@@ -48,7 +48,7 @@ class Menu {
 	/**
 	 * Register menu for rendering poll related things.
 	 *
-	 * @return array
+	 * @return void
 	 */
 	public function add_metabox(): void {
 		add_meta_box(
@@ -64,7 +64,7 @@ class Menu {
 	/**
 	 * Register menu for rendering poll related things.
 	 *
-	 * @return array
+	 * @return void
 	 */
 	public function admin_menu(): void {
 		global $pollify_menu;
