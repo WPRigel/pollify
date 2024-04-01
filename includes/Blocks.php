@@ -128,7 +128,11 @@ class Blocks {
 				$poll['attrs']['style']
 			);
 
-			// Get block.json attributes.
+			/**
+			 * We use file_get_contents here because we need to get the block.json file from the build folder.
+			 * This is a safe operation because we are not fetching any external content.
+			 */
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 			$json             = file_get_contents( plugin()->path . '/build/poll/block.json' );
 			$json_data        = json_decode( $json, true );
 			$block_attributes = $json_data['attributes'] ?? [];
@@ -178,12 +182,5 @@ class Blocks {
 				'nonce' => wp_create_nonce( 'pollify-vote' ),
 			)
 		);
-	}
-
-	public function get_block_attributes() {
-		$json      = file_get_contents( plugin()->path . '/build/poll/block.json' );
-		$json_data = json_decode( $json, true );
-
-		return $json_data['attributes'] ?? [];
 	}
 }

@@ -222,7 +222,7 @@ class Polls {
 				return new WP_Error( 'update-failed', __( 'Poll not updated successfully', 'poll-creator' ), [ 'status' => 422 ] );
 			}
 
-			$option_saved = $this->save_options( $poll['id'], $args['options'] );
+			$option_saved = $this->save_options( intval( $poll['id'] ), $args['options'] );
 
 			// If option not saved then return WP_Error.
 			if ( is_wp_error( $option_saved ) ) {
@@ -252,7 +252,7 @@ class Polls {
 
 			$args['id'] = $wpdb->insert_id;
 
-			$option_saved = $this->save_options( $args['id'], $args['options'] );
+			$option_saved = $this->save_options( intval( $args['id'] ), $args['options'] );
 
 			// If option not saved then return WP_Error.
 			if ( is_wp_error( $option_saved ) ) {
