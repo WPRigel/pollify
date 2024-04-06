@@ -350,7 +350,7 @@ class Polls {
 	 *
 	 * @return bool
 	 */
-	public function exist( $client_id ) {
+	public function exist( $client_id ): bool {
 		global $wpdb;
 
 		$poll = $wpdb->get_row(
@@ -407,7 +407,7 @@ class Polls {
 	 *
 	 * @return array|WP_Error
 	 */
-	public function save_options( int $poll_id, array $options ): array|WP_Error {
+	public function save_options( int $poll_id, array $options ) {
 		global $wpdb;
 
 		if ( empty( $poll_id ) ) {

@@ -113,7 +113,7 @@ class PollsController extends WP_REST_Controller {
 	 *
 	 * @return WP_REST_Response|WP_Error
 	 */
-	public function get_items( $request ): WP_REST_Response|WP_Error {
+	public function get_items( $request ) {
 		// Get rest parameters.
 		$params = $request->get_params();
 
@@ -154,7 +154,7 @@ class PollsController extends WP_REST_Controller {
 	 *
 	 * @return WP_REST_Response|WP_Error
 	 */
-	public function get_item( $request ): WP_REST_Response|WP_Error {
+	public function get_item( $request ) {
 		// Get rest parameters.
 		$params = $request->get_params();
 
@@ -174,7 +174,7 @@ class PollsController extends WP_REST_Controller {
 	 *
 	 * @return WP_REST_Response|WP_Error
 	 */
-	public function update_item( $request ): WP_REST_Response|WP_Error {
+	public function update_item( $request ) {
 		// Get rest parameters.
 		$params = $request->get_params();
 
@@ -194,7 +194,7 @@ class PollsController extends WP_REST_Controller {
 	 *
 	 * @return WP_REST_Response|WP_Error
 	 */
-	public function delete_item( $request ): WP_REST_Response|WP_Error {
+	public function delete_item( $request ) {
 		// Get rest parameters.
 		$params = $request->get_params();
 

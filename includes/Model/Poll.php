@@ -192,7 +192,7 @@ class Poll {
 	 *
 	 * @return array|WP_Error
 	 */
-	public function vote( array $options = [] ): array|WP_Error {
+	public function vote( array $options = [] ) {
 		// Get poll settings.
 		$settings = $this->get_settings();
 
@@ -262,7 +262,7 @@ class Poll {
 	 *
 	 * @return array
 	 */
-	public function get_results() {
+	public function get_results(): array {
 		// Get the vote result.
 		$result = Votes::get_instance()->get_results( $this->get_client_id() );
 
@@ -274,7 +274,7 @@ class Poll {
 	 *
 	 * @param array $args Arguments.
 	 *
-	 * @return array
+	 * @return array|int
 	 */
 	public function get_votes( $args = [] ) {
 		$default = [
@@ -294,7 +294,7 @@ class Poll {
 	 *
 	 * @param array $args Arguments.
 	 *
-	 * @return array
+	 * @return array|int
 	 */
 	public function get_ip_votes( $args = [] ) {
 		$default = [

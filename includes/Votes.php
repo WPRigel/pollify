@@ -120,7 +120,7 @@ class Votes {
 	 *
 	 * @return array
 	 */
-	public function get_user_votes( string $client_id ): array|WP_Error {
+	public function get_user_votes( string $client_id ) {
 		global $wpdb;
 
 		// Get user data from Voter class.
@@ -155,7 +155,7 @@ class Votes {
 	 *
 	 * @return array|int
 	 */
-	public function get_votes( $args = [] ): array|int {
+	public function get_votes( $args = [] ) {
 		global $wpdb;
 
 		$default = [
@@ -308,7 +308,7 @@ class Votes {
 	 *
 	 * @return array|int
 	 */
-	public function get_ip_votes( array $args ): array|int {
+	public function get_ip_votes( array $args ) {
 		global $wpdb;
 
 		$default = [

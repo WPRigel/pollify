@@ -7,7 +7,7 @@
 
 declare( strict_types = 1 );
 
-$reseted = pollify_filter_input( INPUT_GET, 'updated', FILTER_VALIDATE_BOOL );
+$reseted = pollify_filter_input( INPUT_GET, 'updated', FILTER_VALIDATE_BOOLEAN );
 ?>
 
 <div class="wrap">
