@@ -37,6 +37,13 @@ if ( ! empty( $attributes['submitButtonHoverBgColor'] ) ) {
 	$styles .= '--pollify-submit-button-hover-bg-color: ' . $attributes['submitButtonHoverBgColor'] . ';';
 }
 
+$is_status_close  = ( ! empty( $attributes['status'] ) && 'draft' === $attributes['status'] );
+
+// If poll status is close then return.
+if ( $is_status_close ) {
+	return;
+}
+
 // Filter poll options from attribute which value is empty.
 $poll_options = array_filter(
 	$attributes['options'],
@@ -48,6 +55,8 @@ $poll_options = array_filter(
 $voter            = new \UnderDev\Pollify\Model\Voter();
 $results          = \UnderDev\Pollify\Votes::get_instance()->get_results( $attributes['pollClientId'] );
 $is_already_voted = ( ! empty( $attributes['allowedPerComputerResponse'] ) && $voter->is_already_voted( $attributes['pollClientId'] ) );
+
+
 ?>
 <div
 <?php
