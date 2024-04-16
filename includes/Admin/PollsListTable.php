@@ -178,9 +178,10 @@ class PollsListTable extends \WP_List_Table {
 	 */
 	public function column_status( $item ) {
 		$statuses = [
-			'publish' => __( 'Open', 'poll-creator' ),
-			'draft'   => __( 'Closed', 'poll-creator' ),
-			'trash'   => __( 'Trash', 'poll-creator' ),
+			'publish'  => __( 'Open', 'poll-creator' ),
+			'draft'    => __( 'Closed', 'poll-creator' ),
+			'schedule' => __( 'Schedule', 'poll-creator' ),
+			'trash'    => __( 'Trash', 'poll-creator' ),
 		];
 
 		// Wrap the status with span tag so later I can style it.
