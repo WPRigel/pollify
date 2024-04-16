@@ -61,7 +61,7 @@ class Blocks {
 		}
 
 		ob_start();
-		include plugin()->path . '/templates/poll.php';
+		include plugin()->path . '/templates/poll/poll.php';
 		$content = ob_get_clean();
 
 		return $content;

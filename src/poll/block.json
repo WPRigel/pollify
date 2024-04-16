@@ -64,9 +64,17 @@
 			"type": "string",
 			"default": "publish"
 		},
-		"width": {
+		"endDate": {
 			"type": "string",
-			"default": "100%"
+			"default": null
+		},
+		"closePollState": {
+			"type": "string",
+			"default": "show-result"
+		},
+		"closePollmessage": {
+			"type": "string",
+			"default": "This poll is closed."
 		},
 		"submitButtonLabel" : {
 			"type": "string",
@@ -95,6 +103,14 @@
 		"submitButtonAlign" : {
 			"type": "string",
 			"default": "left"
+		},
+		"closingBannerBgColor" : {
+			"type": "string",
+			"default": "#f8dad8"
+		},
+		"closingBannerTextColor" : {
+			"type": "string",
+			"default": "#d82e20"
 		},
 		"confirmationMessageType" : {
 			"type": "string",

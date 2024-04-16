@@ -55,7 +55,9 @@ class Poll {
 			)
 		);
 
-		$this->data['settings'] = json_decode( $this->data['settings'] ?? '', true, 512 );
+		if ( ! empty( $this->data['settings'] ) ) {
+			$this->data['settings'] = json_decode( $this->data['settings'] ?? '', true, 512 );
+		}
 	}
 
 	/**

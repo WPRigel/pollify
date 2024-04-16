@@ -1,22 +1,16 @@
-import { cloneDeep } from "lodash";
-import { nanoid } from 'nanoid';
 import classnames from 'classnames';
 import { __ } from '@wordpress/i18n';
-import { useEffect, useState, useRef, useMemo } from "@wordpress/element";
-import { subscribe, useSelect, select } from '@wordpress/data';
+import { useEffect } from "@wordpress/element";
 import {
 	Button,
 	ButtonGroup,
 	SelectControl,
 	TextareaControl,
 	CheckboxControl,
-	Spinner,
+	TimePicker,
 	ToolbarGroup,
 	ToolbarButton,
-	PanelBody,
-	__experimentalUnitControl as UnitControl,
-	__experimentalUseCustomUnits as useCustomUnits,
-	__experimentalBorderControl as BorderControl,
+	PanelBody
 } from "@wordpress/components";
 import {
 	RichText,
@@ -24,44 +18,36 @@ import {
 	BlockControls,
 	InspectorControls,
 	PanelColorSettings,
-	useSetting,
 }  from '@wordpress/block-editor';
-import apiFetch from "@wordpress/api-fetch";
 import OptionsWrapper from './options-wrapper';
 
 import './style.scss';
 
-
 /**
- * Returns `true` if the post is done saving, `false` otherwise.
+ * Is poll closed or not.
  *
- * @returns {Boolean}
+ * @param {*} pollStatus
+ * @param {*} closedAfterDateTimeUTC
+ * @param {*} currentDateTime
+ * @returns
  */
-const useAfterSave = () => {
-    const [ isPostSaved, setIsPostSaved ] = useState( false );
-    const isPostSavingInProgress = useRef( false );
-    const { isSavingPost, isAutosavingPost } = useSelect( ( __select ) => {
-        return {
-            isSavingPost: __select( 'core/editor' ).isSavingPost(),
-            isAutosavingPost: __select( 'core/editor' ).isAutosavingPost(),
-        }
-    } );
+const isPollClosed = (
+	pollStatus,
+	closedAfterDateTimeUTC,
+	currentDateTime = new Date()
+) => {
+	if ( 'draft' === pollStatus ) {
+		return true;
+	}
 
-    useEffect( () => {
-        if ( ( isSavingPost || isAutosavingPost ) && ! isPostSavingInProgress.current ) {
-            setIsPostSaved( false );
-            isPostSavingInProgress.current = true;
-        }
-        if ( ! ( isSavingPost || isAutosavingPost ) && isPostSavingInProgress.current ) {
-            // Code to run after post is done saving.
-            setIsPostSaved( true );
-            isPostSavingInProgress.current = false;
-        }
-    }, [ isSavingPost, isAutosavingPost ] );
+	if ( 'schedule' === pollStatus ) {
+		const closedAfterDateTime = new Date( closedAfterDateTimeUTC );
 
-    return isPostSaved;
+		return closedAfterDateTime < currentDateTime;
+	}
+
+	return false;
 };
-
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -72,25 +58,24 @@ const useAfterSave = () => {
  * @return {WPElement} Element to render.
  */
 const Edit = ( props ) => {
-	const [ isLoading, setIsLoading ] = useState( false );
-	const [ errors, setErrors ] = useState( [] );
 	const { clientId, attributes, setAttributes } = props;
-	const [ isSavingProcess, setSavingProcess ] = useState(false);
 
 	const {
-		pollId,
 		pollClientId,
 		title,
 		description,
-		options,
 		optionType,
 		status,
-		width,
+		endDate,
+		closePollState,
+		closePollmessage,
 		submitButtonLabel,
 		submitButtonBgColor,
 		submitButtonTextColor,
 		submitButtonHoverBgColor,
 		submitButtonHoverTextColor,
+		closingBannerBgColor,
+		closingBannerTextColor,
 		submitButtonWidth,
 		submitButtonAlign,
 		confirmationMessageType,
@@ -98,10 +83,22 @@ const Edit = ( props ) => {
 		allowedPerComputerResponse,
 	} = attributes;
 
-	const availableUnits = useSetting( 'spacing.units' );
-	const units = useCustomUnits( {
-		availableUnits: availableUnits || [ '%', 'px', 'em', 'rem', 'vw' ],
-	} );
+	const handlePollStatusChange = ( status ) => {
+		setAttributes( {
+			endDate:
+				status === 'schedule'
+					? new Date(
+							new Date().getTime() + 24 * 60 * 60 * 1000
+					  ).toISOString()
+					: null,
+			status,
+		} );
+	};
+
+	const handleEndDateChange = ( endDate ) => {
+		const dateTime = new Date( endDate );
+		setAttributes( { endDate: dateTime.toISOString() } );
+	};
 
 	useEffect( () => {
 		// Check if id is 0 or undefined or null. If yes the create a new poll.
@@ -110,53 +107,71 @@ const Edit = ( props ) => {
 		}
 	}, [] );
 
-	if ( isLoading ) {
-		return (
-			<div { ...useBlockProps( { className: 'poll-form' } ) }>
-				<Spinner />
-			</div>
-		);
-	}
-
-	if ( errors.length ) {
-		return (
-			<div { ...useBlockProps( { className: 'poll-form' } ) }>
-				{ errors.map( ( error, index ) => {
-					return (
-						<div key={ index } className='error'>
-							{ error }
-						</div>
-					);
-				} ) }
-			</div>
-		);
-	}
-
 	const style = {
-		'--pollify-form-width': width,
 		'--pollify-submit-button-bg-color': submitButtonBgColor,
 		'--pollify-submit-button-text-color': submitButtonTextColor,
 		'--pollify-submit-button-hover-bg-color': submitButtonHoverBgColor,
 		'--pollify-submit-button-hover-text-color': submitButtonHoverTextColor,
+		'--pollify-closing-banner-bg-color': closingBannerBgColor,
+		'--pollify-closing-banner-text-color': closingBannerTextColor,
 	};
+
+	const isClosed = isPollClosed( status, endDate );
 
 	const blockProps = useBlockProps( { className: 'wp-block-pollify-editor-wrapper', style } );
 
 	return (
 		<div { ...blockProps }>
 			<InspectorControls group="settings">
-				<PanelBody title={ __( 'General settings', 'poll-creator' ) }>
+				<PanelBody title={ __( 'General settings', 'poll-creator' ) } className="pollify-general-settings-sidebar-wrap">
 					<SelectControl
 						label={ __( 'Status', 'poll-creator' ) }
 						value={ status }
 						options={ [
 							{ label: __( 'Open', 'poll-creator' ), value: 'publish' },
 							{ label: __( 'Close', 'poll-creator' ), value: 'draft' },
+							{ label: __( 'Close after', 'poll-creator' ), value: 'schedule' },
 						] }
-						onChange={ ( status ) => setAttributes( { status } ) }
+						onChange={ handlePollStatusChange }
 					/>
+
+					{ ( status === 'draft' || status === 'schedule' ) && (
+						<>
+							{ ( status === 'schedule' )  && (
+								<TimePicker
+									currentTime={ endDate }
+									onChange={ handleEndDateChange }
+									is12Hour={true}
+								/>
+							) }
+
+							<SelectControl
+								label={ __( 'When poll is closed', 'poll-creator' ) }
+								value={ closePollState }
+								options={ [
+									{ label: __( 'Show poll result', 'poll-creator' ), value: 'show-result' },
+									{ label: __( 'Hide poll', 'poll-creator' ), value: 'hide-poll' },
+									{ label: __( 'Show poll close message', 'poll-creator' ), value: 'show-message' },
+								] }
+								onChange={ ( closePollState ) => setAttributes( { closePollState } ) }
+							/>
+						</>
+					) }
+
+					{ closePollState === 'show-message' && (
+						<TextareaControl
+							value={ closePollmessage || __( 'This poll is closed', 'poll-creator' ) }
+							label={ __( 'Close message text', 'poll-creator' ) }
+							placeholder={ __(
+								'This poll is closed',
+								'poll-creator'
+							) }
+							onChange={ ( closePollmessage ) => setAttributes( { closePollmessage } ) }
+						/>
+					) }
+
 				</PanelBody>
-				<PanelBody title={ __( 'Confiramtion message', 'poll-creator' ) }>
+				<PanelBody title={ __( 'Confiramtion message', 'poll-creator' ) } className="pollify-confirmation-settings-sidebar-wrap">
 					<SelectControl
 						label={ __( 'On submission', 'poll-creator' ) }
 						value={ confirmationMessageType }
@@ -179,7 +194,7 @@ const Edit = ( props ) => {
 						/>
 					) }
 				</PanelBody>
-				<PanelBody title={ __( 'Response settings', 'poll-creator' ) }>
+				<PanelBody title={ __( 'Response settings', 'poll-creator' ) } className="pollify-response-settings-sidebar-wrap">
 					<CheckboxControl
 						label={ __( 'Allowed one response per computer', 'poll-creator' ) }
 						help={ __( 'If checked, only one response per computer will be allowed.', 'poll-creator' ) }
@@ -187,7 +202,6 @@ const Edit = ( props ) => {
 						onChange={ ( allowedPerComputerResponse ) => setAttributes( { allowedPerComputerResponse } ) }
 					/>
 				</PanelBody>
-
 			</InspectorControls>
 			<InspectorControls group="styles">
 				<PanelColorSettings
@@ -267,6 +281,22 @@ const Edit = ( props ) => {
 						) }
 					</ButtonGroup>
 				</PanelColorSettings>
+				<PanelColorSettings
+					title={ __( 'Poll closing banner', 'poll-creator' ) }
+					initialOpen={ false }
+					colorSettings={ [
+						{
+							value: closingBannerBgColor,
+							onChange: ( closingBannerBgColor ) => setAttributes( { closingBannerBgColor } ),
+							label: __( 'Background Color', 'poll-creator' ),
+						},
+						{
+							value: closingBannerTextColor,
+							onChange: ( closingBannerTextColor ) => setAttributes( { closingBannerTextColor } ),
+							label: __( 'Text Color', 'poll-creator' ),
+						},
+					] }
+				/>
 			</InspectorControls>
 			<BlockControls>
 				<ToolbarGroup>
@@ -306,22 +336,30 @@ const Edit = ( props ) => {
 					setAttributes={ setAttributes }
 				/>
 
-				<div className={ classnames( 'wp-block-button poll-block-button', {
-					[ `align-${ submitButtonAlign }` ]: submitButtonAlign,
-					} ) }>
-					<div className={ classnames( 'submit-button-wrapper', {
-					[ `has-custom-width wp-block-button-width-${ submitButtonWidth }` ]: submitButtonWidth,
-					} ) }>
-						<RichText
-							className="wp-block-button__link submit-button"
-							onChange={ ( submitButtonLabel ) => setAttributes( { submitButtonLabel } ) }
-							value={ submitButtonLabel }
-							allowedFormats={ [] }
-							multiline={ false }
-							disableLineBreaks={ true }
-						/>
+				{ isClosed &&
+					<div className='closing-banner'>
+						<p>{ closePollmessage }</p>
 					</div>
-				</div>
+				}
+
+				{ ! isClosed &&
+					<div className={ classnames( 'wp-block-button poll-block-button', {
+						[ `align-${ submitButtonAlign }` ]: submitButtonAlign,
+						} ) }>
+						<div className={ classnames( 'submit-button-wrapper', {
+						[ `has-custom-width wp-block-button-width-${ submitButtonWidth }` ]: submitButtonWidth,
+						} ) }>
+							<RichText
+								className="wp-block-button__link submit-button"
+								onChange={ ( submitButtonLabel ) => setAttributes( { submitButtonLabel } ) }
+								value={ submitButtonLabel }
+								allowedFormats={ [] }
+								multiline={ false }
+								disableLineBreaks={ true }
+							/>
+						</div>
+					</div>
+				}
 			</div>
 		</div>
 	);
