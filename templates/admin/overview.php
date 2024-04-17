@@ -139,8 +139,12 @@ $navigations = pollify_poll_results_page_nav();
 								<?php foreach ( $location_votes as $location_vote ) : ?>
 									<div class="location">
 										<div class="country">
+											<?php if ( ! empty( $location_vote['location'] ) ) : ?>
 											<span class="flag-icon fi fi-<?php echo esc_html( strtolower( $location_vote['location'] ) ); ?> fib"></span>
 											<span class="country-name"><?php echo wp_kses_post( pollify_get_country_name( $location_vote['location'] ) ); ?></span>
+											<?php else : ?>
+											<span class="country-name"><?php esc_html_e( 'Unknown', 'poll-creator' ); ?></span>
+											<?php endif; ?>
 										</div>
 										<div class="count"><?php echo esc_html( $location_vote['votes'] ); ?></div>
 									</div>
@@ -177,8 +181,12 @@ $navigations = pollify_poll_results_page_nav();
 									<?php foreach ( $location_votes as $location_vote ) : ?>
 										<tr>
 											<td class="country">
+												<?php if ( ! empty( $location_vote['location'] ) ) : ?>
 												<span class="flag-icon fi fi-<?php echo esc_html( strtolower( $location_vote['location'] ) ); ?> fib"></span>
 												<span class="country-name"><?php echo wp_kses_post( pollify_get_country_name( $location_vote['location'] ) ); ?></span>
+												<?php else : ?>
+												<span class="country-name"><?php esc_html_e( 'Unknown', 'poll-creator' ); ?></span>
+												<?php endif; ?>
 											</td>
 											<td class="ip-address"><?php echo esc_html( $location_vote['ip'] ); ?></td>
 											<td class="count"><?php echo esc_html( $location_vote['votes'] ); ?></td>
@@ -240,7 +248,9 @@ $navigations = pollify_poll_results_page_nav();
 										<?php endif; ?>
 
 										<div class="other-details">
+											<?php if ( ! empty( $recent_vote['user_location'] ) ) : ?>
 											<span class="flag-icon fi fi-<?php echo esc_html( strtolower( $recent_vote['user_location'] ) ); ?> fib"></span>
+											<?php endif; ?>
 											<span class="user-ip"><?php echo esc_html( $recent_vote['user_ip'] ); ?></span>
 										</div>
 									</div>

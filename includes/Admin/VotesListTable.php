@@ -145,11 +145,15 @@ class VotesListTable extends \WP_List_Table {
 	 * @return string
 	 */
 	public function column_location( $item ) {
-		return sprintf(
-			'<span class="flag-icon fi fi-%s fib"></span> %s',
-			esc_html( strtolower( $item['user_location'] ) ),
-			esc_html( pollify_get_country_name( $item['user_location'] ) )
-		);
+		if ( ! empty( $item['user_location'] ) ) {
+			return sprintf(
+				'<span class="flag-icon fi fi-%s fib"></span> %s',
+				esc_html( strtolower( $item['user_location'] ) ),
+				esc_html( pollify_get_country_name( $item['user_location'] ) )
+			);
+		} else {
+			return __( 'Unknown', 'poll-creator' );
+		}
 	}
 
 	/**
@@ -182,7 +186,11 @@ class VotesListTable extends \WP_List_Table {
 					<option value="" <?php selected( '', $selected_location, true ); ?>><?php esc_html_e( 'All countries', 'poll-creator' ); ?></option>
 
 					<?php foreach ( $locations as $location ) : ?>
-						<option value="<?php echo esc_attr( $location['location'] ); ?>" <?php selected( $location['location'], $selected_location, true ); ?>><?php echo esc_html( pollify_get_country_name( $location['location'] ) ); ?></option>
+						<?php if ( ! empty( $location['location'] ) ) : ?>
+							<option value="<?php echo esc_attr( $location['location'] ); ?>" <?php selected( $location['location'], $selected_location, true ); ?>>
+								<?php echo esc_html( pollify_get_country_name( $location['location'] ) ); ?>
+							</option>
+						<?php endif; ?>
 					<?php endforeach; ?>
 				</select>
 
