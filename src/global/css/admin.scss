@@ -227,6 +227,17 @@ table.toplevel_page_pollify {
 	padding: 5px 10px;
 	border-radius: 5px;
 	color: #fff;
+	display: flex;
+	width: fit-content;
+	align-items: center;
+
+	span.dashicons {
+		font-size: 15px;
+		display: flex;
+		align-items: center;
+		margin-left: 5px;
+		width: 15px;
+	}
 
 	&.status-publish {
 		background-color: #46b450;

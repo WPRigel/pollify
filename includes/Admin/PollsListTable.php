@@ -160,7 +160,15 @@ class PollsListTable extends \WP_List_Table {
 
 			if ( ! empty( $id ) ) {
 				$post_title = get_the_title( $item['reference'] );
-				$reference  = sprintf( '<a href="%s">%s</a>', get_edit_post_link( $id ), $post_title );
+
+				$actions = array(
+					'edit' => sprintf( '<a href="%s" targe="_blank">' . __( 'Edit', 'poll-creator' ) . '</a>', get_edit_post_link( $id ) ),
+					'view' => sprintf( '<a href="%s" targe="_blank">' . __( 'View frontend', 'poll-creator' ) . '</a>', get_permalink( $id ) ),
+				);
+
+				// Wrap the title with view result link.
+				$title     = sprintf( '<a href="%s">%s</a>', get_edit_post_link( $id ), $post_title );
+				$reference = sprintf( '<strong>%1$s</strong> %2$s', $title, $this->row_actions( $actions ) );
 			}
 		} else {
 			$reference = $item['reference'];
@@ -184,6 +192,20 @@ class PollsListTable extends \WP_List_Table {
 			'trash'    => __( 'Trash', 'poll-creator' ),
 		];
 
+		if ( 'schedule' === $item['status'] ) {
+			$end_date   = get_date_from_gmt( $item['settings']['endDate'], get_option('date_format') . ' ' . get_option('time_format') );
+			$ended_text = sprintf( __( 'Ended at %s', 'poll-creator' ), $end_date );
+
+			// Check if the poll ended
+			if ( strtotime( $item['settings']['endDate'] ) < time() ) {
+				return sprintf( '<span tooltip="%s" flow="right" class="pollify-status status-%s">%s <span class="dashicons dashicons-info"></span></span>', $ended_text, 'draft', __( 'Closed', 'poll-=creator' ) );
+			}
+
+			$end_date_text = sprintf( __( 'Will be ended on %s', 'poll-creator' ), $end_date );
+
+			return sprintf( '<span tooltip="%s" flow="right" class="pollify-status status-%s">%s <span class="dashicons dashicons-info"></span></span>', $end_date_text, $item['status'], $statuses[ $item['status'] ] );
+		}
+
 		// Wrap the status with span tag so later I can style it.
 		return sprintf( '<span class="pollify-status status-%s">%s</span>', $item['status'], $statuses[ $item['status'] ] );
 	}
@@ -201,6 +223,7 @@ class PollsListTable extends \WP_List_Table {
 			[
 				'page'    => 'poll-creator',
 				'action'  => 'view_results',
+				'tab'     => 'votes',
 				'poll_id' => $item['client_id'],
 			],
 			admin_url( 'admin.php' )

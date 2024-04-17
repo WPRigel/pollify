@@ -103,6 +103,15 @@ class Polls {
 			ARRAY_A
 		);
 
+		// Filter each $poll and return only settings as an array by json decoding.
+		$polls = array_map(
+			function ( $poll ) {
+				$poll['settings'] = json_decode( $poll['settings'], true );
+				return $poll;
+			},
+			$polls
+		);
+
 		return $polls;
 	}
 
