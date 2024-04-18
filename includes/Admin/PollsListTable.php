@@ -193,7 +193,8 @@ class PollsListTable extends \WP_List_Table {
 		];
 
 		if ( 'schedule' === $item['status'] ) {
-			$end_date   = get_date_from_gmt( $item['settings']['endDate'], get_option('date_format') . ' ' . get_option('time_format') );
+			$end_date = get_date_from_gmt( $item['settings']['endDate'], get_option('date_format') . ' ' . get_option('time_format') );
+			/* translators: %s: poll end date */
 			$ended_text = sprintf( __( 'Ended at %s', 'poll-creator' ), $end_date );
 
 			// Check if the poll ended
@@ -201,6 +202,7 @@ class PollsListTable extends \WP_List_Table {
 				return sprintf( '<span tooltip="%s" flow="right" class="pollify-status status-%s">%s <span class="dashicons dashicons-info"></span></span>', $ended_text, 'draft', __( 'Closed', 'poll-=creator' ) );
 			}
 
+			/* translators: %s: poll end date */
 			$end_date_text = sprintf( __( 'Will be ended on %s', 'poll-creator' ), $end_date );
 
 			return sprintf( '<span tooltip="%s" flow="right" class="pollify-status status-%s">%s <span class="dashicons dashicons-info"></span></span>', $end_date_text, $item['status'], $statuses[ $item['status'] ] );
