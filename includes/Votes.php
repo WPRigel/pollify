@@ -411,7 +411,7 @@ class Votes {
 				'client_id' => $client_id,
 			],
 			[
-				'%d',
+				'%s',
 			]
 		);
 

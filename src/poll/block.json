@@ -5,7 +5,6 @@
 	"version": "1.0.0",
 	"title": "Poll",
 	"category": "widgets",
-	"icon": "file:./images/poll-icon.svg",
 	"description": "Poll block for creating poll with posts",
 	"supports": {
 		"align": [ "center", "full", "wide" ],

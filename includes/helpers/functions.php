@@ -366,7 +366,7 @@ function pollify_poll_results_page_nav() {
 			'icon'  => 'dashicons-dashboard',
 			'link'  => add_query_arg(
 				[
-					'page'    => 'poll-creator',
+					'page'    => 'pollify',
 					'action'  => 'view_results',
 					'poll_id' => $poll_id,
 				],
@@ -379,7 +379,7 @@ function pollify_poll_results_page_nav() {
 			'icon'  => 'dashicons-thumbs-up',
 			'link'  => add_query_arg(
 				[
-					'page'    => 'poll-creator',
+					'page'    => 'pollify',
 					'action'  => 'view_results',
 					'tab'     => 'votes',
 					'poll_id' => $poll_id,
@@ -393,7 +393,7 @@ function pollify_poll_results_page_nav() {
 			'icon'  => 'dashicons-chart-area',
 			'link'  => add_query_arg(
 				[
-					'page'    => 'poll-creator',
+					'page'    => 'pollify',
 					'action'  => 'view_results',
 					'tab'     => 'ip-details',
 					'poll_id' => $poll_id,

@@ -16,10 +16,9 @@ $navigations = pollify_poll_results_page_nav();
 <div class="wrap pollify-poll-details-wrap">
 	<div class="heading-wrap">
 		<h1 class="wp-heading-inline">
-			<span class="dashicons dashicons-chart-bar"></span>
 			<span><?php echo wp_kses_post( $poll->get_title() ); ?></span>
 		</h1>
-		<a href="<?php echo esc_url( add_query_arg( [ 'page' => 'poll-creator' ], admin_url( 'admin.php' ) ) ); ?>" class="page-title-action">
+		<a href="<?php echo esc_url( add_query_arg( [ 'page' => 'pollify' ], admin_url( 'admin.php' ) ) ); ?>" class="page-title-action">
 			<?php esc_html_e( 'Back to list', 'poll-creator' ); ?>
 		</a>
 	</div>
@@ -200,7 +199,7 @@ $navigations = pollify_poll_results_page_nav();
 									echo esc_url(
 										add_query_arg(
 											[
-												'page'    => 'poll-creator',
+												'page'    => 'pollify',
 												'action'  => 'view_results',
 												'tab'     => 'ip-details',
 												'poll_id' => $poll->get_client_id(),
@@ -269,7 +268,7 @@ $navigations = pollify_poll_results_page_nav();
 								echo esc_url(
 									add_query_arg(
 										[
-											'page'    => 'poll-creator',
+											'page'    => 'pollify',
 											'action'  => 'view_results',
 											'tab'     => 'votes',
 											'poll_id' => $poll->get_client_id(),

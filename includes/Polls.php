@@ -68,13 +68,13 @@ class Polls {
 		}
 
 		// If type is set then add where condition for type.
-		if ( ! empty( $args['type'] ) ) {
+		if ( ! empty( $args['type'] ) && 'all' !== $args['type'] ) {
 			$where .= $wpdb->prepare( ' AND type = %s', $args['type'] );
 		}
 
 		// If search is set then add where condition for search.
 		if ( ! empty( $args['search'] ) ) {
-			$where .= $wpdb->prepare( ' AND title LIKE %s', '%' . $args['search'] . '%' );
+			$where .= $wpdb->prepare( ' AND poll.title LIKE %s', '%' . $args['search'] . '%' );
 		}
 
 		// Set the pagination data.
@@ -91,7 +91,7 @@ class Polls {
 		// If we pass count parament true in args then just count the polls and return the count.
 		if ( ! empty( $args['count'] ) && $args['count'] ) {
 			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			$count = $wpdb->get_var( "SELECT COUNT(`id`) FROM {$table_name} {$where}" );
+			$count = $wpdb->get_var( "SELECT COUNT(`id`) FROM {$table_name} as poll {$where}" );
 
 			return intval( $count );
 		}
