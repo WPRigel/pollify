@@ -103,24 +103,12 @@ class Voter {
 	/**
 	 * Get user votes.
 	 *
-	 * @param string $clinet_id Poll client id.
+	 * @param string $client Poll client id.
 	 *
 	 * @return array
 	 */
-	public function get_votes( string $clinet_id ): array {
-		return Votes::get_instance()->get_user_votes( $clinet_id );
-	}
-
-	/**
-	 * Get last vote.
-	 *
-	 * @param string $clinet_id Poll client id.
-	 *
-	 * @return array
-	 */
-	public function get_last_vote( string $clinet_id ) {
-		$votes = $this->get_votes( $clinet_id );
-		return reset( $votes );
+	public function get_votes( string $client ): array {
+		return Votes::get_instance()->get_votes( [ 'client_id' => $client ] );
 	}
 
 	/**
@@ -130,7 +118,27 @@ class Voter {
 	 *
 	 * @return boolean
 	 */
-	public function is_already_voted( string $poll_id ): bool {
-		return ! empty( $this->get_votes( $poll_id ) );
+	public function is_already_voted( string $client ): bool {
+		$votes = Votes::get_instance()->get_votes( [
+			'per_page'  => 1,
+			'client_id' => $client,
+			'user_id'   => $this->get_user_id(),
+		] );
+
+		if ( ! empty( $votes ) ) {
+			return true;
+		}
+
+		$votes = Votes::get_instance()->get_ip_votes( [
+			'per_page'  => 1,
+			'client_id' => $client,
+			'user_ip'   => $this->get_user_ip(),
+		] );
+
+		if ( ! empty( $votes ) ) {
+			return true;
+		}
+
+		return false;
 	}
 }

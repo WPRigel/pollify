@@ -221,6 +221,12 @@ class Menu {
 
 			if ( ! empty( $client_id ) ) {
 				\UnderDev\Pollify\Votes::get_instance()->reset_results( $client_id );
+
+				// Reset cache for the poll.
+				if ( wp_cache_supports( 'flush_group' ) ) {
+					wp_cache_flush_group( 'pollify_poll_cache' );
+				}
+
 				wp_safe_redirect( admin_url( 'admin.php?page=pollify&updated=1' ) );
 			}
 		}

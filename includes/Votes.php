@@ -22,6 +22,7 @@ use UnderDev\Pollify\Traits\Singleton;
  * Handle all vote CRUD operation in one class.
  */
 class Votes {
+
 	use Singleton;
 
 	/**
@@ -109,42 +110,13 @@ class Votes {
 		$vote_data       = $args;
 		$vote_data['id'] = $wpdb->insert_id;
 
+		// Reset cache group for rendering the cache again.
+		if ( wp_cache_supports( 'flush_group' ) ) {
+			wp_cache_flush_group( 'pollify_vote_cache' );
+		}
+
 		// Return success message.
 		return $vote_data;
-	}
-
-	/**
-	 * Get vote table name.
-	 *
-	 * @param string $client_id Poll client ID.
-	 *
-	 * @return array
-	 */
-	public function get_user_votes( string $client_id ) {
-		global $wpdb;
-
-		// Get user data from Voter class.
-		$voter = new Voter();
-
-		// Get user ID.
-		$user_id = $voter->get_user_id();
-
-		// Get user IP.
-		$user_ip = $voter->get_user_ip();
-
-		// Get vote data.
-		$votes = $wpdb->get_results(
-			$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				"SELECT * FROM {$wpdb->prefix}{$this->table_name} WHERE client_id = %s AND (user_id = %d OR user_ip = %s) ORDER BY created_at DESC",
-				$client_id,
-				$user_id,
-				$user_ip
-			),
-			ARRAY_A
-		);
-
-		return $votes ?? [];
 	}
 
 	/**
@@ -180,12 +152,22 @@ class Votes {
 			$where .= $wpdb->prepare( ' AND v.client_id = %s', $args['client_id'] );
 		}
 
-		// Check if location is avaialbe or not.
+		// Check if location is available or not.
+		if ( ! empty( $args['user_id'] ) ) {
+			$where .= $wpdb->prepare( ' AND v.user_id = %d', $args['user_id'] );
+		}
+
+		// Check if location is available or not.
 		if ( ! empty( $args['location'] ) ) {
 			$where .= $wpdb->prepare( ' AND v.user_location = %s', $args['location'] );
 		}
 
-		// Check if option is avaible for filter.
+		// Check if ip is available or not.
+		if ( ! empty( $args['ip'] ) ) {
+			$where .= $wpdb->prepare( ' AND v.user_ip = %s', $args['ip'] );
+		}
+
+		// Check if option is availble for filter.
 		if ( ! empty( $args['option'] ) ) {
 			$where .= $wpdb->prepare( ' AND o.option_id = %s', $args['option'] );
 		}
@@ -198,25 +180,41 @@ class Votes {
 		$offset = ( $args['page'] - 1 ) * $args['per_page'];
 
 		if ( ! empty( $args['count'] ) && $args['count'] ) {
-			// Get vote data.
-			$votes = $wpdb->get_var(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				"SELECT COUNT(v.id), o.option, o.option_id FROM {$wpdb->prefix}{$this->table_name} v LEFT JOIN {$wpdb->prefix}pollify_poll_options o ON v.option_id = o.option_id {$where}",
-			);
+			// Implement cache here for count param.
+			$cache_count_key = 'pollify_votes_count_' . md5( serialize( $args ) );
+			$votes           = wp_cache_get( $cache_count_key, 'pollify_vote_cache' );
+
+			if ( false === $votes ) {
+				// Get vote data.
+				$votes = $wpdb->get_var(
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					"SELECT COUNT(v.id), o.option, o.option_id FROM {$wpdb->prefix}{$this->table_name} v LEFT JOIN {$wpdb->prefix}pollify_poll_options o ON v.option_id = o.option_id {$where}",
+				);
+
+				wp_cache_set( $cache_count_key, $votes, 'pollify_vote_cache', 30 * MINUTE_IN_SECONDS );
+			}
 
 			return intval( $votes ) ?? 0;
 		}
 
-		// Prepare the sql query.
-		$votes = $wpdb->get_results(
-			$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				"SELECT v.*, o.option, o.option_id FROM {$wpdb->prefix}{$this->table_name} v LEFT JOIN {$wpdb->prefix}pollify_poll_options o ON v.option_id = o.option_id {$where} ORDER BY v.{$args['orderby']} {$args['order']} LIMIT %d OFFSET %d",
-				$args['per_page'],
-				$offset
-			),
-			ARRAY_A
-		);
+		// Implement cache for getting rows.
+		$cache_key = 'pollify_votes_' . md5( serialize( $args ) );
+		$votes     = wp_cache_get( $cache_key, 'pollify_vote_cache' );
+
+		if ( false === $votes ) {
+			// Prepare the sql query.
+			$votes = $wpdb->get_results(
+				$wpdb->prepare(
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					"SELECT v.*, o.option, o.option_id FROM {$wpdb->prefix}{$this->table_name} v LEFT JOIN {$wpdb->prefix}pollify_poll_options o ON v.option_id = o.option_id {$where} ORDER BY v.{$args['orderby']} {$args['order']} LIMIT %d OFFSET %d",
+					$args['per_page'],
+					$offset
+				),
+				ARRAY_A
+			);
+
+			wp_cache_set( $cache_key, $votes, 'pollify_vote_cache', 30 * MINUTE_IN_SECONDS );
+		}
 
 		return $votes ?? [];
 	}
@@ -235,70 +233,51 @@ class Votes {
 		$poll    = Polls::get_instance()->get( $client_id );
 		$options = ! is_wp_error( $poll ) ? $poll->get_options() : [];
 
-		// Get vote data.
-		$votes = $wpdb->get_results(
-			$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				"SELECT option_id, COUNT(*) as votes FROM {$wpdb->prefix}{$this->table_name} WHERE client_id = %s GROUP BY option_id",
-				$client_id
-			),
-			ARRAY_A
-		);
+		// Implement caching.
+		$cache_key = 'pollify_results_' . $client_id;
+		$results   = wp_cache_get( $cache_key, 'pollify_vote_cache' );
 
-		$total_votes = array_sum( wp_list_pluck( $votes, 'votes' ) );
+		if ( false === $results ) {
+			// Get vote data.
+			$votes = $wpdb->get_results(
+				$wpdb->prepare(
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					"SELECT option_id, COUNT(*) as votes FROM {$wpdb->prefix}{$this->table_name} WHERE client_id = %s GROUP BY option_id",
+					$client_id
+				),
+				ARRAY_A
+			);
 
-		if ( ! empty( $options ) ) {
-			// Loop through all options and set total votes for each option.
-			foreach ( $options as $key => $option ) {
-				$options[ $key ]['votes']      = 0;
-				$options[ $key ]['percentage'] = 0;
+			$total_votes = array_sum( wp_list_pluck( $votes, 'votes' ) );
 
-				foreach ( $votes as $vote ) {
-					if ( $option['option_id'] === $vote['option_id'] ) {
-						$options[ $key ]['votes'] = (int) $vote['votes'];
+			if ( ! empty( $options ) ) {
+				// Loop through all options and set total votes for each option.
+				foreach ( $options as $key => $option ) {
+					$options[ $key ]['votes']      = 0;
+					$options[ $key ]['percentage'] = 0;
 
-						// Calculate percentage.
-						$options[ $key ]['percentage'] = (int) $vote['votes'] > 0 ? number_format_i18n( ( (int) $vote['votes'] / (int) $total_votes ) * 100, 2 ) : 0;
+					foreach ( $votes as $vote ) {
+						if ( $option['option_id'] === $vote['option_id'] ) {
+							$options[ $key ]['votes'] = (int) $vote['votes'];
 
+							// Calculate percentage.
+							$options[ $key ]['percentage'] = (int) $vote['votes'] > 0 ? number_format_i18n( ( (int) $vote['votes'] / (int) $total_votes ) * 100, 2 ) : 0;
+
+						}
 					}
 				}
 			}
+
+			$results = [
+				'total_votes'  => intval( $total_votes ),
+				'voter_counts' => count( $votes ),
+				'options'      => $options ?? [],
+			];
+
+			wp_cache_set( $cache_key, $results, 'pollify_vote_cache', 30 * MINUTE_IN_SECONDS );
 		}
 
-		$results = [
-			'total_votes'  => intval( $total_votes ),
-			'voter_counts' => count( $votes ),
-			'options'      => $options ?? [],
-		];
-
 		return $results ?? [];
-	}
-
-	/**
-	 * Get votes group by location.
-	 *
-	 * @param string   $client_id Poll client ID.
-	 * @param int|null $no_of_list Number of list.
-	 *
-	 * @return array
-	 */
-	public function get_votes_group_by_location( string $client_id, $no_of_list = null ): array {
-		global $wpdb;
-
-		// Check if no_of_list is empty or not.
-		$limit = ! empty( $no_of_list ) ? 'LIMIT ' . $no_of_list : '';
-
-		// Get vote data.
-		$votes = $wpdb->get_results(
-			$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				"SELECT user_location as location, COUNT(*) as votes FROM {$wpdb->prefix}{$this->table_name} WHERE client_id = %d GROUP BY user_location ORDER BY votes DESC {$limit}",
-				$client_id
-			),
-			ARRAY_A
-		);
-
-		return $votes ?? [];
 	}
 
 	/**
@@ -347,26 +326,41 @@ class Votes {
 
 		// If count is exist then return the count.
 		if ( ! empty( $args['count'] ) && $args['count'] ) {
-			// Get vote data.
+			// Implement cacjiing for count param.
+			$cache_count_key = 'pollify_ip_votes_count_' . md5( serialize( $args ) );
+			$votes           = wp_cache_get( $cache_count_key, 'pollify_vote_cache' );
 
-			$votes = $wpdb->get_var(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				"SELECT COUNT(*) AS total_rows FROM ( SELECT user_ip FROM {$wpdb->prefix}{$this->table_name} v {$where} GROUP BY user_ip ) AS grouped_ips",
-			);
+			if ( false === $votes ) {
+				// Get vote data.
+				$votes = $wpdb->get_var(
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					"SELECT COUNT(DISTINCT user_ip) FROM {$wpdb->prefix}{$this->table_name} v {$where}",
+				);
+
+				wp_cache_set( $cache_count_key, $votes, 'pollify_vote_cache', 30 * MINUTE_IN_SECONDS );
+			}
 
 			return intval( $votes ) ?? 0;
 		}
 
-		// Get vote data.
-		$votes = $wpdb->get_results(
-			$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				"SELECT user_ip as ip, user_location as location, COUNT(*) as votes FROM {$wpdb->prefix}{$this->table_name} v {$where} GROUP BY user_ip ORDER BY {$args['orderby']} {$args['order']} LIMIT %d OFFSET %d",
-				$args['per_page'],
-				$offset
-			),
-			ARRAY_A
-		);
+		// Implement cache for getting rows.
+		$cache_key = 'pollify_ip_votes_' . md5( serialize( $args ) );
+		$votes     = wp_cache_get( $cache_key, 'pollify_vote_cache' );
+
+		if ( false === $votes ) {
+			// Get vote data.
+			$votes = $wpdb->get_results(
+				$wpdb->prepare(
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					"SELECT user_ip as ip, user_location as location, COUNT(*) as votes FROM {$wpdb->prefix}{$this->table_name} v {$where} GROUP BY user_ip ORDER BY {$args['orderby']} {$args['order']} LIMIT %d OFFSET %d",
+					$args['per_page'],
+					$offset
+				),
+				ARRAY_A
+			);
+
+			wp_cache_set( $cache_key, $votes, 'pollify_vote_cache', 30 * MINUTE_IN_SECONDS );
+		}
 
 		return $votes ?? [];
 	}
@@ -380,6 +374,14 @@ class Votes {
 	 */
 	public function get_votes_location( string $client_id ): array {
 		global $wpdb;
+
+		// Implement cache for getting rows.
+		$cache_key = 'pollify_votes_location_' . $client_id;
+		$locations = wp_cache_get( $cache_key, 'pollify_vote_cache' );
+
+		if ( false !== $locations ) {
+			return $locations;
+		}
 
 		// Get vote data.
 		$locations = $wpdb->get_results(

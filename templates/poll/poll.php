@@ -64,6 +64,8 @@ $is_schedule_with_show_close_banner = ( 'schedule' === $attributes['status'] && 
 $voter            = new \UnderDev\Pollify\Model\Voter();
 $results          = \UnderDev\Pollify\Votes::get_instance()->get_results( $attributes['pollClientId'] );
 $is_already_voted = ( ! empty( $attributes['allowedPerComputerResponse'] ) && $voter->is_already_voted( $attributes['pollClientId'] ) );
+
+var_dump( $is_already_voted );
 ?>
 <div
 <?php
