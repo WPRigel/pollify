@@ -183,7 +183,7 @@ class Votes {
 
 		if ( ! empty( $args['count'] ) && $args['count'] ) {
 			// Implement cache here for count param.
-			$cache_count_key = 'pollify_votes_count_' . md5( serialize( $args ) );
+			$cache_count_key = 'pollify_votes_count_' . md5( maybe_serialize( $args ) );
 			$votes           = wp_cache_get( $cache_count_key, 'pollify_vote_cache' );
 
 			if ( false === $votes ) {
@@ -200,7 +200,7 @@ class Votes {
 		}
 
 		// Implement cache for getting rows.
-		$cache_key = 'pollify_votes_' . md5( serialize( $args ) );
+		$cache_key = 'pollify_votes_' . md5( maybe_serialize( $args ) );
 		$votes     = wp_cache_get( $cache_key, 'pollify_vote_cache' );
 
 		if ( false === $votes ) {
@@ -329,7 +329,7 @@ class Votes {
 		// If count is exist then return the count.
 		if ( ! empty( $args['count'] ) && $args['count'] ) {
 			// Implement cacjiing for count param.
-			$cache_count_key = 'pollify_ip_votes_count_' . md5( serialize( $args ) );
+			$cache_count_key = 'pollify_ip_votes_count_' . md5( maybe_serialize( $args ) );
 			$votes           = wp_cache_get( $cache_count_key, 'pollify_vote_cache' );
 
 			if ( false === $votes ) {
@@ -346,7 +346,7 @@ class Votes {
 		}
 
 		// Implement cache for getting rows.
-		$cache_key = 'pollify_ip_votes_' . md5( serialize( $args ) );
+		$cache_key = 'pollify_ip_votes_' . md5( maybe_serialize( $args ) );
 		$votes     = wp_cache_get( $cache_key, 'pollify_vote_cache' );
 
 		if ( false === $votes ) {

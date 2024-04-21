@@ -91,8 +91,8 @@ class Polls {
 		// If we pass count parament true in args then just count the polls and return the count.
 		if ( ! empty( $args['count'] ) && $args['count'] ) {
 			// Implement cache for poll data.
-			$cache_key_count = 'polls_count_' . md5( serialize( $args ) );
-			$count = wp_cache_get( $cache_key_count, 'pollify_poll_cache' );
+			$cache_key_count = 'polls_count_' . md5( maybe_serialize( $args ) );
+			$count           = wp_cache_get( $cache_key_count, 'pollify_poll_cache' );
 
 			if ( false === $count ) {
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
@@ -104,7 +104,7 @@ class Polls {
 			return intval( $count );
 		}
 
-		$cache_key = 'polls_' . md5( serialize( $args ) );
+		$cache_key = 'polls_' . md5( maybe_serialize( $args ) );
 
 		$polls = wp_cache_get( $cache_key, 'pollify_poll_cache' );
 
