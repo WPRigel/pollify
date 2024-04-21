@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-04-21T20:08:29+00:00\n"
+"POT-Creation-Date: 2024-04-21T20:14:11+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.9.0\n"
 
@@ -18,7 +18,7 @@ msgid "Poll Creator"
 msgstr ""
 
 #. Plugin URI of the plugin
-msgid "https://github.com/sabbir1991"
+msgid "http://wprigel.com/product/poll-creator/"
 msgstr ""
 
 #. Description of the plugin

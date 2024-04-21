@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Poll Creator
- * Plugin URI: https://github.com/sabbir1991
+ * Plugin URI: http://wprigel.com/product/poll-creator/
  * Description: Create poll using Gutenberg way.
  * Version: 1.0.0
  * Author: wprigel
