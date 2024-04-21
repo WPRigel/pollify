@@ -63,8 +63,8 @@ const Poll = {
 		} );
 	},
 
-	addResonseMessage: function ( message ) {
-		const mainWrapper = document.querySelector( '.pollify-poll-form' );
+	addResonseMessage: function ( element, message ) {
+		const mainWrapper = element.closest( '.pollify-poll-form' );
 		const html = `<div class="response-message">${ message }</div>`;
 
 		// Remove the existing response html from the form.
@@ -121,7 +121,7 @@ const Poll = {
 				const wrapper = element.closest( 'form.poll-form' );
 				wrapper.innerHTML = Poll.sanitizeHTML( response.resultTemplate );
 			} else {
-				Poll.addResonseMessage( response.settings.confirmationMessage );
+				Poll.addResonseMessage( element, response.settings.confirmationMessage );
 			}
 
 		} ).catch( ( error ) => {

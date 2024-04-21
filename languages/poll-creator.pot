@@ -2,21 +2,19 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Pollify 1.0.0\n"
+"Project-Id-Version: Poll Creator 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pollify\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-04-19T06:33:43+00:00\n"
+"POT-Creation-Date: 2024-04-21T08:27:56+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.9.0\n"
 
 #. Plugin Name of the plugin
-#: includes/Admin/Menu.php:100
-#: includes/Admin/Menu.php:101
-msgid "Pollify"
+msgid "Poll Creator"
 msgstr ""
 
 #. Plugin URI of the plugin
@@ -86,7 +84,12 @@ msgstr ""
 msgid "Documentation"
 msgstr ""
 
-#: includes/Admin/Menu.php:196
+#: includes/Admin/Menu.php:100
+#: includes/Admin/Menu.php:101
+msgid "Pollify"
+msgstr ""
+
+#: includes/Admin/Menu.php:197
 msgid "Polls per page"
 msgstr ""
 
@@ -238,37 +241,37 @@ msgid "You have already voted."
 msgstr ""
 
 #. translators: %s: Field name
-#: includes/Polls.php:154
+#: includes/Polls.php:170
 msgid "Error: %s cannot be left empty. Please fill the required information"
 msgstr ""
 
-#: includes/Polls.php:178
-#: includes/Polls.php:181
+#: includes/Polls.php:195
+#: includes/Polls.php:198
 msgid "Options must contain type and option value"
 msgstr ""
 
-#: includes/Polls.php:187
+#: includes/Polls.php:204
 msgid "Client id is not valid"
 msgstr ""
 
-#: includes/Polls.php:231
+#: includes/Polls.php:241
 msgid "Poll not updated successfully"
 msgstr ""
 
-#: includes/Polls.php:259
+#: includes/Polls.php:269
 msgid "Poll not created successfully"
 msgstr ""
 
-#: includes/Polls.php:295
+#: includes/Polls.php:316
 msgid "Poll not found"
 msgstr ""
 
-#: includes/Polls.php:339
-#: includes/Polls.php:349
+#: includes/Polls.php:363
+#: includes/Polls.php:373
 msgid "Poll not deleted successfully"
 msgstr ""
 
-#: includes/Polls.php:423
+#: includes/Polls.php:442
 msgid "Poll ID cannot be empty"
 msgstr ""
 
