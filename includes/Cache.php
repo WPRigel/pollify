@@ -24,6 +24,8 @@ namespace UnderDev\Pollify;
 // If this file is called directly, abort.
 defined( 'WPINC' ) || die;
 
+use UnderDev\Pollify\Traits\Singleton;
+
 /**
  * Class Cache
  *
@@ -32,6 +34,8 @@ defined( 'WPINC' ) || die;
  * @package UnderDev\Pollify
  */
 class Cache {
+
+	use Singleton;
 
 	/**
 	 * The prefix for all our keys.
@@ -78,6 +82,8 @@ class Cache {
 		$found = false;
 		// Get from cache first.
 		$cached = $this->get_cache( $key, $group, false, $found );
+
+		var_dump( $cached );
 
 		// Found in cache.
 		if ( ! empty( $found ) ) {

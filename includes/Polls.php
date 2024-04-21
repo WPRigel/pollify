@@ -90,27 +90,43 @@ class Polls {
 
 		// If we pass count parament true in args then just count the polls and return the count.
 		if ( ! empty( $args['count'] ) && $args['count'] ) {
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			$count = $wpdb->get_var( "SELECT COUNT(`id`) FROM {$table_name} as poll {$where}" );
+			// Implement cache for poll data.
+			$cache_key_count = 'polls_count_' . md5( serialize( $args ) );
+			$count = wp_cache_get( $cache_key_count, 'pollify_poll_cache' );
+
+			if ( false === $count ) {
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$count = $wpdb->get_var( "SELECT COUNT(`id`) FROM {$table_name} as poll {$where}" );
+
+				wp_cache_set( $cache_key_count, $count, 'pollify_poll_cache', 15 * MINUTE_IN_SECONDS );
+			}
 
 			return intval( $count );
 		}
 
-		// Get all polls from database.
-		$polls = $wpdb->get_results(
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			"SELECT poll.*, COUNT(vote.id) as response FROM {$table_name} AS poll {$join} {$where} GROUP BY poll.id ORDER BY poll.{$args['orderby']} {$args['order']} {$limit}",
-			ARRAY_A
-		);
+		$cache_key = 'polls_' . md5( serialize( $args ) );
 
-		// Filter each $poll and return only settings as an array by json decoding.
-		$polls = array_map(
-			function ( $poll ) {
-				$poll['settings'] = json_decode( $poll['settings'], true );
-				return $poll;
-			},
-			$polls
-		);
+		$polls = wp_cache_get( $cache_key, 'pollify_poll_cache' );
+
+		if ( false === $polls ) {
+			// Get all polls from database.
+			$polls = $wpdb->get_results(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"SELECT poll.*, COUNT(vote.id) as response FROM {$table_name} AS poll {$join} {$where} GROUP BY poll.id ORDER BY poll.{$args['orderby']} {$args['order']} {$limit}",
+				ARRAY_A
+			);
+
+			// Filter each $poll and return only settings as an array by json decoding.
+			$polls = array_map(
+				function ( $poll ) {
+					$poll['settings'] = json_decode( $poll['settings'], true );
+					return $poll;
+				},
+				$polls
+			);
+
+			wp_cache_set( $cache_key, $polls, 'pollify_poll_cache', 15 * MINUTE_IN_SECONDS );
+		}
 
 		return $polls;
 	}
@@ -161,6 +177,7 @@ class Polls {
 
 		// Handle the poll options.
 		// - id.
+		// - option_id: random_string.
 		// - type: text|image.
 		// - option: Text|Image object(id/url).
 
@@ -188,17 +205,10 @@ class Polls {
 		}
 
 		// Get poll data using client_id.
-		$poll = $wpdb->get_row(
-			$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				"SELECT * FROM {$wpdb->prefix}{$this->poll_table_name} WHERE client_id = %s",
-				$args['client_id'],
-			),
-			ARRAY_A
-		);
+		$poll = $this->get( $args['client_id'] );
 
 		// Check if client_id is avilable and valid uuid using regex or not.
-		if ( ! empty( $poll['id'] ) ) {
+		if ( ! is_wp_error( $poll ) ) {
 
 			$updated = $wpdb->update(
 				$wpdb->prefix . $this->poll_table_name,
@@ -213,7 +223,7 @@ class Polls {
 				],
 				[
 					'client_id' => $args['client_id'],
-					'id'        => $poll['id'],
+					'id'        => $poll->get_id(),
 				],
 				[
 					'%s',
@@ -224,14 +234,14 @@ class Polls {
 					'%s',
 					'%s',
 				],
-				[ '%s', '%d' ]
+				[ '%s' ]
 			);
 
 			if ( ! $updated ) {
 				return new WP_Error( 'update-failed', __( 'Poll not updated successfully', 'poll-creator' ), [ 'status' => 422 ] );
 			}
 
-			$option_saved = $this->save_options( intval( $poll['id'] ), $args['options'] );
+			$option_saved = $this->save_options( intval( $poll->get_id() ), $args['options'] );
 
 			// If option not saved then return WP_Error.
 			if ( is_wp_error( $option_saved ) ) {
@@ -269,6 +279,11 @@ class Polls {
 			}
 		}
 
+		// Delete the cache after updating or inserting the exisitng or new poll.
+		if ( wp_cache_supports( 'flush_group' ) ) {
+			wp_cache_flush_group( 'pollify_poll_cache' );
+		}
+
 		return $this->get( $args['id'] );
 	}
 
@@ -277,34 +292,43 @@ class Polls {
 	 *
 	 * @param int $client_id Poll client ID.
 	 *
-	 * @return array|WP_Error
+	 * @return Poll|WP_Error
 	 */
 	public function get( $client_id ) {
 		global $wpdb;
 
-		$poll = $wpdb->get_row(
-			$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				"SELECT * FROM {$wpdb->prefix}{$this->poll_table_name} WHERE client_id = %s",
-				$client_id,
-			),
-			ARRAY_A
-		);
+		// Get poll data from cache if has any.
+		$cache_key = 'poll_' . $client_id;
 
-		if ( ! $poll ) {
-			return new WP_Error( 'not-found', __( 'Poll not found', 'poll-creator' ), [ 'status' => 404 ] );
+		$poll = wp_cache_get( $cache_key, 'pollify_poll_cache' );
+
+		if ( false === $poll ) {
+			$poll = $wpdb->get_row(
+				$wpdb->prepare(
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					"SELECT * FROM {$wpdb->prefix}{$this->poll_table_name} WHERE client_id = %s",
+					$client_id,
+				),
+				ARRAY_A
+			);
+
+			if ( ! $poll ) {
+				return new WP_Error( 'not-found', __( 'Poll not found', 'poll-creator' ), [ 'status' => 404 ] );
+			}
+
+			$poll_options = $wpdb->get_results(
+				$wpdb->prepare(
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					"SELECT `id`,`option_id`,`type`,`option` FROM {$wpdb->prefix}pollify_poll_options WHERE poll_id = %d",
+					intval( $poll['id'] )
+				),
+				ARRAY_A
+			);
+
+			$poll['options'] = $poll_options;
+
+			wp_cache_set( $cache_key, $poll, 'pollify_poll_cache', 15 * MINUTE_IN_SECONDS );
 		}
-
-		$poll_options = $wpdb->get_results(
-			$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				"SELECT `id`,`option_id`,`type`,`option` FROM {$wpdb->prefix}pollify_poll_options WHERE poll_id = %d",
-				intval( $poll['id'] )
-			),
-			ARRAY_A
-		);
-
-		$poll['options'] = $poll_options;
 
 		return new Poll( $poll );
 	}
@@ -321,13 +345,13 @@ class Polls {
 		global $wpdb;
 
 		// Get poll id from poll client ID.
-		$poll_id = $wpdb->get_var(
-			$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				"SELECT id FROM {$wpdb->prefix}{$this->poll_table_name} WHERE client_id = %s",
-				$client_id
-			)
-		);
+		$poll = $this->get( $client_id );
+
+		if ( is_wp_error( $poll ) ) {
+			return $poll;
+		}
+
+		$poll_id = $poll->get_id();
 
 		$deleted = $wpdb->delete(
 			$wpdb->prefix . $this->poll_table_name,
@@ -349,6 +373,10 @@ class Polls {
 			return new WP_Error( 'deletion-failed', __( 'Poll not deleted successfully', 'poll-creator' ), [ 'status' => 422 ] );
 		}
 
+		if ( wp_cache_supports( 'flush_group' ) ) {
+			wp_cache_flush_group( 'pollify_poll_cache' );
+		}
+
 		return true;
 	}
 
@@ -360,18 +388,9 @@ class Polls {
 	 * @return bool
 	 */
 	public function exist( $client_id ): bool {
-		global $wpdb;
+		$poll = $this->get( $client_id );
 
-		$poll = $wpdb->get_row(
-			$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				"SELECT * FROM {$wpdb->prefix}{$this->poll_table_name} WHERE client_id = %s",
-				$client_id
-			),
-			ARRAY_A
-		);
-
-		return ! empty( $poll );
+		return ! is_wp_error( $poll );
 	}
 
 	/**
