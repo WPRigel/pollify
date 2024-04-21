@@ -99,7 +99,7 @@ class Menu {
 		$pollify_menu = add_menu_page(
 			__( 'Pollify', 'poll-creator' ),
 			__( 'Pollify', 'poll-creator' ),
-			'manage_options',
+			'edit_posts',
 			'pollify',
 			[ $this, 'render_polls' ],
 			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
