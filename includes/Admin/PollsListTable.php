@@ -238,7 +238,7 @@ class PollsListTable extends \WP_List_Table {
 				<span class="comment-count-approved" aria-hidden="true"><?php echo esc_html( $item['response'] ) ?? 0; ?></span>
 				<span class="screen-reader-text">
 					<?php
-						/* translators: %s: number of votes */
+						/* translators: %s: votes count */
 						echo esc_html( wp_sprintf( __( '%s votes', 'poll-creator' ), $item['response'] ) );
 					?>
 				</span>

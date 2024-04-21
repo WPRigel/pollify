@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-04-21T08:27:56+00:00\n"
+"POT-Creation-Date: 2024-04-21T20:08:29+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.9.0\n"
 
@@ -22,7 +22,7 @@ msgid "https://github.com/sabbir1991"
 msgstr ""
 
 #. Description of the plugin
-msgid "Create poll using gutenberg way."
+msgid "Create poll using Gutenberg way."
 msgstr ""
 
 #. Author of the plugin
@@ -170,7 +170,6 @@ msgstr ""
 msgid "Will be ended on %s"
 msgstr ""
 
-#. translators: %s: number of votes
 #. translators: %s: votes count
 #: includes/Admin/PollsListTable.php:242
 #: templates/admin/overview.php:60
@@ -342,19 +341,19 @@ msgstr ""
 msgid "Return with result or not"
 msgstr ""
 
-#: includes/Votes.php:55
+#: includes/Votes.php:56
 msgid "Poll ID or Option ID is empty."
 msgstr ""
 
-#: includes/Votes.php:62
+#: includes/Votes.php:63
 msgid "Invalid poll data."
 msgstr ""
 
-#: includes/Votes.php:67
+#: includes/Votes.php:68
 msgid "Invalid poll option."
 msgstr ""
 
-#: includes/Votes.php:105
+#: includes/Votes.php:106
 msgid "Sorry vote not accepted."
 msgstr ""
 
