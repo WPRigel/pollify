@@ -1,4 +1,4 @@
-=== Pollify ===
+=== Poll Creator ===
 Contributors: wprigel
 Tags: poll plugin, poll creator, poll maker, vote, survey
 Requires at least: 5.4
@@ -8,7 +8,7 @@ Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Pollify lets you create a poll website in WordPress with advanced polling/voting features to engage your audience like never before
+Poll creator lets you create a poll website in WordPress Gutenberg with advanced polling/voting features to engage your audience like never before
 
 == Description ==
 
