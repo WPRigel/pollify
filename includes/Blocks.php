@@ -2,22 +2,22 @@
 /**
  * Main plugin class.
  *
- * @package UnderDev\Pollify
+ * @package wpRigel\Pollify
  * @since 1.0.0
  */
 
 declare(strict_types=1);
 
-namespace UnderDev\Pollify;
+namespace wpRigel\Pollify;
 
-use UnderDev\Pollify\Model\Poll;
-use UnderDev\Pollify\Polls;
-use UnderDev\Pollify\Traits\Singleton;
+use wpRigel\Pollify\Model\Poll;
+use wpRigel\Pollify\Polls;
+use wpRigel\Pollify\Traits\Singleton;
 
 /**
  * Class Plugin.
  *
- * @package UnderDev\Pollify
+ * @package wpRigel\Pollify
  */
 class Blocks {
 

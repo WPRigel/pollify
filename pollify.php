@@ -9,7 +9,7 @@
  * License: GPL2
  * Text Domain: poll-creator
  *
- * @package UnderDev\Pollify
+ * @package wpRigel\Pollify
  */
 
 /**
@@ -40,7 +40,7 @@
 
 declare(strict_types=1);
 
-namespace UnderDev\Pollify;
+namespace wpRigel\Pollify;
 
 // don't call the file directly.
 if ( ! defined( 'ABSPATH' ) ) {

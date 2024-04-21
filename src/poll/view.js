@@ -1,7 +1,7 @@
 /**
  * Poll frontend handler.
  *
- * @package UnderDev\Poll
+ * @package wpRigel\Poll
  */
 import { __ } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';

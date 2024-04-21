@@ -2,13 +2,13 @@
 /**
  * Class for displaying the IPs list table.
  *
- * @package UnderDev\Pollify
+ * @package wpRigel\Pollify
  * @since 1.0.0
  */
 
 declare(strict_types=1);
 
-namespace UnderDev\Pollify\Admin;
+namespace wpRigel\Pollify\Admin;
 
 if ( ! class_exists( '\WP_List_Table' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
@@ -17,7 +17,7 @@ if ( ! class_exists( '\WP_List_Table' ) ) {
 /**
  * IPsListTable class.
  *
- * @package UnderDev\Pollify
+ * @package wpRigel\Pollify
  *
  * @since 1.0.0
  */
@@ -54,7 +54,7 @@ class IPsListTable extends \WP_List_Table {
 			$this->poll = $poll;
 		} else {
 			$poll_id    = pollify_filter_input( INPUT_GET, 'poll_id', POLLIFY_FILTER_SANITIZE_STRING );
-			$this->poll = \UnderDev\Pollify\Polls::get_instance()->get( $poll_id );
+			$this->poll = \wpRigel\Pollify\Polls::get_instance()->get( $poll_id );
 		}
 
 		parent::__construct(
@@ -132,7 +132,7 @@ class IPsListTable extends \WP_List_Table {
 		if ( 'top' === $which ) {
 			$selected_location = pollify_filter_input( INPUT_POST, 'location', POLLIFY_FILTER_SANITIZE_STRING );
 
-			$locations = \UnderDev\Pollify\Votes::get_instance()->get_votes_location( $this->poll->get_client_id() );
+			$locations = \wpRigel\Pollify\Votes::get_instance()->get_votes_location( $this->poll->get_client_id() );
 			?>
 			<div class="alignleft actions bulkactions">
 				<select name="location" id="vote-location" >

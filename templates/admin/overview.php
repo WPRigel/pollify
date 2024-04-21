@@ -8,7 +8,7 @@
 declare( strict_types = 1 );
 
 $poll_id     = pollify_filter_input( INPUT_GET, 'poll_id', POLLIFY_FILTER_SANITIZE_STRING );
-$poll        = ! empty( $poll ) ? $poll : \UnderDev\Pollify\Polls::get_instance()->get( $poll_id );
+$poll        = ! empty( $poll ) ? $poll : \wpRigel\Pollify\Polls::get_instance()->get( $poll_id );
 $nav_tab     = pollify_filter_input( INPUT_GET, 'tab', POLLIFY_FILTER_SANITIZE_STRING ) ?: 'overview';
 $navigations = pollify_poll_results_page_nav();
 ?>
@@ -291,7 +291,7 @@ $navigations = pollify_poll_results_page_nav();
 			<div class="votes-table">
 				<form method="post">
 				<?php
-					$table = new \UnderDev\Pollify\Admin\VotesListTable( $poll );
+					$table = new \wpRigel\Pollify\Admin\VotesListTable( $poll );
 
 					// Prepare table.
 					$table->prepare_items();
@@ -308,7 +308,7 @@ $navigations = pollify_poll_results_page_nav();
 			<div class="ips-table">
 				<form method="post">
 				<?php
-					$table = new \UnderDev\Pollify\Admin\IPsListTable( $poll );
+					$table = new \wpRigel\Pollify\Admin\IPsListTable( $poll );
 
 					// Prepare table.
 					$table->prepare_items();

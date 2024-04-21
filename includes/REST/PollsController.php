@@ -7,20 +7,20 @@
 
 declare(strict_types=1);
 
-namespace UnderDev\Pollify\REST;
+namespace wpRigel\Pollify\REST;
 
 use WP_Error;
 use WP_REST_Server;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Controller;
-use UnderDev\Pollify\Polls;
-use UnderDev\Pollify\Model\Poll;
+use wpRigel\Pollify\Polls;
+use wpRigel\Pollify\Model\Poll;
 
 /**
  * MiusageController class.
  *
- * @package UnderDev\Pollify\API
+ * @package wpRigel\Pollify\API
  */
 class PollsController extends WP_REST_Controller {
 

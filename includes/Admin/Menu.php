@@ -2,15 +2,15 @@
 /**
  * Menu class.
  *
- * @package UnderDev\Pollify
+ * @package wpRigel\Pollify
  * @since 1.0.0
  */
 
 declare(strict_types=1);
 
-namespace UnderDev\Pollify\Admin;
+namespace wpRigel\Pollify\Admin;
 
-use UnderDev\Pollify\Traits\Singleton;
+use wpRigel\Pollify\Traits\Singleton;
 
 /**
  * Class Menu
@@ -150,7 +150,7 @@ class Menu {
 		if ( 'pollify' === $page && 'view_results' === $action ) {
 			$poll_id = pollify_filter_input( INPUT_GET, 'poll_id', POLLIFY_FILTER_SANITIZE_STRING );
 
-			$poll = \UnderDev\Pollify\Polls::get_instance()->get( $poll_id );
+			$poll = \wpRigel\Pollify\Polls::get_instance()->get( $poll_id );
 
 			if ( is_wp_error( $poll ) ) {
 				wp_die( esc_html( $poll->get_error_message() ) );
@@ -220,7 +220,7 @@ class Menu {
 			$client_id = pollify_filter_input( INPUT_GET, 'poll_id', POLLIFY_FILTER_SANITIZE_STRING );
 
 			if ( ! empty( $client_id ) ) {
-				\UnderDev\Pollify\Votes::get_instance()->reset_results( $client_id );
+				\wpRigel\Pollify\Votes::get_instance()->reset_results( $client_id );
 
 				// Reset cache for the poll.
 				if ( wp_cache_supports( 'flush_group' ) ) {

@@ -2,14 +2,14 @@
 /**
  * Voter model class.
  *
- * @package UnderDev\Pollify
+ * @package wpRigel\Pollify
  */
 
 declare(strict_types=1);
 
-namespace UnderDev\Pollify\Model;
+namespace wpRigel\Pollify\Model;
 
-use UnderDev\Pollify\Votes;
+use wpRigel\Pollify\Votes;
 
 /**
  * Class Voter.

@@ -8,12 +8,12 @@
     },
     "autoload": {
         "psr-4": {
-            "UnderDev\\Pollify\\": "includes/"
+            "wpRigel\\Pollify\\": "includes/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "UnderDev\\Pollify\\Tests\\": "tests/php"
+            "wpRigel\\Pollify\\Tests\\": "tests/php"
         }
     },
     "scripts": {

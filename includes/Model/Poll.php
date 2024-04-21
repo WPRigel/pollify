@@ -2,15 +2,15 @@
 /**
  * Poll model class.
  *
- * @package UnderDev\Pollify
+ * @package wpRigel\Pollify
  */
 
 declare(strict_types=1);
 
-namespace UnderDev\Pollify\Model;
+namespace wpRigel\Pollify\Model;
 
 use WP_Error;
-use UnderDev\Pollify\Votes;
+use wpRigel\Pollify\Votes;
 use Gutenberg_Templates\Inc\Importer\plugin;
 
 /**

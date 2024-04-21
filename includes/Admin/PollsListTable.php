@@ -2,13 +2,13 @@
 /**
  * Menu class.
  *
- * @package UnderDev\Pollify
+ * @package wpRigel\Pollify
  * @since 1.0.0
  */
 
 declare(strict_types=1);
 
-namespace UnderDev\Pollify\Admin;
+namespace wpRigel\Pollify\Admin;
 
 if ( ! class_exists( '\WP_List_Table' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
@@ -17,7 +17,7 @@ if ( ! class_exists( '\WP_List_Table' ) ) {
 /**
  * PollsListTable class.
  *
- * @package UnderDev\Pollify
+ * @package wpRigel\Pollify
  *
  * @since 1.0.0
  */
@@ -377,6 +377,6 @@ class PollsListTable extends \WP_List_Table {
 	 * @return array|int
 	 */
 	private function get_table_data( $args ) {
-		return \UnderDev\Pollify\Polls::get_instance()->all( $args );
+		return \wpRigel\Pollify\Polls::get_instance()->all( $args );
 	}
 }

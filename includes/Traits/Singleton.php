@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace UnderDev\Pollify\Traits;
+namespace wpRigel\Pollify\Traits;
 
 trait Singleton {
 

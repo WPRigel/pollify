@@ -23,7 +23,7 @@ $reseted = pollify_filter_input( INPUT_GET, 'updated', FILTER_VALIDATE_BOOLEAN )
 	<?php endif; ?>
 
 	<?php
-		$table = new \UnderDev\Pollify\Admin\PollsListTable();
+		$table = new \wpRigel\Pollify\Admin\PollsListTable();
 		$table->views();
 
 		echo '<form method="post">';

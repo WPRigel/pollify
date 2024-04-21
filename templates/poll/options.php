@@ -6,7 +6,7 @@
  *
  * @var array $attributes
  *
- * @package UnderDev\Pollify
+ * @package wpRigel\Pollify
  *
  * @since 1.0.0
  */

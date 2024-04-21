@@ -3,20 +3,20 @@
  * Installer classe that handle functionality
  * during activation and installation.
  *
- * @package UnderDev\Pollify
+ * @package wpRigel\Pollify
  * @since 1.0.0
  */
 
 declare(strict_types=1);
 
-namespace UnderDev\Pollify;
+namespace wpRigel\Pollify;
 
-use UnderDev\Pollify\Traits\Singleton;
+use wpRigel\Pollify\Traits\Singleton;
 
 /**
  * Class Installer.
  *
- * @package UnderDev\Pollify
+ * @package wpRigel\Pollify
  */
 class Installer {
 

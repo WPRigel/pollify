@@ -2,15 +2,15 @@
 /**
  * Main plugin class.
  *
- * @package UnderDev\Automator
+ * @package wpRigel\Automator
  * @since 1.0.0
  */
 
 declare(strict_types=1);
 
-namespace UnderDev\Pollify;
+namespace wpRigel\Pollify;
 
-use UnderDev\Pollify\Traits\Singleton;
+use wpRigel\Pollify\Traits\Singleton;
 
 /**
  * Class Api.
@@ -45,8 +45,8 @@ class Apis {
 	 */
 	public function map_classes(): array {
 		return [
-			\UnderDev\Pollify\REST\PollsController::class,
-			\UnderDev\Pollify\REST\VotesController::class,
+			\wpRigel\Pollify\REST\PollsController::class,
+			\wpRigel\Pollify\REST\VotesController::class,
 		];
 	}
 

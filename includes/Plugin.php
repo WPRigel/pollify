@@ -2,20 +2,20 @@
 /**
  * Main plugin class.
  *
- * @package UnderDev\Pollify
+ * @package wpRigel\Pollify
  * @since 1.0.0
  */
 
 declare(strict_types=1);
 
-namespace UnderDev\Pollify;
+namespace wpRigel\Pollify;
 
-use UnderDev\Pollify\Admin\Menu;
+use wpRigel\Pollify\Admin\Menu;
 
 /**
  * Class Plugin.
  *
- * @package UnderDev\Pollify
+ * @package wpRigel\Pollify
  */
 class Plugin {
 

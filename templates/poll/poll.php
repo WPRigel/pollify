@@ -6,7 +6,7 @@
  *
  * @var array $attributes
  *
- * @package UnderDev\Pollify
+ * @package wpRigel\Pollify
  *
  * @since 1.0.0
  */
@@ -61,11 +61,9 @@ $is_schedule_with_show_results = ( 'schedule' === $attributes['status'] && strto
 $is_draft_with_show_close_banner    = ( 'draft' === $attributes['status'] && 'show-message' === $attributes['closePollState'] );
 $is_schedule_with_show_close_banner = ( 'schedule' === $attributes['status'] && strtotime( $attributes['endDate'] ) < time() && 'show-message' === $attributes['closePollState'] );
 
-$voter            = new \UnderDev\Pollify\Model\Voter();
-$results          = \UnderDev\Pollify\Votes::get_instance()->get_results( $attributes['pollClientId'] );
+$voter            = new \wpRigel\Pollify\Model\Voter();
+$results          = \wpRigel\Pollify\Votes::get_instance()->get_results( $attributes['pollClientId'] );
 $is_already_voted = ( ! empty( $attributes['allowedPerComputerResponse'] ) && $voter->is_already_voted( $attributes['pollClientId'] ) );
-
-var_dump( $is_already_voted );
 ?>
 <div
 <?php

@@ -4,17 +4,17 @@
  *
  * Handle all vote CRUD operation in one class.
  *
- * @package UnderDev\Pollify
+ * @package wpRigel\Pollify
  * @since 1.0.0
  */
 
 declare(strict_types=1);
 
-namespace UnderDev\Pollify;
+namespace wpRigel\Pollify;
 
 use WP_Error;
-use UnderDev\Pollify\Model\Voter;
-use UnderDev\Pollify\Traits\Singleton;
+use wpRigel\Pollify\Model\Voter;
+use wpRigel\Pollify\Traits\Singleton;
 
 /**
  * Class Votes.
@@ -112,7 +112,9 @@ class Votes {
 
 		// Reset cache group for rendering the cache again.
 		if ( wp_cache_supports( 'flush_group' ) ) {
+			wp_cache_flush_group( 'pollify_poll_cache' );
 			wp_cache_flush_group( 'pollify_vote_cache' );
+
 		}
 
 		// Return success message.
