@@ -84,16 +84,6 @@ class Blocks {
 			return;
 		}
 
-		if ( ! $update ) {
-			return;
-		}
-
-		// Return if not a post request from the editor.
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		if ( empty( $_POST ) ) {
-			return;
-		}
-
 		$blocks = parse_blocks( $post->post_content );
 
 		$polls = array_filter(
