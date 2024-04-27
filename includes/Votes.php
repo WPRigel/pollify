@@ -114,7 +114,6 @@ class Votes {
 		if ( wp_cache_supports( 'flush_group' ) ) {
 			wp_cache_flush_group( 'pollify_poll_cache' );
 			wp_cache_flush_group( 'pollify_vote_cache' );
-
 		}
 
 		// Return success message.
