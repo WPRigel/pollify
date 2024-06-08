@@ -15,8 +15,8 @@ Poll creator lets you create a poll website in WordPress Gutenberg with advanced
 Using the Pollify poll maker plugin, you can easily integrate polls and surveys directly into your Gutenberg editor, no shortcode required. There’s no capping with the free version, you can get unlimited votes. Create dynamic polls by allowing your users to select from single or multiple options. Also, customize every detail of your online poll including title, description, and vote button text.
 
 - [Pollify Poll Creator Features at a glance](https://wprigel.com)
-- Pollify Free Demo
-- Pollify User Manual
+- [Pollify Free Demo](https://pollifydemo.wprigel.com/)
+- [Pollify User Manual](https://wprigel.com/docs-category/poll-creator/)
 
 Pollify is the ultimate WordPress poll creator plugin powered by the Gutenberg editor. Add as many polls/surveys as you need, and customize your polls just as you want. Set a specific timeline for your polls, schedule a poll for holidays or when you’re on a vacation; it’s all up to you!
 
