@@ -11,7 +11,6 @@ namespace wpRigel\Pollify\Model;
 
 use WP_Error;
 use wpRigel\Pollify\Votes;
-use Gutenberg_Templates\Inc\Importer\plugin;
 
 /**
  * Class Poll.

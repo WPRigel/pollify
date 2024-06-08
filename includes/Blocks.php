@@ -28,6 +28,7 @@ class Blocks {
 	 */
 	public function __construct() {
 		add_action( 'init', [ $this, 'init_blocks' ] );
+		add_action( 'block_categories_all', [ $this, 'register_block_category' ] );
 		add_action( 'save_post', [ $this, 'save_polls' ], 10, 3 );
 
 		// Add localize script for nonces.
@@ -42,6 +43,25 @@ class Blocks {
 			POLLIFY_PATH . '/build/poll',
 			array(
 				'render_callback' => [ $this, 'render_block' ],
+			)
+		);
+	}
+
+	/**
+	 * Register block category.
+	 *
+	 * @param array $categories Block categories.
+	 *
+	 * @return array
+	 */
+	public function register_block_category( $categories ): array {
+		return array_merge(
+			$categories,
+			array(
+				array(
+					'slug'  => 'pollify',
+					'title' => __( 'Pollify', 'pollify' ),
+				),
 			)
 		);
 	}
