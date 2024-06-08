@@ -4,7 +4,7 @@
   "name": "pollify/poll",
   "version": "1.0.0",
   "title": "Poll",
-  "category": "widgets",
+  "category": "pollify",
   "description": "Poll block for creating poll with posts",
   "supports": {
     "align": [

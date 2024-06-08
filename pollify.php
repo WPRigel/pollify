@@ -50,8 +50,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Define some constant for getting path and urls and version of the plugin.
 define( 'POLLIFY_VERSION', '1.0.0' );
 define( 'POLLIFY_PATH', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
+define( 'POLLIFY_ASSET_PATH', untrailingslashit( POLLIFY_PATH . '/assets' ) );
 define( 'POLLIFY_ASSET_BUILD_PATH', untrailingslashit( POLLIFY_PATH . '/assets/build' ) );
 define( 'POLLIFY_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
+define( 'POLLIFY_ASSET_URL', untrailingslashit( POLLIFY_URL . '/assets' ) );
 define( 'POLLIFY_ASSET_BUILD_URL', untrailingslashit( POLLIFY_URL . '/assets/build' ) );
 define( 'POLLIFY_FILTER_SANITIZE_STRING', 'filter-sanitize-string' );
 
