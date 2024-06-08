@@ -112,7 +112,7 @@ $navigations = pollify_poll_results_page_nav();
 								pollify_get_country_name( $location_vote['location'] ),
 								intval( $location_vote['votes'] ),
 							];
-						};
+						}
 						?>
 						<div class="location-map">
 							<div id="geo-chart-map" class="geo-chart-map" data-locations="<?php echo esc_attr( wp_json_encode( $location_data ) ); ?>" ></div>

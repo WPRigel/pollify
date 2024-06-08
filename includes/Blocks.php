@@ -29,7 +29,7 @@ class Blocks {
 	public function __construct() {
 		add_action( 'init', [ $this, 'init_blocks' ] );
 		add_action( 'block_categories_all', [ $this, 'register_block_category' ] );
-		add_action( 'save_post', [ $this, 'save_polls' ], 10, 3 );
+		add_action( 'save_post', [ $this, 'save_polls' ], 10, 2 );
 
 		// Add localize script for nonces.
 		add_action( 'wp_enqueue_scripts', [ $this, 'localize_script' ] );
@@ -60,7 +60,7 @@ class Blocks {
 			array(
 				array(
 					'slug'  => 'pollify',
-					'title' => __( 'Pollify', 'pollify' ),
+					'title' => __( 'Pollify', 'poll-creator' ),
 				),
 			)
 		);
@@ -92,9 +92,10 @@ class Blocks {
 	 *
 	 * @param int     $post_id Post ID.
 	 * @param WP_Post $post    Post object.
-	 * @param bool    $update  Whether this is an existing post being updated or not.
+	 *
+	 * @return void
 	 */
-	public function save_polls( $post_id, $post, $update ) {
+	public function save_polls( $post_id, $post ) {
 		if (
 			wp_is_post_autosave( $post_id )
 			|| wp_is_post_revision( $post_id )

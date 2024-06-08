@@ -53,6 +53,42 @@ class Voter {
 	}
 
 	/**
+	 * Function to check if an IP address is from localhost or a local network.
+	 *
+	 * @param string $ip The IP address to check.
+	 *
+	 * @return bool True if the IP is from localhost or a local network, false otherwise.
+	 */
+	public function is_local_ip( $ip ) {
+		// Localhost.
+		if ( '127.0.0.1' === $ip || '::1' === $ip ) {
+			return true;
+		}
+
+		// Local network IP ranges.
+		$local_ip_ranges = [
+			'10.0.0.0|10.255.255.255',        // Class A private network.
+			'172.16.0.0|172.31.255.255',      // Class B private network.
+			'192.168.0.0|192.168.255.255',    // Class C private network.
+			'169.254.0.0|169.254.255.255',    // Link-local address (APIPA).
+		];
+
+		$long_ip = ip2long( $ip );
+
+		if ( false !== $long_ip ) {
+			foreach ( $local_ip_ranges as $range ) {
+				list( $start, $end ) = explode( '|', $range );
+
+				if ( $long_ip >= ip2long( $start ) && $long_ip <= ip2long( $end ) ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Get user IP.
 	 *
 	 * @return string
@@ -61,16 +97,25 @@ class Voter {
 		// Get user IP address.
 		if ( ! empty( $_SERVER['HTTP_CLIENT_IP'] ) ) {
 			// Check IP from internet.
-			$ip = $_SERVER['HTTP_CLIENT_IP'];
+			$ip = sanitize_text_field( $_SERVER['HTTP_CLIENT_IP'] );
 		} elseif ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
 			// Check IP is passed from proxy.
-			$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+			$ip = sanitize_text_field( explode( ',', $_SERVER['HTTP_X_FORWARDED_FOR'] )[0] );
 		} else {
 			// Get IP address.
-			$ip = $_SERVER['REMOTE_ADDR'];
+			$ip = sanitize_text_field( $_SERVER['REMOTE_ADDR'] );
 		}
 
-		return $ip ?? '';
+		// Check if the IP is localhost or local network then don't need to pass filter_var.
+		if ( $this->is_local_ip( $ip ) ) {
+			return $ip;
+		}
+
+		if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) ) {
+			return $ip;
+		}
+
+		return '';
 	}
 
 	/**
@@ -79,7 +124,15 @@ class Voter {
 	 * @return string
 	 */
 	public function get_user_country(): string {
-		$url  = 'http://www.geoplugin.net/json.gp?ip=' . $this->get_user_ip();
+		$ip = $this->get_user_ip();
+
+		// If someone is using localhost or local network then don't need to pass the IP.
+		// Geoplugin will get automatically IP location from the server.
+		if ( $this->is_local_ip( $ip ) ) {
+			$ip = '';
+		}
+
+		$url  = 'http://www.geoplugin.net/json.gp?ip=' . $ip;
 		$data = wp_remote_get( $url );
 
 		if ( ! is_wp_error( $data ) ) {
@@ -97,7 +150,7 @@ class Voter {
 	 * @return string
 	 */
 	public function get_user_agent(): string {
-		return $_SERVER['HTTP_USER_AGENT'] ?? '';
+		return sanitize_text_field( $_SERVER['HTTP_USER_AGENT'] ) ?? '';
 	}
 
 	/**

@@ -158,6 +158,11 @@ class Poll {
 		return maybe_unserialize( $this->data['settings'] );
 	}
 
+	/**
+	 * Check if poll is closed or not.
+	 *
+	 * @return bool
+	 */
 	public function is_poll_closed(): bool {
 		$settings = $this->get_settings();
 
