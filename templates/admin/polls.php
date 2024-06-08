@@ -7,6 +7,11 @@
 
 declare( strict_types = 1 );
 
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 $reseted = pollify_filter_input( INPUT_GET, 'updated', FILTER_VALIDATE_BOOLEAN );
 ?>
 
