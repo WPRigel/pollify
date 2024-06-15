@@ -146,39 +146,42 @@ class Votes {
 		}
 
 		// Create some where condition regarding status, type, search etc.
-		$where = 'WHERE 1=1';
+		$where = $wpdb->prepare( 'WHERE 1=%d', 1 );
 
 		// Check if client_id is empty or not.
 		if ( ! empty( $args['client_id'] ) ) {
-			$where .= $wpdb->prepare( ' AND v.client_id = %s', $args['client_id'] );
+			$where .= $wpdb->prepare( ' AND v.client_id = %s', sanitize_text_field( $args['client_id'] ) );
 		}
 
 		// Check if location is available or not.
 		if ( ! empty( $args['user_id'] ) ) {
-			$where .= $wpdb->prepare( ' AND v.user_id = %d', $args['user_id'] );
+			$where .= $wpdb->prepare( ' AND v.user_id = %d', sanitize_text_field( $args['user_id'] ) );
 		}
 
 		// Check if location is available or not.
 		if ( ! empty( $args['location'] ) ) {
-			$where .= $wpdb->prepare( ' AND v.user_location = %s', $args['location'] );
+			$where .= $wpdb->prepare( ' AND v.user_location = %s', sanitize_text_field( $args['location'] ) );
 		}
 
 		// Check if ip is available or not.
 		if ( ! empty( $args['ip'] ) ) {
-			$where .= $wpdb->prepare( ' AND v.user_ip = %s', $args['ip'] );
+			$where .= $wpdb->prepare( ' AND v.user_ip = %s', sanitize_text_field( $args['ip'] ) );
 		}
 
 		// Check if option is availble for filter.
 		if ( ! empty( $args['option'] ) ) {
-			$where .= $wpdb->prepare( ' AND o.option_id = %s', $args['option'] );
+			$where .= $wpdb->prepare( ' AND o.option_id = %s', sanitize_text_field( $args['option'] ) );
 		}
 
 		// If search is set then add where condition for search.
 		if ( ! empty( $args['search'] ) ) {
-			$where .= $wpdb->prepare( ' AND v.user_ip LIKE %s', '%' . $args['search'] . '%' );
+			$where .= $wpdb->prepare( ' AND v.user_ip LIKE %s', '%' . sanitize_text_field( $args['search'] ) . '%' );
 		}
 
 		$offset = ( $args['page'] - 1 ) * $args['per_page'];
+
+		// Set orderby clause using prepare.
+		$order_by = sanitize_sql_orderby( "{$args['orderby']} {$args['order']}" );
 
 		if ( ! empty( $args['count'] ) && $args['count'] ) {
 			// Implement cache here for count param.
@@ -188,11 +191,15 @@ class Votes {
 			if ( false === $votes ) {
 				// Get vote data.
 				$votes = $wpdb->get_var(
-					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-					"SELECT COUNT(v.id), o.option, o.option_id FROM {$wpdb->prefix}{$this->table_name} v LEFT JOIN {$wpdb->prefix}pollify_poll_options o ON v.option_id = o.option_id {$where}",
+					$wpdb->prepare(
+						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+						"SELECT COUNT(v.id), o.option, o.option_id FROM %i v LEFT JOIN %i o ON v.option_id = o.option_id {$where}",
+						$wpdb->prefix . $this->table_name,
+						$wpdb->prefix . 'pollify_poll_options'
+					)
 				);
 
-				wp_cache_set( $cache_count_key, $votes, 'pollify_vote_cache', 30 * MINUTE_IN_SECONDS );
+				wp_cache_set( $cache_count_key, $votes, 'pollify_vote_cache', 15 * MINUTE_IN_SECONDS );
 			}
 
 			return intval( $votes ) ?? 0;
@@ -207,7 +214,7 @@ class Votes {
 			$votes = $wpdb->get_results(
 				$wpdb->prepare(
 					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-					"SELECT v.*, o.option, o.option_id FROM {$wpdb->prefix}{$this->table_name} v LEFT JOIN {$wpdb->prefix}pollify_poll_options o ON v.option_id = o.option_id {$where} ORDER BY v.{$args['orderby']} {$args['order']} LIMIT %d OFFSET %d",
+					"SELECT v.*, o.option, o.option_id FROM {$wpdb->prefix}{$this->table_name} v LEFT JOIN {$wpdb->prefix}pollify_poll_options o ON v.option_id = o.option_id {$where} ORDER BY {$order_by} LIMIT %d OFFSET %d",
 					$args['per_page'],
 					$offset
 				),
@@ -242,8 +249,8 @@ class Votes {
 			// Get vote data.
 			$votes = $wpdb->get_results(
 				$wpdb->prepare(
-					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-					"SELECT option_id, COUNT(*) as votes FROM {$wpdb->prefix}{$this->table_name} WHERE client_id = %s GROUP BY option_id",
+					'SELECT option_id, COUNT(*) as votes FROM %i WHERE client_id = %s GROUP BY option_id',
+					$wpdb->prefix . $this->table_name,
 					$client_id
 				),
 				ARRAY_A
@@ -306,21 +313,21 @@ class Votes {
 		}
 
 		// Create some where condition regarding status, type, search etc.
-		$where = 'WHERE 1=1';
+		$where = $wpdb->prepare( 'WHERE 1=%d', 1 );
 
 		// Check if client_id is empty or not.
 		if ( ! empty( $args['client_id'] ) ) {
-			$where .= $wpdb->prepare( ' AND v.client_id = %s', $args['client_id'] );
+			$where .= $wpdb->prepare( ' AND v.client_id = %s', sanitize_text_field( $args['client_id'] ) );
 		}
 
 		// Check if client_id is empty or not.
 		if ( ! empty( $args['location'] ) ) {
-			$where .= $wpdb->prepare( ' AND v.user_location = %s', $args['location'] );
+			$where .= $wpdb->prepare( ' AND v.user_location = %s', sanitize_text_field( $args['location'] ) );
 		}
 
 		// If search is set then add where condition for search.
 		if ( ! empty( $args['search'] ) ) {
-			$where .= $wpdb->prepare( ' AND v.user_ip LIKE %s', '%' . $args['search'] . '%' );
+			$where .= $wpdb->prepare( ' AND v.user_ip LIKE %s', '%' . sanitize_text_field( $args['search'] ) . '%' );
 		}
 
 		$offset = ( $args['page'] - 1 ) * $args['per_page'];
@@ -334,8 +341,11 @@ class Votes {
 			if ( false === $votes ) {
 				// Get vote data.
 				$votes = $wpdb->get_var(
-					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-					"SELECT COUNT(DISTINCT user_ip) FROM {$wpdb->prefix}{$this->table_name} v {$where}",
+					$wpdb->prepare(
+						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+						"SELECT COUNT(DISTINCT user_ip) FROM %i v {$where}",
+						$wpdb->prefix . $this->table_name
+					)
 				);
 
 				wp_cache_set( $cache_count_key, $votes, 'pollify_vote_cache', 30 * MINUTE_IN_SECONDS );
@@ -348,12 +358,16 @@ class Votes {
 		$cache_key = 'pollify_ip_votes_' . md5( maybe_serialize( $args ) );
 		$votes     = wp_cache_get( $cache_key, 'pollify_vote_cache' );
 
+		// Set order by clause using prepare.
+		$order_by = sanitize_sql_orderby( "{$args['orderby']} {$args['order']}" );
+
 		if ( false === $votes ) {
 			// Get vote data.
 			$votes = $wpdb->get_results(
 				$wpdb->prepare(
 					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-					"SELECT user_ip as ip, user_location as location, COUNT(*) as votes FROM {$wpdb->prefix}{$this->table_name} v {$where} GROUP BY user_ip ORDER BY {$args['orderby']} {$args['order']} LIMIT %d OFFSET %d",
+					"SELECT user_ip as ip, user_location as location, COUNT(*) as votes FROM %i v {$where} GROUP BY user_ip ORDER BY {$order_by} LIMIT %d OFFSET %d",
+					$wpdb->prefix . $this->table_name,
 					$args['per_page'],
 					$offset
 				),
@@ -387,12 +401,14 @@ class Votes {
 		// Get vote data.
 		$locations = $wpdb->get_results(
 			$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				"SELECT DISTINCT user_location as location FROM {$wpdb->prefix}{$this->table_name} WHERE client_id = %s",
+				'SELECT DISTINCT user_location as location FROM %i WHERE client_id = %s',
+				$wpdb->prefix . $this->table_name,
 				$client_id
 			),
 			ARRAY_A
 		);
+
+		wp_cache_set( $cache_key, $locations, 'pollify_vote_cache', 15 * MINUTE_IN_SECONDS );
 
 		return $locations ?? [];
 	}
