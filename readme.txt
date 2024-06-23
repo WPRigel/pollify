@@ -148,7 +148,9 @@ Seamlessly collect user emails for community building and email marketing effort
 - Email campaign using email services.
 
 === Acknowledgements ===
-This plugin utilizes the [GeoPlugin service](https://www.geoplugin.com/) for geolocation functionality. We would like to thank the GeoPlugin team for providing this valuable support.
+This plugin utilizes the [GeoPlugin service](https://www.geoplugin.com/) to provide geolocation functionality. This third-party service helps us determine the geographic location of users based on their IP addresses. For more information on GeoPlugin's terms of use and privacy policies, please visit [GeoPlugin Terms of Use](https://www.geoplugin.com/aup) and [GeoPlugin Privacy Policy](https://www.geoplugin.com/privacy).
+
+Additionally, our plugin uses Google Charts (https://www.gstatic.com/charts/loader.js) for charting and data visualization. For more information on Google Charts' terms of use and privacy policies, please visit Google Charts [Terms of Service](https://developers.google.com/chart/terms) and Google [Privacy Policy](https://developers.google.com/chart/interactive/docs/security_privacy).
 
 = Author =
 Created by [wpRigel](https://wprigel.com)
