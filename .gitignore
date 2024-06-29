@@ -64,3 +64,5 @@ Thumbs.db
 *.log
 *.sql
 *.sqlite
+*.zip
+/poll-creator
