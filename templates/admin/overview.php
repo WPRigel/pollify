@@ -7,6 +7,11 @@
 
 declare( strict_types = 1 );
 
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 $poll_id     = pollify_filter_input( INPUT_GET, 'poll_id', POLLIFY_FILTER_SANITIZE_STRING );
 $poll        = ! empty( $poll ) ? $poll : \wpRigel\Pollify\Polls::get_instance()->get( $poll_id );
 $nav_tab     = pollify_filter_input( INPUT_GET, 'tab', POLLIFY_FILTER_SANITIZE_STRING ) ?: 'overview';
@@ -49,7 +54,7 @@ $navigations = pollify_poll_results_page_nav();
 						<div class="horizointal-bar-chart">
 							<?php $poll_results = $poll->get_results(); ?>
 
-							<?php if ( ! empty( $poll_results ) ) : ?>
+							<?php if ( ! empty( $poll_results['options'] ) ) : ?>
 								<?php foreach ( $poll_results['options'] as $result_option ) : ?>
 								<div class="horizointal-bar-chart__bar">
 									<div class="horizointal-bar-chart__bar-label">
@@ -104,34 +109,18 @@ $navigations = pollify_poll_results_page_nav();
 								'orderby'  => 'votes',
 							]
 						);
+
+						$location_data = [ [ __( 'Country', 'poll-creator' ), __( 'Votes', 'poll-creator' ) ] ];
+
+						foreach ( $location_votes as $location_vote ) {
+							$location_data[] = [
+								pollify_get_country_name( $location_vote['location'] ),
+								intval( $location_vote['votes'] ),
+							];
+						}
 						?>
 						<div class="location-map">
-							<div id="geo-chart-map" class="geo-chart-map"></div>
-							<script type="text/javascript">
-								function drawRegionsMap() {
-									var data = google.visualization.arrayToDataTable( [
-									['Country', 'Votes'],
-									<?php foreach ( $location_votes as $geo_data ) : ?>
-										['<?php echo esc_js( pollify_get_country_name( $geo_data['location'] ) ); ?>', <?php echo esc_js( $geo_data['votes'] ); ?>],
-									<?php endforeach; ?>
-									] );
-
-									var options = {
-										colorAxis: {colors: [ '#91cdff', '#2271b1' ]},
-										magnifyingGlass: {enable: true, zoomFactor: 15}
-									};
-
-									var chart = new google.visualization.GeoChart(document.getElementById( 'geo-chart-map' ) );
-
-									chart.draw( data, options );
-								}
-
-								google.charts.load('current', {
-									'packages':['geochart'],
-								});
-
-								google.charts.setOnLoadCallback(drawRegionsMap);
-							</script>
+							<div id="geo-chart-map" class="geo-chart-map" data-locations="<?php echo esc_attr( wp_json_encode( $location_data ) ); ?>" ></div>
 						</div>
 						<div class="location-list">
 							<?php if ( ! empty( $location_votes ) ) : ?>

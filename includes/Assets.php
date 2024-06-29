@@ -35,10 +35,10 @@ class Assets {
 	 * @return void
 	 */
 	public function admin_scripts() {
-		$this->register_script( 'pollify-admin', 'admin.js' );
-		$this->register_style( 'pollify-admin', 'admin.css' );
-		$this->register_style( 'pollify-flag-icons', 'https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css' );
-		$this->register_script( 'pollify-geo-chart', 'https://www.gstatic.com/charts/loader.js', [], POLLIFY_VERSION, false );
+		$this->register_style( 'pollify-flag-icons', 'libs/flag-icon.css' );
+		$this->register_script( 'pollify-geo-chart', 'libs/gstatic-loader.js', [], POLLIFY_VERSION, false );
+		$this->register_script( 'pollify-admin', 'build/admin.js', [ 'pollify-geo-chart' ] );
+		$this->register_style( 'pollify-admin', 'build/admin.css' );
 	}
 
 	/**
@@ -95,7 +95,7 @@ class Assets {
 	 * @return bool Whether the script has been registered. True on success, false on failure.
 	 */
 	public function register_script( $handle, $file, $deps = [], $ver = false, $in_footer = true ) {
-		$src        = ( false !== strpos( $file, 'https://' ) ) ? $file : sprintf( POLLIFY_ASSET_BUILD_URL . '/%s', $file );
+		$src        = ( false !== strpos( $file, 'https://' ) ) ? $file : sprintf( POLLIFY_ASSET_URL . '/%s', $file );
 		$asset_meta = $this->get_asset_meta( $file, $deps, $ver );
 
 		return wp_register_script( $handle, $src, $asset_meta['dependencies'], $asset_meta['version'], $in_footer );
@@ -120,7 +120,7 @@ class Assets {
 			$src = $file;
 			$ver = POLLIFY_VERSION;
 		} else {
-			$src = sprintf( POLLIFY_ASSET_BUILD_URL . '/%s', $file );
+			$src = sprintf( POLLIFY_ASSET_URL . '/%s', $file );
 			$ver = $this->get_file_version( $file, $ver );
 		}
 

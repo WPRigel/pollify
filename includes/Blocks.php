@@ -28,7 +28,8 @@ class Blocks {
 	 */
 	public function __construct() {
 		add_action( 'init', [ $this, 'init_blocks' ] );
-		add_action( 'save_post', [ $this, 'save_polls' ], 10, 3 );
+		add_action( 'block_categories_all', [ $this, 'register_block_category' ] );
+		add_action( 'save_post', [ $this, 'save_polls' ], 10, 2 );
 
 		// Add localize script for nonces.
 		add_action( 'wp_enqueue_scripts', [ $this, 'localize_script' ] );
@@ -42,6 +43,25 @@ class Blocks {
 			POLLIFY_PATH . '/build/poll',
 			array(
 				'render_callback' => [ $this, 'render_block' ],
+			)
+		);
+	}
+
+	/**
+	 * Register block category.
+	 *
+	 * @param array $categories Block categories.
+	 *
+	 * @return array
+	 */
+	public function register_block_category( $categories ): array {
+		return array_merge(
+			$categories,
+			array(
+				array(
+					'slug'  => 'pollify',
+					'title' => __( 'Pollify', 'poll-creator' ),
+				),
 			)
 		);
 	}
@@ -72,25 +92,16 @@ class Blocks {
 	 *
 	 * @param int     $post_id Post ID.
 	 * @param WP_Post $post    Post object.
-	 * @param bool    $update  Whether this is an existing post being updated or not.
+	 *
+	 * @return void
 	 */
-	public function save_polls( $post_id, $post, $update ) {
+	public function save_polls( $post_id, $post ) {
 		if (
 			wp_is_post_autosave( $post_id )
 			|| wp_is_post_revision( $post_id )
 			|| 'trash' === $post->post_status
 			|| 'auto-draft' === $post->post_status
 		) {
-			return;
-		}
-
-		if ( ! $update ) {
-			return;
-		}
-
-		// Return if not a post request from the editor.
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		if ( empty( $_POST ) ) {
 			return;
 		}
 
@@ -104,6 +115,17 @@ class Blocks {
 		);
 
 		if ( empty( $polls ) ) {
+			$saved_poll_ids = get_post_meta( $post_id, '_pollify_poll_client_ids', true );
+
+			// Loop through all saved poll ids and delete them.
+			// since there are no polls avaialbe in post.
+			foreach ( $saved_poll_ids as $saved_poll_id ) {
+				Polls::get_instance()->delete( $saved_poll_id );
+			}
+
+			// Delete poll client ids.
+			delete_post_meta( $post_id, '_pollify_poll_client_ids' );
+
 			return;
 		}
 

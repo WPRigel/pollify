@@ -134,7 +134,7 @@ class VotesListTable extends \WP_List_Table {
 			$user = get_user_by( 'ID', $user_id );
 		}
 
-		return $user ? esc_html( $user->display_name ) : esc_html__( 'Guest', 'poll-creator' );
+		return ! empty( $user ) ? esc_html( $user->display_name ) : esc_html__( 'Guest', 'poll-creator' );
 	}
 
 	/**

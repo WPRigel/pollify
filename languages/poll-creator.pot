@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-04-21T20:14:11+00:00\n"
+"POT-Creation-Date: 2024-06-29T11:04:33+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.9.0\n"
 
@@ -44,12 +44,13 @@ msgstr ""
 
 #: includes/Admin/IPsListTable.php:77
 #: includes/Admin/VotesListTable.php:77
-#: templates/admin/overview.php:175
+#: templates/admin/overview.php:164
 msgid "Location"
 msgstr ""
 
 #: includes/Admin/IPsListTable.php:78
 #: includes/helpers/functions.php:377
+#: templates/admin/overview.php:113
 msgid "Votes"
 msgstr ""
 
@@ -60,8 +61,8 @@ msgstr ""
 
 #: includes/Admin/IPsListTable.php:120
 #: includes/Admin/VotesListTable.php:155
-#: templates/admin/overview.php:145
-#: templates/admin/overview.php:187
+#: templates/admin/overview.php:134
+#: templates/admin/overview.php:176
 msgid "Unknown"
 msgstr ""
 
@@ -71,7 +72,7 @@ msgid "All countries"
 msgstr ""
 
 #: includes/Admin/IPsListTable.php:148
-#: includes/Admin/PollsListTable.php:295
+#: includes/Admin/PollsListTable.php:294
 #: includes/Admin/VotesListTable.php:205
 msgid "Filter"
 msgstr ""
@@ -86,6 +87,7 @@ msgstr ""
 
 #: includes/Admin/Menu.php:100
 #: includes/Admin/Menu.php:101
+#: includes/Blocks.php:63
 msgid "Pollify"
 msgstr ""
 
@@ -156,7 +158,6 @@ msgid "Schedule"
 msgstr ""
 
 #: includes/Admin/PollsListTable.php:192
-#: includes/Admin/PollsListTable.php:272
 msgid "Trash"
 msgstr ""
 
@@ -172,8 +173,8 @@ msgstr ""
 
 #. translators: %s: votes count
 #: includes/Admin/PollsListTable.php:242
-#: templates/admin/overview.php:60
-#: templates/results/horizointal-bar-chart.php:26
+#: templates/admin/overview.php:65
+#: templates/results/horizointal-bar-chart.php:31
 msgid "%s votes"
 msgstr ""
 
@@ -181,11 +182,11 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:291
+#: includes/Admin/PollsListTable.php:290
 msgid "All types"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:292
+#: includes/Admin/PollsListTable.php:291
 msgid "Poll"
 msgstr ""
 
@@ -202,7 +203,7 @@ msgid "Name"
 msgstr ""
 
 #: includes/Admin/VotesListTable.php:78
-#: templates/admin/overview.php:176
+#: templates/admin/overview.php:165
 msgid "IP Address"
 msgstr ""
 
@@ -215,7 +216,7 @@ msgid "Vote date"
 msgstr ""
 
 #: includes/Admin/VotesListTable.php:137
-#: templates/admin/overview.php:246
+#: templates/admin/overview.php:235
 msgid "Guest"
 msgstr ""
 
@@ -231,46 +232,53 @@ msgstr ""
 msgid "IP Details"
 msgstr ""
 
-#: includes/Model/Poll.php:203
+#: includes/Model/Poll.php:225
 msgid "Options are empty."
 msgstr ""
 
-#: includes/Model/Poll.php:214
+#: includes/Model/Poll.php:229
+#: templates/poll/poll.php:145
+#: src/poll/edit.js:163
+#: src/poll/edit.js:165
+msgid "This poll is closed"
+msgstr ""
+
+#: includes/Model/Poll.php:240
 msgid "You have already voted."
 msgstr ""
 
 #. translators: %s: Field name
-#: includes/Polls.php:170
+#: includes/Polls.php:181
 msgid "Error: %s cannot be left empty. Please fill the required information"
 msgstr ""
 
-#: includes/Polls.php:195
-#: includes/Polls.php:198
+#: includes/Polls.php:206
+#: includes/Polls.php:209
 msgid "Options must contain type and option value"
 msgstr ""
 
-#: includes/Polls.php:204
+#: includes/Polls.php:215
 msgid "Client id is not valid"
 msgstr ""
 
-#: includes/Polls.php:241
+#: includes/Polls.php:252
 msgid "Poll not updated successfully"
 msgstr ""
 
-#: includes/Polls.php:269
+#: includes/Polls.php:280
 msgid "Poll not created successfully"
 msgstr ""
 
-#: includes/Polls.php:316
+#: includes/Polls.php:327
 msgid "Poll not found"
 msgstr ""
 
-#: includes/Polls.php:363
-#: includes/Polls.php:373
+#: includes/Polls.php:374
+#: includes/Polls.php:384
 msgid "Poll not deleted successfully"
 msgstr ""
 
-#: includes/Polls.php:442
+#: includes/Polls.php:453
 msgid "Poll ID cannot be empty"
 msgstr ""
 
@@ -357,94 +365,92 @@ msgstr ""
 msgid "Sorry vote not accepted."
 msgstr ""
 
-#: templates/admin/overview.php:22
+#: templates/admin/overview.php:27
 msgid "Back to list"
 msgstr ""
 
-#: templates/admin/overview.php:45
+#: templates/admin/overview.php:50
 msgid "At a glance"
 msgstr ""
 
 #. translators: %s: percentage
-#: templates/admin/overview.php:66
-#: templates/admin/overview.php:73
-#: templates/results/horizointal-bar-chart.php:32
-#: templates/results/horizointal-bar-chart.php:39
+#: templates/admin/overview.php:71
+#: templates/admin/overview.php:78
+#: templates/results/horizointal-bar-chart.php:37
+#: templates/results/horizointal-bar-chart.php:44
 msgid "%s%"
 msgstr ""
 
 #. translators: %s: total votes
-#: templates/admin/overview.php:83
+#: templates/admin/overview.php:88
 msgid "Total votes: %s"
 msgstr ""
 
-#: templates/admin/overview.php:88
-#: templates/results/horizointal-bar-chart.php:54
+#: templates/admin/overview.php:93
+#: templates/results/horizointal-bar-chart.php:59
 msgid "No results found for this poll"
 msgstr ""
 
-#: templates/admin/overview.php:96
+#: templates/admin/overview.php:101
 msgid "Popular Location"
 msgstr ""
 
-#: templates/admin/overview.php:152
-#: templates/admin/overview.php:214
+#: templates/admin/overview.php:113
+msgid "Country"
+msgstr ""
+
+#: templates/admin/overview.php:141
+#: templates/admin/overview.php:203
 msgid "No location data found for this poll"
 msgstr ""
 
-#: templates/admin/overview.php:159
+#: templates/admin/overview.php:148
 msgid "IP overviews"
 msgstr ""
 
-#: templates/admin/overview.php:177
+#: templates/admin/overview.php:166
 msgid "Vote count"
 msgstr ""
 
-#: templates/admin/overview.php:211
+#: templates/admin/overview.php:200
 msgid "See all IP's"
 msgstr ""
 
-#: templates/admin/overview.php:223
+#: templates/admin/overview.php:212
 msgid "Recent votes"
 msgstr ""
 
-#: templates/admin/overview.php:280
+#: templates/admin/overview.php:269
 msgid "See all votes"
 msgstr ""
 
-#: templates/admin/overview.php:284
+#: templates/admin/overview.php:273
 msgid "No recent votes found for this poll"
 msgstr ""
 
-#: templates/admin/overview.php:300
-#: templates/admin/overview.php:317
+#: templates/admin/overview.php:289
+#: templates/admin/overview.php:306
 msgid "Search by IP"
 msgstr ""
 
-#: templates/admin/polls.php:18
+#: templates/admin/polls.php:23
 msgid "Poll results has been reseted."
 msgstr ""
 
-#: templates/admin/polls.php:20
+#: templates/admin/polls.php:25
 msgid "Dismiss this notice."
 msgstr ""
 
-#: templates/admin/polls.php:35
+#: templates/admin/polls.php:40
 msgid "Search by title"
 msgstr ""
 
-#: templates/poll/poll.php:140
-#: src/poll/edit.js:163
-#: src/poll/edit.js:165
-msgid "This poll is closed"
-msgstr ""
-
-#: templates/poll/poll.php:151
+#: templates/poll/poll.php:156
 msgid "Thank you for voting!"
 msgstr ""
 
 #. translators: %s: total votes
-#: templates/results/horizointal-bar-chart.php:49
+#: templates/results/horizointal-bar-chart.php:54
 msgid "Total votes %s"
 msgstr ""
 

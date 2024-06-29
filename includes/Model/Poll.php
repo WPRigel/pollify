@@ -11,7 +11,6 @@ namespace wpRigel\Pollify\Model;
 
 use WP_Error;
 use wpRigel\Pollify\Votes;
-use Gutenberg_Templates\Inc\Importer\plugin;
 
 /**
  * Class Poll.
@@ -160,6 +159,29 @@ class Poll {
 	}
 
 	/**
+	 * Check if poll is closed or not.
+	 *
+	 * @return bool
+	 */
+	public function is_poll_closed(): bool {
+		$settings = $this->get_settings();
+
+		if ( 'draft' === $settings['status'] ) {
+			return true;
+		}
+
+		if ( 'schedule' === $settings['status'] && ! empty( $settings['endDate'] ) ) {
+			$end_date = strtotime( $settings['endDate'] );
+
+			if ( $end_date < time() ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Check all options is valid which is passed by arguments.
 	 *
 	 * @param array $options Options.
@@ -201,6 +223,10 @@ class Poll {
 		// Check if options is empty or not.
 		if ( empty( $options ) ) {
 			return new WP_Error( 'empty-options', __( 'Options are empty.', 'poll-creator' ), [ 'status' => 400 ] );
+		}
+
+		if ( $this->is_poll_closed() ) {
+			return new WP_Error( 'poll-closed', wp_kses_post( $settings['closePollmessage'] ?? __( 'This poll is closed', 'poll-creator' ) ), [ 'status' => 400 ] );
 		}
 
 		// Get the voter details from Voter model class.

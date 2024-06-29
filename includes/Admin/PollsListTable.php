@@ -269,7 +269,6 @@ class PollsListTable extends \WP_List_Table {
 			'all'     => '<a href="' . admin_url( 'admin.php?page=pollify' ) . '" class="' . ( empty( pollify_filter_input( INPUT_GET, 'status', POLLIFY_FILTER_SANITIZE_STRING ) ) ? 'current' : '' ) . '">' . __( 'All', 'poll-creator' ) . '</a>',
 			'publish' => '<a href="' . admin_url( 'admin.php?page=pollify&status=publish' ) . '" class="' . ( 'publish' === pollify_filter_input( INPUT_GET, 'status', POLLIFY_FILTER_SANITIZE_STRING ) ? 'current' : '' ) . '">' . __( 'Open', 'poll-creator' ) . '</a>',
 			'draft'   => '<a href="' . admin_url( 'admin.php?page=pollify&status=draft' ) . '" class="' . ( 'draft' === pollify_filter_input( INPUT_GET, 'status', POLLIFY_FILTER_SANITIZE_STRING ) ? 'current' : '' ) . '">' . __( 'Closed', 'poll-creator' ) . '</a>',
-			'trash'   => '<a href="' . admin_url( 'admin.php?page=pollify&status=trash' ) . '" class="' . ( 'trash' === pollify_filter_input( INPUT_GET, 'status', POLLIFY_FILTER_SANITIZE_STRING ) ? 'current' : '' ) . '">' . __( 'Trash', 'poll-creator' ) . '</a>',
 		];
 
 		return $views;
