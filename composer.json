@@ -11,19 +11,9 @@
             "wpRigel\\Pollify\\": "includes/"
         }
     },
-    "autoload-dev": {
-        "psr-4": {
-            "wpRigel\\Pollify\\Tests\\": "tests/php"
-        }
-    },
     "scripts": {
         "cs": "@php ./vendor/bin/phpcs . --ignore=tests",
-        "cs:fix": "@php ./vendor/bin/phpcbf . --ignore=tests",
-        "tests:unit": "@php ./vendor/bin/phpunit tests/php/Unit/",
-        "qa": [
-            "@cs",
-            "@tests"
-        ]
+        "cs:fix": "@php ./vendor/bin/phpcbf . --ignore=tests"
     },
     "config": {
         "allow-plugins": {
