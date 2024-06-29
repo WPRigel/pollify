@@ -54,7 +54,7 @@ $navigations = pollify_poll_results_page_nav();
 						<div class="horizointal-bar-chart">
 							<?php $poll_results = $poll->get_results(); ?>
 
-							<?php if ( ! empty( $poll_results ) ) : ?>
+							<?php if ( ! empty( $poll_results['options'] ) ) : ?>
 								<?php foreach ( $poll_results['options'] as $result_option ) : ?>
 								<div class="horizointal-bar-chart__bar">
 									<div class="horizointal-bar-chart__bar-label">

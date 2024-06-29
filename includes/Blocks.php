@@ -115,6 +115,17 @@ class Blocks {
 		);
 
 		if ( empty( $polls ) ) {
+			$saved_poll_ids = get_post_meta( $post_id, '_pollify_poll_client_ids', true );
+
+			// Loop through all saved poll ids and delete them.
+			// since there are no polls avaialbe in post.
+			foreach ( $saved_poll_ids as $saved_poll_id ) {
+				Polls::get_instance()->delete( $saved_poll_id );
+			}
+
+			// Delete poll client ids.
+			delete_post_meta( $post_id, '_pollify_poll_client_ids' );
+
 			return;
 		}
 

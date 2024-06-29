@@ -1,8 +1,8 @@
 === Poll Creator ===
 Contributors: wprigel
 Tags: poll plugin, poll creator, poll maker, vote, survey
-Requires at least: 5.4
-Tested up to: 6.5
+Requires at least: 6.4
+Tested up to: 6.5.5
 Requires PHP: 7.4
 Stable tag: 1.0.0
 License: GPLv2 or later
@@ -181,10 +181,11 @@ Sure, there is! Check out our [official documentation](https://wprigel.com/docs/
 1. Poll Block
 2. General settings
 3. Style settings
-4. Admin overview
-5. Single poll details
-6. Vote details
-7. IP details
+4. Frontend Result view
+5. All poll lists
+6. Single poll details
+7. Vote details
+8. IP details
 
 == Changelog ==
 
