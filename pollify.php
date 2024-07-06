@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name: Poll Creator
+ * Plugin Name: Pollify
  * Plugin URI: http://wprigel.com/product/poll-creator/
- * Description: Create poll using Gutenberg way.
- * Version: 1.0.0
+ * Description: Ultimate Poll Creator, Survey Maker Plugin using Gutenberg for WordPress.
+ * Version: 1.0.1
  * Author: wprigel
  * Author URI: http://wprigel.com/
  * License: GPL2
@@ -48,7 +48,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define some constant for getting path and urls and version of the plugin.
-define( 'POLLIFY_VERSION', '1.0.0' );
+define( 'POLLIFY_VERSION', '1.0.1' );
 define( 'POLLIFY_PATH', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
 define( 'POLLIFY_ASSET_PATH', untrailingslashit( POLLIFY_PATH . '/assets' ) );
 define( 'POLLIFY_ASSET_BUILD_PATH', untrailingslashit( POLLIFY_PATH . '/assets/build' ) );
