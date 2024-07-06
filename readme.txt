@@ -1,10 +1,10 @@
-=== Pollify- Ultimate Poll Creator, Survey Maker Plugin for WordPress ===
+=== Pollify - Ultimate Poll Creator, Survey Maker Plugin for WordPress ===
 Contributors: wprigel
 Tags: poll plugin, poll, poll maker, vote, survey
 Requires at least: 6.4
 Tested up to: 6.5.5
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -191,9 +191,14 @@ Sure, there is! Check out our [official documentation](https://wprigel.com/docs/
 
 == Changelog ==
 
-v1.0.0 -> April 20, 2024
+v1.0.0 -> June 29, 2024
 --------------------------------------------
 - [feat] Initial version released
+
+v1.0.1 -> Jul 7, 2024
+--------------------------------------------
+- [fix] Fixed plugin name issues.
+- [fix] Fixed readme issues.
 
 == Upgrade Notice ==
 No upgrade notice
