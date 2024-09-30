@@ -1,6 +1,6 @@
 {
     "name": "wprigel/pollify",
-    "description": "Create poll using gutenberg way.",
+    "description": "Ultimate Poll Creator and Survey Maker Plugin for WordPress",
     "require-dev": {
         "wp-coding-standards/wpcs": "^3.0",
         "phpcompatibility/phpcompatibility-wp": "*",
