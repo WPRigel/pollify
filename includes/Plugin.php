@@ -20,13 +20,6 @@ use wpRigel\Pollify\Admin\Menu;
 class Plugin {
 
 	/**
-	 * Plugin version.
-	 *
-	 * @var string
-	 */
-	public $version = '1.0.0';
-
-	/**
 	 * Plugin directory path.
 	 *
 	 * @var string

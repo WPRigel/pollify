@@ -1,8 +1,8 @@
 {
 	"name": "poll-creator",
-	"version": "1.0.1",
-	"description": "Example block scaffolded with Create Block tool.",
-	"author": "The WordPress Contributors",
+	"version": "1.0.2",
+	"description": "Ultimate Poll Creator and Survey Maker Plugin for WordPress",
+	"author": "wpRigel",
 	"license": "GPL-2.0-or-later",
 	"main": "build/index.js",
 	"scripts": {
