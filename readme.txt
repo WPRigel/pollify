@@ -197,14 +197,22 @@ Sure, there is! Check out our [official documentation](https://wprigel.com/docs/
 
 == Changelog ==
 
-v1.0.0 -> June 29, 2024
+v1.0.2 -> September 30, 2024
 --------------------------------------------
-- [feat] Initial version released
+- [feat] Added inline list style variation for poll block.
+- [feat] Added plugin helper links on plugin page.
+- [fix] Fixed undefined warnings for block deleting.
+- [fix] Changed readme content.
 
 v1.0.1 -> Jul 7, 2024
 --------------------------------------------
 - [fix] Fixed plugin name issues.
 - [fix] Fixed readme issues.
+
+v1.0.0 -> June 29, 2024
+--------------------------------------------
+- [feat] Initial version released
+
 
 == Upgrade Notice ==
 No upgrade notice
