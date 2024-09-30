@@ -29,6 +29,7 @@ class Blocks {
 	public function __construct() {
 		add_action( 'init', [ $this, 'init_blocks' ] );
 		add_action( 'block_categories_all', [ $this, 'register_block_category' ] );
+		add_action( 'init', [ $this, 'register_block_styles' ] );
 		add_action( 'save_post', [ $this, 'save_polls' ], 10, 2 );
 
 		// Add localize script for nonces.
@@ -191,6 +192,25 @@ class Blocks {
 		}
 
 		update_post_meta( $post_id, '_pollify_poll_client_ids', $poll_ids );
+	}
+
+	/**
+	 * Register block styles.
+	 */
+	public function register_block_styles() {
+		$block_styles = [
+			[
+				'block' => 'pollify/poll',
+				'style' => [
+					'name'  => 'poll-inline-list',
+					'label' => __( 'Inline list', 'poll-creator' ),
+				],
+			],
+		];
+
+		foreach ( $block_styles as $block_style ) {
+			register_block_style( $block_style['block'], $block_style['style'] );
+		}
 	}
 
 	/**

@@ -1,8 +1,8 @@
-=== Pollify - Ultimate Poll Creator, Survey Maker Plugin for WordPress ===
+=== Pollify - Ultimate Poll Creator and Survey Maker ===
 Contributors: wprigel, sakiladnan
 Tags: poll plugin, poll, poll maker, vote, survey
 Requires at least: 6.4
-Tested up to: 6.5.5
+Tested up to: 6.6.2
 Requires PHP: 7.4
 Stable tag: 1.0.1
 License: GPLv2 or later
@@ -12,31 +12,35 @@ Poll creator lets you create a poll website in WordPress Gutenberg with advanced
 
 == Description ==
 
-Pollify lets you create a poll website in WordPress with awesome polling/online voting capabilities and unlock a series of advanced features to engage your audience like never before.
+**Pollify** lets you create a poll website in WordPress with awesome polling/online voting capabilities and unlock a series of advanced features to engage your audience like never before.
 
-Using the Pollify poll maker plugin, you can easily integrate polls and surveys directly into your Gutenberg editor, no shortcode required. There’s no capping with the free version, you can get unlimited votes. Create dynamic polls by allowing your users to select from single or multiple options. Also, customize every detail of your online poll including title, description, and vote button text.
+Using the Pollify poll maker plugin, you can easily integrate polls and surveys directly into your Gutenberg editor, **no shortcode required**.
 
-- [Pollify Poll Creator Features at a glance](https://wprigel.com)
+There’s **no capping with the free version**, you can get unlimited votes. Create **dynamic polls** by allowing your users to select from single or multiple options. Also, customize every detail of your online poll including title, description, and vote button text.
+
+- [Pollify Poll Creator Features at a glance](https://wprigel.com/pollify/)
 - [Pollify Free Demo](https://pollifydemo.wprigel.com/)
-- [Pollify User Manual](https://wprigel.com/docs/poll-creator/)
+- [Pollify Documentation](https://wprigel.com/docs/pollify/)
 
-Pollify is the ultimate WordPress poll creator plugin powered by the Gutenberg editor. Add as many polls/surveys as you need, and customize your polls just as you want. Set a specific timeline for your polls, schedule a poll for holidays or when you’re on a vacation; it’s all up to you!
+Pollify is the ultimate WordPress poll creator plugin **100% powered by Gutenberg editor**. Add as many polls/surveys as you need, and customize your polls just as you want. **Set a specific timeline** for your polls, schedule a poll for holidays or when you’re on a vacation; it’s all up to you!
 
 Design the appearance of your polls/online surveys effortlessly using the Sidebar Settings. From color schemes to button alignment, the Pollify poll creator puts the power of customization in your hands. Whether you’re a beginner or a WordPress expert, you can seamlessly blend your polls with your website's aesthetics.
 
-You can add a poll or survey anywhere in the posts, pages, or any custom post type that supports Gutenberg and the site editor with just a click; no short code is required.
+**You can add a poll or survey anywhere in the posts, pages, or any custom post type that supports Gutenberg and the site editor with just a click; no short code is required.**
 
 You have full control of your polling ecosystem with Pollify's user-friendly Admin Dashboard.
 
-Track poll performance, count votes, view real-time survey results, and dive deep into user engagement metrics with our comprehensive analytics tools. This WP poll maker plugin provides everything you need to make data-driven decisions, from poll lists to IP details.
+**Track poll performance, count votes, view real-time survey results**, and dive deep into user engagement metrics with our comprehensive analytics tools. This WP poll maker plugin provides everything you need to make data-driven decisions, from poll lists to IP details.
+
+[wpRigel](https://wprigel.com) provides everything you need to make data-driven decisions, from poll lists to IP details.
 
 Elevate your polling experience with an array of Pollify premium features. Compare options with VS Type polls, gather user data with custom forms, and add personalized options for enhanced user interaction.
 
-Visualize data effortlessly with Results Charts, export insights to CSV for in-depth analysis, and engage users with text-based results and vote reasoning options. Plus, ensure user privacy with Anonymous Polls and empower multilingual audiences with Multilingual Polls.
+Visualize data effortlessly with Results Charts, export insights to CSV(upcoming) for in-depth analysis, and engage users with text-based results and vote reasoning options. Plus, ensure user privacy with **Anonymous Polls** and empower multilingual audiences with **Multilingual Polls**.
 
-With the Pollify WordPress poll plugin, the possibilities are endless. It is the ultimate polling plugin for creating, managing, and analyzing polls on your WordPress website.
+With the [Pollify](https://wprigel.com/pollify/) WordPress poll plugin, the possibilities are endless. It is the ultimate polling plugin for creating, managing, and analyzing polls on your WordPress website.
 
-=== Detailed Overview of Pollify Poll Creator Plugin ===
+=== Features-wise Detailed Overview of Pollify Poll Creator Plugin ===
 
 **The Gutenberg Editor**
 The Pollify plugin provides a block in the Gutenberg editor named “Poll” to create polls and get your audience’s opinion.
@@ -89,7 +93,7 @@ Seamlessly collect user emails for community building and email marketing effort
 * **VS**: Facilitate competition between two options, such as products or individuals, with stylish versus voting formats. (Upcoming pro)
 * **Feedback**: Solicit detailed responses from participants, allowing them to provide comprehensive answers using short text or paragraphs. (Upcoming pro)
 
-=== Pollify Free Features at a Glance: ===
+=== Pollify Poll Maker Plugin Free Features at a Glance: ===
 
 1. Gutenberg Block - Poll
     - Ability to create polls within the Gutenberg editor.
@@ -136,7 +140,7 @@ Seamlessly collect user emails for community building and email marketing effort
     - IP Details Page:
         - Display all IP addresses with total vote counts and locations.
 
-=== Pollify Pro Features at a Glance: ===
+=== Pollify Poll Maker Plugin Premium Features at a Glance: ===
 - VS Type of Poll (Versus) enables the creation of polls comparing options side by side
 - User Information Form that incorporates a form to gather user details alongside poll participation.
 - Extra 5 Themes or patterns provide additional visual themes for enhancing poll appearance and engagement.
@@ -159,25 +163,27 @@ Created by [wpRigel](https://wprigel.com)
 
 == Installation ==
 How to Install the Pollify Plugin:
-- Go to your WordPress admin dashboard and click on→ Add New Plugins
-- Write Pollify on the search box and click on Install and then Activate Button
-- Add a new post from Post→ Add New Post or Page→ Add New Page
+- Go to your WordPress admin dashboard and click on → **Add New Plugins**
+- Write Pollify on the search box and click on Install and then **Activate** Button
+- Add a new post from Post→ Add New Post or Page → **Add New Page**
+- You’re done. Now search **Poll** block from the block list or click the “/” button and type **Poll** to create and customize a poll for your posts.
+- Publish and enjoy!!
+
 
 == Frequently Asked Questions ==
 
 = How can I add a Poll in my site? =
-First, you need to install the Pollify plugin. Now go to any post or page you want to add your poll to. Search for the “poll” block and create a Poll in it. That’s it.
-= Are there any limitations in the way of making questions for Poll or getting votes? =
-No. There’s no limitation in the way of making questions Poll. You can make a Poll
-yourself and can add as many questions as you want. Also, there’s no limit with Pollify to generate votes from users.
+First, you need to install the Pollify plugin. Now go to any post or page you want to add your poll to. Search for the “poll” block and create a poll for it. That’s it.
+= Are there any limitations in asking questions for polls or getting votes? =
+No. There are no limitations in the way of making questions for the poll. You can make a Poll yourself and add as many questions as you want. Also, there’s no limit with Pollify to generate votes from users.
 = How to upgrade to the Poll PRO version? =
 All you need to do is to click on the Upgrade button from your admin panel. It will redirect you to our official website. Choose your plan and download and upload the pro version. No worries, you will not lose your previous data. Knock our support team for further help.
 = Is there any way we can check the user's IP address after the vote? =
 Yes, we can check users by IP address from the admin dashboard.
 = How to check the results in Poll? =
-After the installation of Pollify poll plugin, go to your dashboard and discover a new tab named “Pollify”. Click on it and check all you need. It’s your dedicated dashboard to manage all old/new polls and survey results.
+After the installation of the Pollify poll plugin, go to your dashboard and discover a new tab named “Pollify”. Click on it and check all you need. It’s your dedicated dashboard to manage all old/new polls and survey results.
 = Is there any documentation or user guide for this poll plugin? =
-Sure, there is! Check out our [official documentation](https://wprigel.com/docs/) to find all the features/functionalities the plugin includes. You are welcome to contact us via the Free Support Forum in case of have any questions/queries.
+Sure, there is! Check out our [official documentation](https://wprigel.com/docs/pollify/) to find all the features/functionalities the plugin includes. You are welcome to contact us via the Free Support Forum in case of having any questions/queries.
 
 == Screenshots ==
 1. Poll Block
