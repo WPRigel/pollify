@@ -10,7 +10,7 @@
 
 	.pollify-poll-form {
 		.poll-options-wrapper {
-			margin-bottom: 1em;
+			margin-bottom: 1.5em;
 
 			.option {
 				display: flex;
@@ -237,6 +237,18 @@
 						box-sizing: border-box;
 					}
 				}
+			}
+		}
+	}
+
+	&.is-style-poll-inline-list {
+
+		.pollify-poll-form {
+
+			.poll-options-wrapper {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 1.5rem;
 			}
 		}
 	}

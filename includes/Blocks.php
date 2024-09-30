@@ -29,6 +29,7 @@ class Blocks {
 	public function __construct() {
 		add_action( 'init', [ $this, 'init_blocks' ] );
 		add_action( 'block_categories_all', [ $this, 'register_block_category' ] );
+		add_action( 'init', [ $this, 'register_block_styles' ] );
 		add_action( 'save_post', [ $this, 'save_polls' ], 10, 2 );
 
 		// Add localize script for nonces.
@@ -117,10 +118,13 @@ class Blocks {
 		if ( empty( $polls ) ) {
 			$saved_poll_ids = get_post_meta( $post_id, '_pollify_poll_client_ids', true );
 
-			// Loop through all saved poll ids and delete them.
-			// since there are no polls avaialbe in post.
-			foreach ( $saved_poll_ids as $saved_poll_id ) {
-				Polls::get_instance()->delete( $saved_poll_id );
+			// Checked if saved poll ids are not empty.
+			if ( ! empty( $saved_poll_ids ) ) {
+				// Loop through all saved poll ids and delete them.
+				// since there are no polls avaialbe in post.
+				foreach ( $saved_poll_ids as $saved_poll_id ) {
+					Polls::get_instance()->delete( $saved_poll_id );
+				}
 			}
 
 			// Delete poll client ids.
@@ -191,6 +195,25 @@ class Blocks {
 		}
 
 		update_post_meta( $post_id, '_pollify_poll_client_ids', $poll_ids );
+	}
+
+	/**
+	 * Register block styles.
+	 */
+	public function register_block_styles() {
+		$block_styles = [
+			[
+				'block' => 'pollify/poll',
+				'style' => [
+					'name'  => 'poll-inline-list',
+					'label' => __( 'Inline list', 'poll-creator' ),
+				],
+			],
+		];
+
+		foreach ( $block_styles as $block_style ) {
+			register_block_style( $block_style['block'], $block_style['style'] );
+		}
 	}
 
 	/**
