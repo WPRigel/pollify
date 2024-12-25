@@ -80,6 +80,7 @@ const Edit = ( props ) => {
 		submitButtonAlign,
 		confirmationMessageType,
 		confirmationMessage,
+		viewResultconfirmationMessage,
 		allowedPerComputerResponse,
 	} = attributes;
 
@@ -191,6 +192,17 @@ const Edit = ( props ) => {
 								'poll-creator'
 							) }
 							onChange={ ( confirmationMessage ) => setAttributes( { confirmationMessage } ) }
+						/>
+					) }
+					{ confirmationMessageType === 'view-result' && (
+						<TextareaControl
+							value={ viewResultconfirmationMessage || __( 'Thanks for voting!', 'poll-creator' ) }
+							label={ __( 'View result message text', 'crowdsignal-forms' ) }
+							placeholder={ __(
+								'Thanks for voting!',
+								'poll-creator'
+							) }
+							onChange={ ( viewResultconfirmationMessage ) => setAttributes( { viewResultconfirmationMessage } ) }
 						/>
 					) }
 				</PanelBody>

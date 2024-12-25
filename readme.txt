@@ -1,10 +1,10 @@
 === Pollify - Ultimate Poll Creator and Survey Maker ===
 Contributors: wprigel, sakiladnan
 Tags: poll plugin, poll, poll maker, vote, survey
-Requires at least: 6.4
-Tested up to: 6.6.2
+Requires at least: 6.2
+Tested up to: 6.7.1
 Requires PHP: 7.4
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -197,14 +197,30 @@ Sure, there is! Check out our [official documentation](https://wprigel.com/docs/
 
 == Changelog ==
 
-v1.0.0 -> June 29, 2024
+v1.0.3 -> December 25, 2024
 --------------------------------------------
-- [feat] Initial version released
+- [feat] Added view result message text customization option on block settings.
+- [feat] Added user per response chceckout when user can vote multiple times depending on the poll settings.
+- [fix] Fixed delete block issue when some delete the block from editor.
+- [fix] Fixed some typo.
+- [fix] Fixed undefined warning on poll list table if status is not set.
+
+v1.0.2 -> September 30, 2024
+--------------------------------------------
+- [feat] Added inline list style variation for poll block.
+- [feat] Added plugin helper links on plugin page.
+- [fix] Fixed undefined warnings for block deleting.
+- [fix] Changed readme content.
 
 v1.0.1 -> Jul 7, 2024
 --------------------------------------------
 - [fix] Fixed plugin name issues.
 - [fix] Fixed readme issues.
+
+v1.0.0 -> June 29, 2024
+--------------------------------------------
+- [feat] Initial version released
+
 
 == Upgrade Notice ==
 No upgrade notice

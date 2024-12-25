@@ -123,6 +123,10 @@
       "type": "string",
       "default": "Thank you for voting!"
     },
+    "viewResultconfirmationMessage": {
+      "type": "string",
+      "default": "Thank you for voting!"
+    },
     "allowedPerComputerResponse": {
       "type": "boolean",
       "default": false
