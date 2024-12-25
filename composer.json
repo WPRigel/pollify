@@ -1,5 +1,6 @@
 {
     "name": "wprigel/pollify",
+    "type": "wordpress-plugin",
     "description": "Ultimate Poll Creator and Survey Maker Plugin for WordPress",
     "require-dev": {
         "wp-coding-standards/wpcs": "^3.0",

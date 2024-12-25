@@ -144,7 +144,7 @@ class PollsListTable extends \WP_List_Table {
 			'poll' => 'dashicons-chart-bar',
 		];
 
-		return sprintf( '<span tooltip="%s" flow="right"><span class="dashicons %s"></span></span>', ucfirst( $item['type'] ), $icon_list[ $item['type'] ] );
+		return sprintf( '<span tooltip="%s" flow="right"><span class="dashicons %s"></span></span>', ucfirst( $item['type'] ?? '' ), $icon_list[ $item['type'] ] ?? '' );
 	}
 
 	/**
