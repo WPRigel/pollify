@@ -9,14 +9,14 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-09-30T17:15:24+00:00\n"
+"POT-Creation-Date: 2024-12-25T14:55:09+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.9.0\n"
 
 #. Plugin Name of the plugin
 #: includes/Admin/Menu.php:100
 #: includes/Admin/Menu.php:101
-#: includes/Blocks.php:64
+#: includes/Blocks.php:65
 msgid "Pollify"
 msgstr ""
 
@@ -106,7 +106,7 @@ msgid "Source"
 msgstr ""
 
 #: includes/Admin/PollsListTable.php:52
-#: src/poll/edit.js:128
+#: src/poll/edit.js:129
 msgid "Status"
 msgstr ""
 
@@ -123,7 +123,7 @@ msgid "Are you sure you want to reset the results? If you do reset, the results 
 msgstr ""
 
 #: includes/Admin/PollsListTable.php:125
-#: src/poll/edit.js:179
+#: src/poll/edit.js:180
 msgid "View results"
 msgstr ""
 
@@ -141,7 +141,7 @@ msgstr ""
 
 #: includes/Admin/PollsListTable.php:189
 #: includes/Admin/PollsListTable.php:270
-#: src/poll/edit.js:131
+#: src/poll/edit.js:132
 msgid "Open"
 msgstr ""
 
@@ -222,7 +222,7 @@ msgstr ""
 msgid "All answers"
 msgstr ""
 
-#: includes/Blocks.php:206
+#: includes/Blocks.php:228
 msgid "Inline list"
 msgstr ""
 
@@ -240,8 +240,8 @@ msgstr ""
 
 #: includes/Model/Poll.php:229
 #: templates/poll/poll.php:145
-#: src/poll/edit.js:163
-#: src/poll/edit.js:165
+#: src/poll/edit.js:164
+#: src/poll/edit.js:166
 msgid "This poll is closed"
 msgstr ""
 
@@ -451,120 +451,122 @@ msgstr ""
 msgid "Search by title"
 msgstr ""
 
-#: templates/poll/poll.php:156
-msgid "Thank you for voting!"
-msgstr ""
-
 #. translators: %s: total votes
 #: templates/results/horizointal-bar-chart.php:54
 msgid "Total votes %s"
 msgstr ""
 
-#: src/poll/edit.js:126
+#: src/poll/edit.js:127
 msgid "General settings"
 msgstr ""
 
-#: src/poll/edit.js:132
+#: src/poll/edit.js:133
 msgid "Close"
 msgstr ""
 
-#: src/poll/edit.js:133
+#: src/poll/edit.js:134
 msgid "Close after"
 msgstr ""
 
-#: src/poll/edit.js:149
+#: src/poll/edit.js:150
 msgid "When poll is closed"
 msgstr ""
 
-#: src/poll/edit.js:152
+#: src/poll/edit.js:153
 msgid "Show poll result"
 msgstr ""
 
-#: src/poll/edit.js:153
+#: src/poll/edit.js:154
 msgid "Hide poll"
 msgstr ""
 
-#: src/poll/edit.js:154
+#: src/poll/edit.js:155
 msgid "Show poll close message"
 msgstr ""
 
-#: src/poll/edit.js:164
+#: src/poll/edit.js:165
 msgid "Close message text"
 msgstr ""
 
-#: src/poll/edit.js:174
+#: src/poll/edit.js:175
 msgid "Confiramtion message"
 msgstr ""
 
-#: src/poll/edit.js:176
+#: src/poll/edit.js:177
 msgid "On submission"
 msgstr ""
 
-#: src/poll/edit.js:180
+#: src/poll/edit.js:181
 msgid "View message"
 msgstr ""
 
-#: src/poll/edit.js:187
-#: src/poll/edit.js:189
+#: src/poll/edit.js:188
+#: src/poll/edit.js:190
+#: src/poll/edit.js:199
+#: src/poll/edit.js:201
 msgid "Thanks for voting!"
 msgstr ""
 
-#: src/poll/edit.js:188
+#: src/poll/edit.js:189
 msgid "Message text"
 msgstr ""
 
-#: src/poll/edit.js:197
+#: src/poll/edit.js:200
+msgid "View result message text"
+msgstr ""
+
+#: src/poll/edit.js:209
 msgid "Response settings"
 msgstr ""
 
-#: src/poll/edit.js:199
+#: src/poll/edit.js:211
 msgid "Allowed one response per computer"
 msgstr ""
 
-#: src/poll/edit.js:200
+#: src/poll/edit.js:212
 msgid "If checked, only one response per computer will be allowed."
 msgstr ""
 
-#: src/poll/edit.js:208
+#: src/poll/edit.js:220
 msgid "Submit button colors"
 msgstr ""
 
-#: src/poll/edit.js:214
-#: src/poll/edit.js:291
+#: src/poll/edit.js:226
+#: src/poll/edit.js:303
 msgid "Background Color"
 msgstr ""
 
-#: src/poll/edit.js:219
-#: src/poll/edit.js:296
+#: src/poll/edit.js:231
+#: src/poll/edit.js:308
 msgid "Text Color"
 msgstr ""
 
-#: src/poll/edit.js:224
+#: src/poll/edit.js:236
 msgid "Hover Background Color"
 msgstr ""
 
-#: src/poll/edit.js:229
+#: src/poll/edit.js:241
 msgid "Hover Text Color"
 msgstr ""
 
-#: src/poll/edit.js:233
-#: src/poll/edit.js:234
+#: src/poll/edit.js:245
+#: src/poll/edit.js:246
 msgid "Button width"
 msgstr ""
 
-#: src/poll/edit.js:261
+#: src/poll/edit.js:273
 msgid "Button alignment"
 msgstr ""
 
-#: src/poll/edit.js:285
+#: src/poll/edit.js:297
 msgid "Poll closing banner"
 msgstr ""
 
-#: src/poll/edit.js:322
+#: src/poll/edit.js:334
 msgid "Enter the poll question"
 msgstr ""
 
-#: src/poll/edit.js:330
+#: src/poll/edit.js:342
 msgid "Add a description (optional)"
 msgstr ""
 

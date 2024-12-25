@@ -150,10 +150,11 @@ echo wp_kses(
 					<?php if ( $is_already_voted ) : ?>
 						<div class="response-message">
 							<?php
-								echo (
-									! empty( $attributes['confirmationMessageType'] )
-									&& 'view-message' === $attributes['confirmationMessageType']
-								) ? esc_html( $attributes['confirmationMessage'] ) : esc_html__( 'Thank you for voting!', 'poll-creator' );
+								if ( ! empty( $attributes['confirmationMessageType'] ) && 'view-result' === $attributes['confirmationMessageType'] ) {
+									echo wp_kses_post( $attributes['viewResultconfirmationMessage'] );
+								} elseif ( ! empty( $attributes['confirmationMessageType'] ) && 'view-message' === $attributes['confirmationMessageType'] ) {
+									echo wp_kses_post( $attributes['confirmationMessage'] );
+								}
 							?>
 						</div>
 					<?php endif; ?>

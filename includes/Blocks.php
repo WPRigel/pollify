@@ -31,6 +31,7 @@ class Blocks {
 		add_action( 'block_categories_all', [ $this, 'register_block_category' ] );
 		add_action( 'init', [ $this, 'register_block_styles' ] );
 		add_action( 'save_post', [ $this, 'save_polls' ], 10, 2 );
+		add_action( 'save_post', [ $this, 'delete_unused_blocks' ], 10, 2 );
 
 		// Add localize script for nonces.
 		add_action( 'wp_enqueue_scripts', [ $this, 'localize_script' ] );
@@ -116,20 +117,6 @@ class Blocks {
 		);
 
 		if ( empty( $polls ) ) {
-			$saved_poll_ids = get_post_meta( $post_id, '_pollify_poll_client_ids', true );
-
-			// Checked if saved poll ids are not empty.
-			if ( ! empty( $saved_poll_ids ) ) {
-				// Loop through all saved poll ids and delete them.
-				// since there are no polls avaialbe in post.
-				foreach ( $saved_poll_ids as $saved_poll_id ) {
-					Polls::get_instance()->delete( $saved_poll_id );
-				}
-			}
-
-			// Delete poll client ids.
-			delete_post_meta( $post_id, '_pollify_poll_client_ids' );
-
 			return;
 		}
 
@@ -175,15 +162,47 @@ class Blocks {
 
 			Polls::get_instance()->save( $data );
 		}
+	}
+
+	/**
+	 * Delete unused blocks.
+	 *
+	 * @param int     $post_id Post ID.
+	 * @param WP_Post $post    Post object.
+	 *
+	 * @return void
+	 */
+	public function delete_unused_blocks( $post_id, $post ) {
+		if (
+			wp_is_post_autosave( $post_id )
+			|| wp_is_post_revision( $post_id )
+			|| 'trash' === $post->post_status
+			|| 'auto-draft' === $post->post_status
+		) {
+			return;
+		}
+
+		$blocks = parse_blocks( $post->post_content );
+
+		$polls = array_filter(
+			$blocks,
+			function ( $block ) {
+				if ( ! empty( $block['blockName'] ) ) {
+					// Return true if the block name start with `pollify/`
+					return 0 === strpos( $block['blockName'], 'pollify/' );
+				}
+
+				return false;
+			}
+		);
 
 		$poll_ids = array_map(
 			function ( $poll ) {
-				return $poll['attrs']['pollClientId'];
+				return $poll['attrs']['pollClientId'] ?? '';
 			},
-			$polls
+			$polls ?? []
 		);
 
-		// Check if poll id is not in saved meta, then delete it.
 		$saved_poll_ids = get_post_meta( $post_id, '_pollify_poll_client_ids', true );
 
 		if ( ! empty( $saved_poll_ids ) ) {
