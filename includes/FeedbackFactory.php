@@ -35,8 +35,8 @@ class FeedbackFactory {
 	 * @var array
 	 */
 	protected static $classMap = [
-        'poll' => Poll::class, // Default free feature
-    ];
+		'poll' => Poll::class, // Default free feature
+	];
 
 	/**
 	 * Cconstructor. where we pass the feedback arrat or object
@@ -91,5 +91,4 @@ class FeedbackFactory {
 		// Create feedback object.
 		return new $class( (array) $this->feedback );
 	}
-
 }

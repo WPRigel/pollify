@@ -97,7 +97,7 @@ class Voter {
 		$ip = '';
 
 		// Check if HTTP_CLIENT_IP is set and valid.
-		if ( isset( $_SERVER['HTTP_CLIENT_IP' ] ) && filter_var( $_SERVER['HTTP_CLIENT_IP'], FILTER_VALIDATE_IP ) ) {
+		if ( isset( $_SERVER['HTTP_CLIENT_IP'] ) && filter_var( $_SERVER['HTTP_CLIENT_IP'], FILTER_VALIDATE_IP ) ) {
 			$ip = sanitize_text_field( $_SERVER['HTTP_CLIENT_IP'] );
 		} elseif ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) { // Check if HTTP_X_FORWARDED_FOR is set.
 			// Extract first valid IP from the list.
@@ -110,7 +110,6 @@ class Voter {
 					$ip = sanitize_text_field( $forwarded_ip );
 					break; // Use the first valid IP
 				}
-
 			}
 		} elseif ( isset( $_SERVER['REMOTE_ADDR'] ) && filter_var( $_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP ) ) { // Fallback to REMOTE_ADDR.
 			$ip = sanitize_text_field( $_SERVER['REMOTE_ADDR'] );

@@ -20,10 +20,10 @@ use wpRigel\Pollify\Votes;
 abstract class Feedback {
 
 		/**
-	 * Poll data.
-	 *
-	 * @var array
-	 */
+		 * Poll data.
+		 *
+		 * @var array
+		 */
 	private array $data = [
 		'id'          => 0,
 		'client_id'   => '',
@@ -36,7 +36,7 @@ abstract class Feedback {
 		'created_at'  => '',
 		'updated_at'  => '',
 		'settings'    => [],
-		'response'	  => 0,
+		'response'    => 0,
 	];
 
 	/**
@@ -171,7 +171,7 @@ abstract class Feedback {
 	/**
 	 * Get poll icon.
 	 *
-	 * @param int $size Icon size. Default 25.
+	 * @param int    $size Icon size. Default 25.
 	 * @param string $color Icon color. Default #50575e.
 	 *
 	 * @return string

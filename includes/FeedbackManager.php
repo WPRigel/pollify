@@ -92,7 +92,7 @@ class FeedbackManager {
 		if ( ! empty( $args['count'] ) && $args['count'] ) {
 			// Implement cache for poll data.
 			$cache_key_count = 'polls_count_' . md5( maybe_serialize( $args ) );
-			$count           = false; //wp_cache_get( $cache_key_count, 'pollify_poll_cache' );
+			$count           = false; // wp_cache_get( $cache_key_count, 'pollify_poll_cache' );
 
 			if ( false === $count ) {
 				$count = $wpdb->get_var(

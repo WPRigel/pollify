@@ -60,7 +60,7 @@ class PollsListTable extends \WP_List_Table {
 	/**
 	 * Render the column cb.
 	 *
-	 * @param object  $item The current item.
+	 * @param object $item The current item.
 	 * @param string $column_name The current column name.
 	 *
 	 * @return string

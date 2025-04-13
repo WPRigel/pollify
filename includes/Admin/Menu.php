@@ -190,7 +190,7 @@ class Menu {
 				'admin/overview.php',
 				false,
 				[
-					'poll'    => $feedback,
+					'poll' => $feedback,
 				]
 			);
 		}

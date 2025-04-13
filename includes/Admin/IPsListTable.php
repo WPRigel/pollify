@@ -72,11 +72,15 @@ class IPsListTable extends \WP_List_Table {
 	 * @return array
 	 */
 	public function get_columns(): array {
-		$columns = apply_filters( 'pollify_ip_list_columns', array(
-			'ip'       => __( 'IP', 'poll-creator' ),
-			'location' => __( 'Location', 'poll-creator' ),
-			'votes'    => __( 'Votes', 'poll-creator' ),
-		), $this->poll );
+		$columns = apply_filters(
+			'pollify_ip_list_columns',
+			array(
+				'ip'       => __( 'IP', 'poll-creator' ),
+				'location' => __( 'Location', 'poll-creator' ),
+				'votes'    => __( 'Votes', 'poll-creator' ),
+			),
+			$this->poll
+		);
 
 		return $columns;
 	}
