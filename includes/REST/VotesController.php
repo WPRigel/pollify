@@ -14,8 +14,7 @@ use WP_REST_Server;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Controller;
-use wpRigel\Pollify\Polls;
-use wpRigel\Pollify\Model\Poll;
+use wpRigel\Pollify\FeedbackManager;
 
 /**
  * MiusageController class.
@@ -41,7 +40,7 @@ class VotesController extends WP_REST_Controller {
 	/**
 	 * Register Routes for custom request.
 	 *
-	 * Get challenge: '/wp-json/pollify/v1/polls'.
+	 * Get challenge: '/wp-json/pollify/v1/vote'.
 	 *
 	 * @return void
 	 */
@@ -85,13 +84,13 @@ class VotesController extends WP_REST_Controller {
 			return new WP_Error( 'no-poll-id', __( 'Invalid poll', 'poll-creator' ), [ 'status' => 404 ] );
 		}
 
-		$poll = Polls::get_instance()->get( $args['client_id'] );
+		$feedback = FeedbackManager::get_instance()->get( $args['client_id'] );
 
-		if ( is_wp_error( $poll ) ) {
+		if ( is_wp_error( $feedback ) ) {
 			return new WP_Error( 'no-poll', __( 'Invalid poll', 'poll-creator' ), [ 'status' => 404 ] );
 		}
 
-		$data = $poll->vote( $args['options'] ?? [] );
+		$data = $feedback->vote( $args['options'] ?? [], $args );
 
 		if ( is_wp_error( $data ) ) {
 			return $data;

@@ -60,7 +60,7 @@ class PollsListTable extends \WP_List_Table {
 	/**
 	 * Render the column cb.
 	 *
-	 * @param array  $item The current item.
+	 * @param object  $item The current item.
 	 * @param string $column_name The current column name.
 	 *
 	 * @return string
@@ -68,13 +68,21 @@ class PollsListTable extends \WP_List_Table {
 	public function column_default( $item, $column_name ) {
 		switch ( $column_name ) {
 			case 'id':
+				return $item->get_id();
 			case 'client_id':
+				return $item->get_client_id();
 			case 'title':
+				return $item->get_title();
 			case 'type':
+				return $item->get_type();
 			case 'status':
+				return $item->get_status();
 			case 'reference':
+				return $item->get_reference();
 			case 'response':
+				return $item->get_response();
 			case 'created_at':
+				return $item->get_created_at();
 			default:
 				return $item[ $column_name ];
 		}
@@ -97,21 +105,21 @@ class PollsListTable extends \WP_List_Table {
 	/**
 	 * Render the column cb.
 	 *
-	 * @param array $item The current item.
+	 * @param object $item The current item.
 	 *
 	 * @return string
 	 */
 	public function column_cb( $item ) {
 		return sprintf(
 			'<input type="checkbox" name="poll_id[]" value="%d" />',
-			$item['id']
+			$item->get_id()
 		);
 	}
 
 	/**
 	 * Add row actions with column title.
 	 *
-	 * @param array $item The current item.
+	 * @param object $item The current item.
 	 *
 	 * @return array
 	 */
@@ -122,12 +130,12 @@ class PollsListTable extends \WP_List_Table {
 		$nocne = wp_create_nonce( 'pollify_reset_results' );
 
 		$actions = array(
-			'view'  => sprintf( '<a href="?page=%s&action=%s&poll_id=%s">' . __( 'View results', 'poll-creator' ) . '</a>', $page, 'view_results', $item['client_id'] ),
-			'trash' => sprintf( '<a class="submitdelete" onclick="return confirm(\'%s\')" href="?page=%s&action=%s&poll_id=%s&_nonce=%s">' . __( 'Reset Results', 'poll-creator' ) . '</a>', $confirm_text, $page, 'reset_results', $item['client_id'], $nocne ),
+			'view'  => sprintf( '<a href="?page=%s&action=%s&poll_id=%s">' . __( 'View results', 'poll-creator' ) . '</a>', $page, 'view_results', $item->get_client_id() ),
+			'trash' => sprintf( '<a class="submitdelete" onclick="return confirm(\'%s\')" href="?page=%s&action=%s&poll_id=%s&_nonce=%s">' . __( 'Reset Results', 'poll-creator' ) . '</a>', $confirm_text, $page, 'reset_results', $item->get_client_id(), $nocne ),
 		);
 
 		// Wrap the title with view result link.
-		$title = sprintf( '<a href="?page=%s&action=%s&poll_id=%s">%s</a>', $page, 'view_results', $item['client_id'], $item['title'] );
+		$title = sprintf( '<a href="?page=%s&action=%s&poll_id=%s">%s</a>', $page, 'view_results', $item->get_client_id(), $item->get_title() );
 
 		return sprintf( '<strong>%1$s</strong> %2$s', $title, $this->row_actions( $actions ) );
 	}
@@ -135,31 +143,27 @@ class PollsListTable extends \WP_List_Table {
 	/**
 	 * Render the column type using icon.
 	 *
-	 * @param array $item The current item.
+	 * @param object $item The current item.
 	 *
 	 * @return string
 	 */
 	public function column_type( $item ) {
-		$icon_list = [
-			'poll' => 'dashicons-chart-bar',
-		];
-
-		return sprintf( '<span tooltip="%s" flow="right"><span class="dashicons %s"></span></span>', ucfirst( $item['type'] ?? '' ), $icon_list[ $item['type'] ] ?? '' );
+		return sprintf( '<span tooltip="%s" flow="right">%s</span>', ucfirst( $item->get_type() ?? '' ), $item->get_icon() );
 	}
 
 	/**
 	 * Render the column reference.
 	 *
-	 * @param array $item The current item.
+	 * @param object $item The current item.
 	 *
 	 * @return string
 	 */
 	public function column_reference( $item ) {
-		if ( is_numeric( $item['reference'] ) ) {
-			$id = $item['reference'];
+		if ( is_numeric( $item->get_reference() ) ) {
+			$id = $item->get_reference();
 
 			if ( ! empty( $id ) ) {
-				$post_title = get_the_title( $item['reference'] );
+				$post_title = get_the_title( $item->get_reference() );
 
 				$actions = array(
 					'edit' => sprintf( '<a href="%s" targe="_blank">' . __( 'Edit', 'poll-creator' ) . '</a>', get_edit_post_link( $id ) ),
@@ -171,7 +175,7 @@ class PollsListTable extends \WP_List_Table {
 				$reference = sprintf( '<strong>%1$s</strong> %2$s', $title, $this->row_actions( $actions ) );
 			}
 		} else {
-			$reference = $item['reference'];
+			$reference = $item->get_reference();
 		}
 
 		return $reference;
@@ -180,7 +184,7 @@ class PollsListTable extends \WP_List_Table {
 	/**
 	 * Render the column status.
 	 *
-	 * @param array $item The current item.
+	 * @param object $item The current item.
 	 *
 	 * @return string
 	 */
@@ -192,30 +196,32 @@ class PollsListTable extends \WP_List_Table {
 			'trash'    => __( 'Trash', 'poll-creator' ),
 		];
 
-		if ( 'schedule' === $item['status'] ) {
-			$end_date = get_date_from_gmt( $item['settings']['endDate'], get_option( 'date_format' ) . ' ' . get_option( 'time_format' ) );
+		$settins = $item->get_settings() ?? [];
+
+		if ( 'schedule' === $item->get_status() ) {
+			$end_date = get_date_from_gmt( $settins['endDate'], get_option( 'date_format' ) . ' ' . get_option( 'time_format' ) );
 			/* translators: %s: poll end date */
 			$ended_text = sprintf( __( 'Ended at %s', 'poll-creator' ), $end_date );
 
 			// Check if the poll ended.
-			if ( strtotime( $item['settings']['endDate'] ) < time() ) {
+			if ( strtotime( $settins['endDate'] ) < time() ) {
 				return sprintf( '<span tooltip="%s" flow="right" class="pollify-status status-%s">%s <span class="dashicons dashicons-info"></span></span>', $ended_text, 'draft', __( 'Closed', 'poll-creator' ) );
 			}
 
 			/* translators: %s: poll end date */
 			$end_date_text = sprintf( __( 'Will be ended on %s', 'poll-creator' ), $end_date );
 
-			return sprintf( '<span tooltip="%s" flow="right" class="pollify-status status-%s">%s <span class="dashicons dashicons-info"></span></span>', $end_date_text, $item['status'], $statuses[ $item['status'] ] );
+			return sprintf( '<span tooltip="%s" flow="right" class="pollify-status status-%s">%s <span class="dashicons dashicons-info"></span></span>', $end_date_text, $item->get_status(), $statuses[ $item->get_status() ] );
 		}
 
 		// Wrap the status with span tag so later I can style it.
-		return sprintf( '<span class="pollify-status status-%s">%s</span>', $item['status'], $statuses[ $item['status'] ] );
+		return sprintf( '<span class="pollify-status status-%s">%s</span>', $item->get_status(), $statuses[ $item->get_status() ] );
 	}
 
 	/**
 	 * Render the column response.
 	 *
-	 * @param array $item The current item.
+	 * @param object $item The current item.
 	 *
 	 * @return string
 	 */
@@ -226,7 +232,7 @@ class PollsListTable extends \WP_List_Table {
 				'page'    => 'poll-creator',
 				'action'  => 'view_results',
 				'tab'     => 'votes',
-				'poll_id' => $item['client_id'],
+				'poll_id' => $item->get_client_id(),
 			],
 			admin_url( 'admin.php' )
 		);
@@ -235,11 +241,11 @@ class PollsListTable extends \WP_List_Table {
 		?>
 		<div class="post-com-count-wrapper">
 			<a href="<?php echo esc_url( $view_results_link ); ?>" class="post-com-count post-com-count-approved">
-				<span class="comment-count-approved" aria-hidden="true"><?php echo esc_html( $item['response'] ) ?? 0; ?></span>
+				<span class="comment-count-approved" aria-hidden="true"><?php echo esc_html( $item->get_response() ) ?? 0; ?></span>
 				<span class="screen-reader-text">
 					<?php
 						/* translators: %s: votes count */
-						echo esc_html( wp_sprintf( __( '%s votes', 'poll-creator' ), $item['response'] ) );
+						echo esc_html( wp_sprintf( __( '%s votes', 'poll-creator' ), $item->get_response() ) );
 					?>
 				</span>
 			</a>
@@ -251,12 +257,12 @@ class PollsListTable extends \WP_List_Table {
 	/**
 	 * Render the column created_at.
 	 *
-	 * @param array $item The current item.
+	 * @param object $item The current item.
 	 *
 	 * @return string
 	 */
 	public function column_created_at( $item ) {
-		return date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $item['created_at'] ) );
+		return date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $item->get_created_at() ) );
 	}
 
 	/**
@@ -376,6 +382,6 @@ class PollsListTable extends \WP_List_Table {
 	 * @return array|int
 	 */
 	private function get_table_data( $args ) {
-		return \wpRigel\Pollify\Polls::get_instance()->all( $args );
+		return \wpRigel\Pollify\FeedbackManager::get_instance()->all( $args );
 	}
 }

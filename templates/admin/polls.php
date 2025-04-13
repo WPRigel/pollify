@@ -16,7 +16,7 @@ $reseted = pollify_filter_input( INPUT_GET, 'updated', FILTER_VALIDATE_BOOLEAN )
 ?>
 
 <div class="wrap">
-	<h2 class="wp-heading-inline">Polls</h2>
+	<h2 class="wp-heading-inline"><?php echo esc_html__( 'Polls', 'poll-creator' ); ?></h2>
 
 	<?php if ( $reseted ) : ?>
 	<div id="message" class="notice is-dismissible updated">

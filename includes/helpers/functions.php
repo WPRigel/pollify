@@ -403,3 +403,65 @@ function pollify_poll_results_page_nav() {
 		],
 	];
 }
+
+/**
+ * Generate shorthand CSS styles.
+ *
+ * @param string $type Block shorthand name.
+ * @param string $property The CSS property (e.g., 'border', 'padding', 'margin', 'border-radius').
+ * @param array $values The values for the property, either as a flat value or detailed object.
+ *
+ * @return string The generated shorthand CSS style.
+ */
+function pollify_generate_shorthand_styles( $type, $property, $values ) {
+    if ( isset( $values['top'] ) || isset( $values['right'] ) || isset( $values['bottom'] ) || isset( $values['left'] ) ) {
+        // Detailed object: collect values from each side
+        $top_value    = isset( $values['top'] ) ? $values['top'] : '0';
+        $right_value  = isset( $values['right'] ) ? $values['right'] : '0';
+        $bottom_value = isset( $values['bottom'] ) ? $values['bottom'] : '0';
+        $left_value   = isset( $values['left'] ) ? $values['left'] : '0';
+
+        $all_value = "$top_value $right_value $bottom_value $left_value";
+        return "--pollify-$type-$property: $all_value;";
+    } elseif ( isset( $values['value'] ) ) {
+        // Flat object: apply the same value for all sides
+        return "--pollify-$type-$property: {$values['value']};";
+    }
+
+    return '';
+}
+
+/**
+ * Generate shorthand CSS styles for border properties.
+ *
+ * @param string $type Block shorthand name for defining types of variables.
+ * @param array  $border The border properties, either as a flat value or detailed object.
+ *
+ * @return string The generated shorthand CSS style.
+ */
+function pollify_generate_shorthand_border_styles( $type, $border ) {
+    if ( isset( $border['top'] ) || isset( $border['right'] ) || isset( $border['bottom'] ) || isset( $border['left'] ) ) {
+        // Detailed object: collect values from each side
+        $border_color = ( isset( $border['top']['color'] ) ? $border['top']['color'] : 'transparent' ) . ' ' .
+                        ( isset( $border['right']['color'] ) ? $border['right']['color'] : 'transparent' ) . ' ' .
+                        ( isset( $border['bottom']['color'] ) ? $border['bottom']['color'] : 'transparent' ) . ' ' .
+                        ( isset( $border['left']['color'] ) ? $border['left']['color'] : 'transparent' );
+
+        $border_style = ( isset( $border['top']['style'] ) ? $border['top']['style'] : 'none' ) . ' ' .
+                        ( isset( $border['right']['style'] ) ? $border['right']['style'] : 'none' ) . ' ' .
+                        ( isset( $border['bottom']['style'] ) ? $border['bottom']['style'] : 'none' ) . ' ' .
+                        ( isset( $border['left']['style'] ) ? $border['left']['style'] : 'none' );
+
+        $border_width = ( isset( $border['top']['width'] ) ? $border['top']['width'] : '0' ) . ' ' .
+                        ( isset( $border['right']['width'] ) ? $border['right']['width'] : '0' ) . ' ' .
+                        ( isset( $border['bottom']['width'] ) ? $border['bottom']['width'] : '0' ) . ' ' .
+                        ( isset( $border['left']['width'] ) ? $border['left']['width'] : '0' );
+
+        return "--pollify-$type-bordercolor: $border_color; --pollify-$type-borderstyle: $border_style; --pollify-$type-borderwidth: $border_width;";
+    } elseif ( isset( $border['color'] ) && isset( $border['style'] ) && isset( $border['width'] ) ) {
+        // Flat object: apply the same value for all sides.
+        return "--pollify-$type-bordercolor: {$border['color']}; --pollify-$type-borderstyle: {$border['style']}; --pollify-$type-borderwidth: {$border['width']};";
+    }
+
+    return '';
+}

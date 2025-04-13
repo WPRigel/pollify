@@ -94,28 +94,39 @@ class Voter {
 	 * @return string
 	 */
 	public function get_user_ip(): string {
-		// Get user IP address.
-		if ( ! empty( $_SERVER['HTTP_CLIENT_IP'] ) ) {
-			// Check IP from internet.
+		$ip = '';
+
+		// Check if HTTP_CLIENT_IP is set and valid.
+		if ( isset( $_SERVER['HTTP_CLIENT_IP' ] ) && filter_var( $_SERVER['HTTP_CLIENT_IP'], FILTER_VALIDATE_IP ) ) {
 			$ip = sanitize_text_field( $_SERVER['HTTP_CLIENT_IP'] );
-		} elseif ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
-			// Check IP is passed from proxy.
-			$ip = sanitize_text_field( explode( ',', $_SERVER['HTTP_X_FORWARDED_FOR'] )[0] );
-		} else {
-			// Get IP address.
+		} elseif ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) { // Check if HTTP_X_FORWARDED_FOR is set.
+			// Extract first valid IP from the list.
+			$forwarded_ips = explode( ',', $_SERVER['HTTP_X_FORWARDED_FOR'] );
+
+			foreach ( $forwarded_ips as $forwarded_ip ) {
+				$forwarded_ip = trim( $forwarded_ip ); // Remove spaces.
+
+				if ( filter_var( $forwarded_ip, FILTER_VALIDATE_IP ) ) {
+					$ip = sanitize_text_field( $forwarded_ip );
+					break; // Use the first valid IP
+				}
+
+			}
+		} elseif ( isset( $_SERVER['REMOTE_ADDR'] ) && filter_var( $_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP ) ) { // Fallback to REMOTE_ADDR.
 			$ip = sanitize_text_field( $_SERVER['REMOTE_ADDR'] );
 		}
 
-		// Check if the IP is localhost or local network then don't need to pass filter_var.
+		// If the IP is from localhost/private range, return as is
 		if ( $this->is_local_ip( $ip ) ) {
 			return $ip;
 		}
 
+		// Validate IP to ensure it's not from a reserved range
 		if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) ) {
 			return $ip;
 		}
 
-		return '';
+		return '127.0.0.1'; // Default to localhost IP if no valid IP found.
 	}
 
 	/**

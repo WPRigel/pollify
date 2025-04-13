@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace wpRigel\Pollify;
 
 use wpRigel\Pollify\Model\Poll;
-use wpRigel\Pollify\Polls;
+use wpRigel\Pollify\FeedbackManager;
 use wpRigel\Pollify\Traits\Singleton;
 
 /**
@@ -124,6 +124,8 @@ class Blocks {
 		foreach ( $polls as $poll ) {
 			$poll_client_id = $poll['attrs']['pollClientId'] ?? '';
 
+			error_log( print_r( $poll['attrs'], true ) );
+
 			if ( empty( $poll_client_id ) ) {
 				continue;
 			}
@@ -160,7 +162,7 @@ class Blocks {
 			$data['reference'] = $post_id;
 			$data['settings']  = serialize_block_attributes( $poll['attrs'] );
 
-			Polls::get_instance()->save( $data );
+			FeedbackManager::get_instance()->save( $data );
 		}
 	}
 
@@ -208,7 +210,7 @@ class Blocks {
 		if ( ! empty( $saved_poll_ids ) ) {
 			foreach ( $saved_poll_ids as $saved_poll_id ) {
 				if ( ! in_array( $saved_poll_id, $poll_ids, true ) ) {
-					Polls::get_instance()->delete( $saved_poll_id );
+					FeedbackManager::get_instance()->delete( $saved_poll_id );
 				}
 			}
 		}

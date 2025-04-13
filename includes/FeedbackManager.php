@@ -15,11 +15,11 @@ use wpRigel\Pollify\Model\Poll;
 use wpRigel\Pollify\Traits\Singleton;
 
 /**
- * Class Polls.
+ * Class FeedbackManager.
  *
  * Handle all poll CRUD operation in one class.
  */
-class Polls {
+class FeedbackManager {
 	use Singleton;
 
 	/**
@@ -92,7 +92,7 @@ class Polls {
 		if ( ! empty( $args['count'] ) && $args['count'] ) {
 			// Implement cache for poll data.
 			$cache_key_count = 'polls_count_' . md5( maybe_serialize( $args ) );
-			$count           = wp_cache_get( $cache_key_count, 'pollify_poll_cache' );
+			$count           = false; //wp_cache_get( $cache_key_count, 'pollify_poll_cache' );
 
 			if ( false === $count ) {
 				$count = $wpdb->get_var(
@@ -114,7 +114,7 @@ class Polls {
 
 		$cache_key = 'polls_' . md5( maybe_serialize( $args ) );
 
-		$polls = wp_cache_get( $cache_key, 'pollify_poll_cache' );
+		$polls = false; // wp_cache_get( $cache_key, 'pollify_poll_cache' );
 
 		if ( false === $polls ) {
 			// Get all polls from database.
@@ -128,12 +128,14 @@ class Polls {
 			);
 
 			// Filter each $poll and return only settings as an array by json decoding.
-			$polls = array_map(
-				function ( $poll ) {
-					$poll['settings'] = json_decode( $poll['settings'], true );
-					return $poll;
-				},
-				$polls
+			$polls = array_filter(
+				array_map(
+					function ( $poll ) {
+						$feedback = FeedbackFactory::get_instance( $poll )->get();
+						return ! is_wp_error( $feedback ) ? $feedback : null;
+					},
+					$polls
+				)
 			);
 
 			wp_cache_set( $cache_key, $polls, 'pollify_poll_cache', 15 * MINUTE_IN_SECONDS );
@@ -341,7 +343,7 @@ class Polls {
 			wp_cache_set( $cache_key, $poll, 'pollify_poll_cache', 15 * MINUTE_IN_SECONDS );
 		}
 
-		return new Poll( $poll );
+		return FeedbackFactory::get_instance( $poll )->get();
 	}
 
 	/**
@@ -389,53 +391,6 @@ class Polls {
 		}
 
 		return true;
-	}
-
-	/**
-	 * Check if poll exist or not.
-	 *
-	 * @param int $client_id Poll client ID.
-	 *
-	 * @return bool
-	 */
-	public function exist( $client_id ): bool {
-		$poll = $this->get( $client_id );
-
-		return ! is_wp_error( $poll );
-	}
-
-	/**
-	 * Check if poll with valid options.
-	 *
-	 * @param string $client_id Poll client ID.
-	 * @param array  $option_ids Poll option IDs.
-	 *
-	 * @return bool
-	 */
-	public function is_valid_poll_option( string $client_id, array $option_ids ): bool {
-		global $wpdb;
-
-		$valid = true;
-
-		// Want to check each option id is valid or not.
-		foreach ( $option_ids as $option_id ) {
-			$poll_option = $wpdb->get_row(
-				$wpdb->prepare(
-					'SELECT * FROM %i WHERE option_id = %s AND client_id = %s',
-					$wpdb->prefix . $this->poll_option_table_name,
-					$option_id,
-					$client_id
-				),
-				ARRAY_A
-			);
-
-			if ( empty( $poll_option ) ) {
-				$valid = false;
-				break;
-			}
-		}
-
-		return $valid;
 	}
 
 	/**

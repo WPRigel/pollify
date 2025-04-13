@@ -46,6 +46,9 @@ class Menu {
 
 		// Handle actions for pollify menu.
 		add_action( 'admin_init', [ $this, 'handle_actions' ] );
+
+		// Load feedback poll overview template.
+		add_action( 'pollify_load_feedback_overview_template', [ $this, 'load_feedback_overview_template' ] );
 	}
 
 	/**
@@ -135,6 +138,9 @@ class Menu {
 			wp_enqueue_style( 'pollify-flag-icons' );
 			wp_enqueue_script( 'pollify-geo-chart' );
 		}
+
+		// Hook for loading admin scripts.
+		do_action( 'pollify_load_admin_scripts' );
 	}
 
 	/**
@@ -150,24 +156,43 @@ class Menu {
 		if ( 'pollify' === $page && 'view_results' === $action ) {
 			$poll_id = pollify_filter_input( INPUT_GET, 'poll_id', POLLIFY_FILTER_SANITIZE_STRING );
 
-			$poll = \wpRigel\Pollify\Polls::get_instance()->get( $poll_id );
+			$feedback = \wpRigel\Pollify\FeedbackManager::get_instance()->get( $poll_id );
 
-			if ( is_wp_error( $poll ) ) {
-				wp_die( esc_html( $poll->get_error_message() ) );
+			// Need to do more styles later update :D
+			if ( is_wp_error( $feedback ) ) {
+				echo '<div class="wrap">';
+				echo '<div class="notice notice-error">';
+				echo '<p>' . wp_kses_post( $feedback->get_error_message() ) . '</p>';
+				echo '</div>';
+				echo '</div>';
+				return;
 			}
 
-			// Load poll results template.
+			// Hooked for loading feedback overview template dynamically
+			do_action( 'pollify_load_feedback_overview_template', $feedback );
+
+		} else {
+			// Load poll lists template.
+			pollify_load_template( 'admin/polls.php' );
+		}
+	}
+
+	/**
+	 * Load feedback overview template.
+	 *
+	 * @param \wpRigel\Pollify\Feedback $feedback Feedback object.
+	 * @return void
+	 */
+	public function load_feedback_overview_template( $feedback ): void {
+		if ( 'poll' === $feedback->get_type() ) {
+			// Load feedback overview template.
 			pollify_load_template(
 				'admin/overview.php',
 				false,
 				[
-					'poll_id' => $poll_id,
-					'poll'    => $poll,
+					'poll'    => $feedback,
 				]
 			);
-		} else {
-			// Load poll lists template.
-			pollify_load_template( 'admin/polls.php' );
 		}
 	}
 
