@@ -231,7 +231,7 @@ class Votes {
 	/**
 	 * Get results for a poll.
 	 *
-	 * @param string|object $client_id|$feedback Feedback client ID or Feedback object.
+	 * @param string|object $feedback Feedback client ID or Feedback object.
 	 *
 	 * @return array
 	 */

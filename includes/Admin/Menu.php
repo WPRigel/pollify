@@ -158,7 +158,7 @@ class Menu {
 
 			$feedback = \wpRigel\Pollify\FeedbackManager::get_instance()->get( $poll_id );
 
-			// Need to do more styles later update :D
+			// Need to do more styles later update.
 			if ( is_wp_error( $feedback ) ) {
 				echo '<div class="wrap">';
 				echo '<div class="notice notice-error">';
@@ -168,7 +168,7 @@ class Menu {
 				return;
 			}
 
-			// Hooked for loading feedback overview template dynamically
+			// Hooked for loading feedback overview template dynamically.
 			do_action( 'pollify_load_feedback_overview_template', $feedback );
 
 		} else {

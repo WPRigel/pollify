@@ -124,8 +124,6 @@ class Blocks {
 		foreach ( $polls as $poll ) {
 			$poll_client_id = $poll['attrs']['pollClientId'] ?? '';
 
-			error_log( print_r( $poll['attrs'], true ) );
-
 			if ( empty( $poll_client_id ) ) {
 				continue;
 			}
@@ -190,7 +188,7 @@ class Blocks {
 			$blocks,
 			function ( $block ) {
 				if ( ! empty( $block['blockName'] ) ) {
-					// Return true if the block name start with `pollify/`
+					// Return true if the block name start with `pollify/`.
 					return 0 === strpos( $block['blockName'], 'pollify/' );
 				}
 

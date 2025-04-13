@@ -108,19 +108,19 @@ class Voter {
 
 				if ( filter_var( $forwarded_ip, FILTER_VALIDATE_IP ) ) {
 					$ip = sanitize_text_field( $forwarded_ip );
-					break; // Use the first valid IP
+					break; // Use the first valid IP.
 				}
 			}
 		} elseif ( isset( $_SERVER['REMOTE_ADDR'] ) && filter_var( $_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP ) ) { // Fallback to REMOTE_ADDR.
 			$ip = sanitize_text_field( $_SERVER['REMOTE_ADDR'] );
 		}
 
-		// If the IP is from localhost/private range, return as is
+		// If the IP is from localhost/private range, return as is.
 		if ( $this->is_local_ip( $ip ) ) {
 			return $ip;
 		}
 
-		// Validate IP to ensure it's not from a reserved range
+		// Validate IP to ensure it's not from a reserved range.
 		if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) ) {
 			return $ip;
 		}

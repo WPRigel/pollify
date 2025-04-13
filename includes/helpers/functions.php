@@ -415,7 +415,7 @@ function pollify_poll_results_page_nav() {
  */
 function pollify_generate_shorthand_styles( $type, $property, $values ) {
 	if ( isset( $values['top'] ) || isset( $values['right'] ) || isset( $values['bottom'] ) || isset( $values['left'] ) ) {
-		// Detailed object: collect values from each side
+		// Detailed object: collect values from each side.
 		$top_value    = isset( $values['top'] ) ? $values['top'] : '0';
 		$right_value  = isset( $values['right'] ) ? $values['right'] : '0';
 		$bottom_value = isset( $values['bottom'] ) ? $values['bottom'] : '0';
@@ -424,7 +424,7 @@ function pollify_generate_shorthand_styles( $type, $property, $values ) {
 		$all_value = "$top_value $right_value $bottom_value $left_value";
 		return "--pollify-$type-$property: $all_value;";
 	} elseif ( isset( $values['value'] ) ) {
-		// Flat object: apply the same value for all sides
+		// Flat object: apply the same value for all sides.
 		return "--pollify-$type-$property: {$values['value']};";
 	}
 
@@ -441,7 +441,7 @@ function pollify_generate_shorthand_styles( $type, $property, $values ) {
  */
 function pollify_generate_shorthand_border_styles( $type, $border ) {
 	if ( isset( $border['top'] ) || isset( $border['right'] ) || isset( $border['bottom'] ) || isset( $border['left'] ) ) {
-		// Detailed object: collect values from each side
+		// Detailed object: collect values from each side.
 		$border_color = ( isset( $border['top']['color'] ) ? $border['top']['color'] : 'transparent' ) . ' ' .
 						( isset( $border['right']['color'] ) ? $border['right']['color'] : 'transparent' ) . ' ' .
 						( isset( $border['bottom']['color'] ) ? $border['bottom']['color'] : 'transparent' ) . ' ' .

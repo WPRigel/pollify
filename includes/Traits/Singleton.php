@@ -56,7 +56,7 @@ trait Singleton {
 		$called_class = get_called_class();
 
 		// Generate a unique key based on the class name and arguments.
-		$key = $called_class . serialize( $args );
+		$key = $called_class . maybe_serialize( $args );
 
 		if ( ! isset( $instances[ $key ] ) ) {
 

@@ -34,8 +34,8 @@ class FeedbackFactory {
 	 *
 	 * @var array
 	 */
-	protected static $classMap = [
-		'poll' => Poll::class, // Default free feature
+	protected static $class_map = [
+		'poll' => Poll::class, // Default free feature.
 	];
 
 	/**
@@ -44,7 +44,9 @@ class FeedbackFactory {
 	 *
 	 * @param array|object $feedback Feedback array or object.
 	 *
-	 * @return object|WP_Error
+	 * @throws WP_Error If feedback is not valid.
+	 *
+	 * @return void
 	 */
 	public function __construct( $feedback ) {
 		if ( is_array( $feedback ) ) {
@@ -52,7 +54,7 @@ class FeedbackFactory {
 		}
 
 		if ( ! is_object( $feedback ) ) {
-			return new WP_Error( 'invalid-feedback', __( 'Invalid feedback.', 'poll-creator' ), [ 'status' => 400 ] );
+			throw new WP_Error( 'invalid-feedback', esc_html__( 'Invalid feedback.', 'poll-creator' ), [ 'status' => 400 ] );
 		}
 
 		$this->feedback = $feedback;
@@ -73,20 +75,20 @@ class FeedbackFactory {
 		/**
 		 * Filter the feedback classes map.
 		 *
-		 * @param array $classMap Feedback classes map.
+		 * @param array $class_map Feedback classes map.
 		 * @param object $feedback Feedback object.
 		 *
 		 * @return array
 		 */
-		self::$classMap = apply_filters( 'pollify_map_feedback_classes', self::$classMap, $this->feedback );
+		self::$class_map = apply_filters( 'pollify_map_feedback_classes', self::$class_map, $this->feedback );
 
 		// Check if feedback type is valid or not.
-		if ( ! array_key_exists( $this->feedback->type, self::$classMap ) ) {
+		if ( ! array_key_exists( $this->feedback->type, self::$class_map ) ) {
 			return new WP_Error( 'invalid-feedback-type', __( 'Invalid feedback type.', 'poll-creator' ), [ 'status' => 400 ] );
 		}
 
 		// Get feedback class.
-		$class = self::$classMap[ $this->feedback->type ];
+		$class = self::$class_map[ $this->feedback->type ];
 
 		// Create feedback object.
 		return new $class( (array) $this->feedback );

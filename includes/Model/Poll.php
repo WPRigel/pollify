@@ -27,7 +27,7 @@ class Poll extends Feedback {
 	 *
 	 * @return array|WP_Error
 	 */
-	public function vote( array $options = [], $request ) {
+	public function vote( array $options = [], $request = [] ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 		// Get poll settings.
 		$settings = $this->get_settings();
 
