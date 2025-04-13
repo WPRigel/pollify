@@ -3,7 +3,7 @@
  * Plugin Name: Pollify
  * Plugin URI: http://wprigel.com/product/poll-creator/
  * Description: Pollify is the ultimate poll creator and survey maker plugin for WordPress, 100% powered by the Gutenberg editor. No short code required, no capping on vote counts. Enjoy the freedom & boost user engagement.
- * Version: 1.0.3
+ * Version: 1.0.4
  * Author: wprigel
  * Author URI: http://wprigel.com/
  * License: GPL2

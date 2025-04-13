@@ -2,9 +2,9 @@
 Contributors: wprigel, sakiladnan
 Tags: poll plugin, poll, poll maker, vote, survey
 Requires at least: 6.2
-Tested up to: 6.7.1
-Requires PHP: 7.4
-Stable tag: 1.0.3
+Tested up to: 6.7.2
+Requires PHP: 8.0
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -196,6 +196,15 @@ Sure, there is! Check out our [official documentation](https://wprigel.com/docs/
 8. IP details
 
 == Changelog ==
+
+v1.0.4 -> April 14, 2025
+--------------------------------------------
+- [Tweak] Refactor the entore codebase.
+- [Tweak] Updated the model for Poll using new class FeedbackManager and feedback.
+- [Tweak] Added few filters for extending the core.
+- [Tweak] Updated the poll list icons.
+- [fix] Translation loading issues.
+- [fix] Updated domain path for translation on plugin header.
 
 v1.0.3 -> December 25, 2024
 --------------------------------------------
