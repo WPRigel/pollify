@@ -39,33 +39,36 @@ trait Singleton {
 	final public static function get_instance( ...$args ) {
 
 		/**
-		 * Collection of instance.
+		 * Collection of instances.
 		 *
 		 * @var array
 		 */
-		static $instance = [];
+		static $instances = [];
 
 		/**
 		 * If this trait is implemented in a class which has multiple
-		 * sub-classes then static::$_instance will be overwritten with the most recent
+		 * sub-classes then static::$_instances will be overwritten with the most recent
 		 * sub-class instance. Thanks to late static binding
 		 * we use get_called_class() to grab the called class name, and store
-		 * a key=>value pair for each `classname => instance` in self::$_instance
+		 * a key=>value pair for each `classname => instance` in self::$_instances
 		 * for each sub-class.
 		 */
 		$called_class = get_called_class();
 
-		if ( ! isset( $instance[ $called_class ] ) ) {
+		// Generate a unique key based on the class name and arguments.
+		$key = $called_class . maybe_serialize( $args );
 
-			$instance[ $called_class ] = new $called_class( ...$args );
+		if ( ! isset( $instances[ $key ] ) ) {
+
+			$instances[ $key ] = new $called_class( ...$args );
 
 			/**
-			 * Dependent items can use the miusage_features_singleton_init_{$called_class} hook to execute code
+			 * Dependent items can use the pollify_features_singleton_init_{$called_class} hook to execute code
 			 */
 			do_action( sprintf( 'pollify_features_singleton_init_%s', $called_class ) ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 
 		}
 
-		return $instance[ $called_class ];
+		return $instances[ $key ];
 	}
 } // End trait

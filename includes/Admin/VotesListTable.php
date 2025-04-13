@@ -28,7 +28,7 @@ class VotesListTable extends \WP_List_Table {
 	 *
 	 * @var object
 	 */
-	private $poll;
+	protected $poll;
 
 	/**
 	 * Per page no.
@@ -54,7 +54,7 @@ class VotesListTable extends \WP_List_Table {
 			$this->poll = $poll;
 		} else {
 			$poll_id    = pollify_filter_input( INPUT_GET, 'poll_id', POLLIFY_FILTER_SANITIZE_STRING );
-			$this->poll = \wpRigel\Pollify\Polls::get_instance()->get( $poll_id );
+			$this->poll = \wpRigel\Pollify\FeedbackManager::get_instance()->get( $poll_id );
 		}
 
 		parent::__construct(

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace wpRigel\Pollify;
 
 use WP_Error;
+use wpRigel\Pollify\Model\Feedback;
 use wpRigel\Pollify\Model\Voter;
 use wpRigel\Pollify\Traits\Singleton;
 
@@ -56,7 +57,7 @@ class Votes {
 			return new WP_Error( 'empty_poll_id_or_option_id', __( 'Poll ID or Option ID is empty.', 'poll-creator' ) );
 		}
 
-		$poll = Polls::get_instance()->get( $args['client_id'] );
+		$poll = FeedbackManager::get_instance()->get( $args['client_id'] );
 
 		// Checking if poll exist or not.
 		if ( ! $poll || is_wp_error( $poll ) ) {
@@ -230,43 +231,57 @@ class Votes {
 	/**
 	 * Get results for a poll.
 	 *
-	 * @param string $client_id Poll client ID.
+	 * @param string|object $feedback Feedback client ID or Feedback object.
 	 *
 	 * @return array
 	 */
-	public function get_results( string $client_id ): array {
+	public function get_results( string|object $feedback ): array {
 		global $wpdb;
 
+		// Check if feedback is object of Feedback or not.
+		if ( is_object( $feedback ) && $feedback instanceof Feedback ) {
+			$options = $feedback->get_options();
+		} else {
+			$feedback = FeedbackManager::get_instance()->get( $feedback );
+			$options  = ! is_wp_error( $feedback ) ? $feedback->get_options() : [];
+		}
+
+		// If not $feedback object then return empty array.
+		if ( is_wp_error( $feedback ) ) {
+			return [];
+		}
+
 		// Get poll options.
-		$poll    = Polls::get_instance()->get( $client_id );
-		$options = ! is_wp_error( $poll ) ? $poll->get_options() : [];
 
 		// Implement caching.
-		$cache_key = 'pollify_results_' . $client_id;
+		$cache_key = 'pollify_results_' . $feedback->get_client_id();
 		$results   = wp_cache_get( $cache_key, 'pollify_vote_cache' );
 
 		if ( false === $results ) {
 			// Get vote data.
 			$votes = $wpdb->get_results(
 				$wpdb->prepare(
-					'SELECT option_id, COUNT(*) as votes FROM %i WHERE client_id = %s GROUP BY option_id',
+					'SELECT option_id, COUNT(*) as votes, COUNT(DISTINCT user_ip) as unique_votes FROM %i WHERE client_id = %s GROUP BY option_id',
 					$wpdb->prefix . $this->table_name,
-					$client_id
+					$feedback->get_client_id()
 				),
 				ARRAY_A
 			);
 
-			$total_votes = array_sum( wp_list_pluck( $votes, 'votes' ) );
+			$total_votes        = array_sum( wp_list_pluck( $votes, 'votes' ) );
+			$total_unique_votes = array_sum( wp_list_pluck( $votes, 'unique_votes' ) );
 
 			if ( ! empty( $options ) ) {
 				// Loop through all options and set total votes for each option.
 				foreach ( $options as $key => $option ) {
-					$options[ $key ]['votes']      = 0;
-					$options[ $key ]['percentage'] = 0;
+					$options[ $key ]['votes']        = 0;
+					$options[ $key ]['unique_votes'] = 0;
+					$options[ $key ]['percentage']   = 0;
 
 					foreach ( $votes as $vote ) {
 						if ( $option['option_id'] === $vote['option_id'] ) {
-							$options[ $key ]['votes'] = (int) $vote['votes'];
+							$options[ $key ]['votes']        = (int) $vote['votes'];
+							$options[ $key ]['unique_votes'] = (int) $vote['unique_votes'];
 
 							// Calculate percentage.
 							$options[ $key ]['percentage'] = (int) $vote['votes'] > 0 ? number_format_i18n( ( (int) $vote['votes'] / (int) $total_votes ) * 100, 2 ) : 0;
@@ -276,11 +291,16 @@ class Votes {
 				}
 			}
 
-			$results = [
-				'total_votes'  => intval( $total_votes ),
-				'voter_counts' => count( $votes ),
-				'options'      => $options ?? [],
-			];
+			$results = apply_filters(
+				'pollify_get_feedback_results_data',
+				[
+					'total_votes'        => intval( $total_votes ),
+					'total_unique_votes' => intval( $total_unique_votes ),
+					'voter_counts'       => count( $votes ),
+					'options'            => $options ?? [],
+				],
+				$feedback
+			);
 
 			wp_cache_set( $cache_key, $results, 'pollify_vote_cache', 30 * MINUTE_IN_SECONDS );
 		}

@@ -54,7 +54,7 @@ class IPsListTable extends \WP_List_Table {
 			$this->poll = $poll;
 		} else {
 			$poll_id    = pollify_filter_input( INPUT_GET, 'poll_id', POLLIFY_FILTER_SANITIZE_STRING );
-			$this->poll = \wpRigel\Pollify\Polls::get_instance()->get( $poll_id );
+			$this->poll = \wpRigel\Pollify\FeedbackManager::get_instance()->get( $poll_id );
 		}
 
 		parent::__construct(
@@ -72,10 +72,14 @@ class IPsListTable extends \WP_List_Table {
 	 * @return array
 	 */
 	public function get_columns(): array {
-		$columns = array(
-			'ip'       => __( 'IP', 'poll-creator' ),
-			'location' => __( 'Location', 'poll-creator' ),
-			'votes'    => __( 'Votes', 'poll-creator' ),
+		$columns = apply_filters(
+			'pollify_ip_list_columns',
+			array(
+				'ip'       => __( 'IP', 'poll-creator' ),
+				'location' => __( 'Location', 'poll-creator' ),
+				'votes'    => __( 'Votes', 'poll-creator' ),
+			),
+			$this->poll
 		);
 
 		return $columns;

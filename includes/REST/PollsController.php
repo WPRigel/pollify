@@ -14,7 +14,7 @@ use WP_REST_Server;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Controller;
-use wpRigel\Pollify\Polls;
+use wpRigel\Pollify\FeedbackManager;
 use wpRigel\Pollify\Model\Poll;
 
 /**
@@ -118,7 +118,7 @@ class PollsController extends WP_REST_Controller {
 		$params = $request->get_params();
 
 		$data  = [];
-		$polls = Polls::get_instance()->all( $params );
+		$polls = FeedbackManager::get_instance()->all( $params );
 
 		foreach ( $polls as $poll ) {
 			$item   = $this->prepare_item_for_response( $poll, $request );
@@ -138,7 +138,7 @@ class PollsController extends WP_REST_Controller {
 	public function create_item( $request ) {
 		$args = $request->get_params();
 
-		$poll = Polls::get_instance()->save( $args );
+		$poll = FeedbackManager::get_instance()->save( $args );
 
 		if ( is_wp_error( $poll ) ) {
 			return $poll;
@@ -158,7 +158,7 @@ class PollsController extends WP_REST_Controller {
 		// Get rest parameters.
 		$params = $request->get_params();
 
-		$poll = Polls::get_instance()->get( $params['id'] );
+		$poll = FeedbackManager::get_instance()->get( $params['id'] );
 
 		if ( is_wp_error( $poll ) ) {
 			return $poll;
@@ -178,7 +178,7 @@ class PollsController extends WP_REST_Controller {
 		// Get rest parameters.
 		$params = $request->get_params();
 
-		$poll = Polls::get_instance()->save( $params );
+		$poll = FeedbackManager::get_instance()->save( $params );
 
 		if ( is_wp_error( $poll ) ) {
 			return $poll;
@@ -198,7 +198,7 @@ class PollsController extends WP_REST_Controller {
 		// Get rest parameters.
 		$params = $request->get_params();
 
-		$poll = Polls::get_instance()->delete( $params['id'] );
+		$poll = FeedbackManager::get_instance()->delete( $params['id'] );
 
 		if ( is_wp_error( $poll ) ) {
 			return $poll;

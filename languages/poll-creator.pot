@@ -1,21 +1,21 @@
-# Copyright (C) 2024 wprigel
+# Copyright (C) 2025 wprigel
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Pollify 1.0.2\n"
+"Project-Id-Version: Pollify 1.0.4\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pollify\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-12-25T14:55:09+00:00\n"
+"POT-Creation-Date: 2025-04-13T18:55:43+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.9.0\n"
 
 #. Plugin Name of the plugin
-#: includes/Admin/Menu.php:100
-#: includes/Admin/Menu.php:101
+#: includes/Admin/Menu.php:103
+#: includes/Admin/Menu.php:104
 #: includes/Blocks.php:65
 msgid "Pollify"
 msgstr ""
@@ -37,7 +37,7 @@ msgid "http://wprigel.com/"
 msgstr ""
 
 #: includes/Admin/IPsListTable.php:62
-#: includes/Admin/IPsListTable.php:76
+#: includes/Admin/IPsListTable.php:78
 msgid "IP"
 msgstr ""
 
@@ -45,51 +45,51 @@ msgstr ""
 msgid "IP's"
 msgstr ""
 
-#: includes/Admin/IPsListTable.php:77
+#: includes/Admin/IPsListTable.php:79
 #: includes/Admin/VotesListTable.php:77
 #: templates/admin/overview.php:164
 msgid "Location"
 msgstr ""
 
-#: includes/Admin/IPsListTable.php:78
+#: includes/Admin/IPsListTable.php:80
 #: includes/helpers/functions.php:377
 #: templates/admin/overview.php:113
 msgid "Votes"
 msgstr ""
 
-#: includes/Admin/IPsListTable.php:96
-#: includes/Admin/IPsListTable.php:98
+#: includes/Admin/IPsListTable.php:100
+#: includes/Admin/IPsListTable.php:102
 msgid "N/A"
 msgstr ""
 
-#: includes/Admin/IPsListTable.php:120
+#: includes/Admin/IPsListTable.php:124
 #: includes/Admin/VotesListTable.php:155
 #: templates/admin/overview.php:134
 #: templates/admin/overview.php:176
 msgid "Unknown"
 msgstr ""
 
-#: includes/Admin/IPsListTable.php:139
+#: includes/Admin/IPsListTable.php:143
 #: includes/Admin/VotesListTable.php:186
 msgid "All countries"
 msgstr ""
 
-#: includes/Admin/IPsListTable.php:148
-#: includes/Admin/PollsListTable.php:294
+#: includes/Admin/IPsListTable.php:152
+#: includes/Admin/PollsListTable.php:300
 #: includes/Admin/VotesListTable.php:205
 msgid "Filter"
 msgstr ""
 
-#: includes/Admin/Menu.php:83
+#: includes/Admin/Menu.php:86
 msgid "Contact us"
 msgstr ""
 
-#: includes/Admin/Menu.php:85
-#: includes/Plugin.php:104
+#: includes/Admin/Menu.php:88
+#: includes/Plugin.php:114
 msgid "Documentation"
 msgstr ""
 
-#: includes/Admin/Menu.php:197
+#: includes/Admin/Menu.php:222
 msgid "Polls per page"
 msgstr ""
 
@@ -118,73 +118,73 @@ msgstr ""
 msgid "Created at"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:120
+#: includes/Admin/PollsListTable.php:128
 msgid "Are you sure you want to reset the results? If you do reset, the results are not achievable again."
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:125
+#: includes/Admin/PollsListTable.php:133
 #: src/poll/edit.js:180
 msgid "View results"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:126
+#: includes/Admin/PollsListTable.php:134
 msgid "Reset Results"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:165
+#: includes/Admin/PollsListTable.php:169
 msgid "Edit"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:166
+#: includes/Admin/PollsListTable.php:170
 msgid "View frontend"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:189
-#: includes/Admin/PollsListTable.php:270
+#: includes/Admin/PollsListTable.php:193
+#: includes/Admin/PollsListTable.php:276
 #: src/poll/edit.js:132
 msgid "Open"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:190
-#: includes/Admin/PollsListTable.php:202
-#: includes/Admin/PollsListTable.php:271
+#: includes/Admin/PollsListTable.php:194
+#: includes/Admin/PollsListTable.php:208
+#: includes/Admin/PollsListTable.php:277
 msgid "Closed"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:191
+#: includes/Admin/PollsListTable.php:195
 msgid "Schedule"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:192
+#: includes/Admin/PollsListTable.php:196
 msgid "Trash"
 msgstr ""
 
 #. translators: %s: poll end date
-#: includes/Admin/PollsListTable.php:198
+#: includes/Admin/PollsListTable.php:204
 msgid "Ended at %s"
 msgstr ""
 
 #. translators: %s: poll end date
-#: includes/Admin/PollsListTable.php:206
+#: includes/Admin/PollsListTable.php:212
 msgid "Will be ended on %s"
 msgstr ""
 
 #. translators: %s: votes count
-#: includes/Admin/PollsListTable.php:242
+#: includes/Admin/PollsListTable.php:248
 #: templates/admin/overview.php:65
 #: templates/results/horizointal-bar-chart.php:31
 msgid "%s votes"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:269
+#: includes/Admin/PollsListTable.php:275
 msgid "All"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:290
+#: includes/Admin/PollsListTable.php:296
 msgid "All types"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:291
+#: includes/Admin/PollsListTable.php:297
 msgid "Poll"
 msgstr ""
 
@@ -226,6 +226,50 @@ msgstr ""
 msgid "Inline list"
 msgstr ""
 
+#: includes/FeedbackFactory.php:57
+msgid "Invalid feedback."
+msgstr ""
+
+#: includes/FeedbackFactory.php:72
+#: includes/FeedbackFactory.php:87
+msgid "Invalid feedback type."
+msgstr ""
+
+#. translators: %s: Field name
+#: includes/FeedbackManager.php:183
+msgid "Error: %s cannot be left empty. Please fill the required information"
+msgstr ""
+
+#: includes/FeedbackManager.php:208
+#: includes/FeedbackManager.php:211
+msgid "Options must contain type and option value"
+msgstr ""
+
+#: includes/FeedbackManager.php:217
+msgid "Client id is not valid"
+msgstr ""
+
+#: includes/FeedbackManager.php:254
+msgid "Poll not updated successfully"
+msgstr ""
+
+#: includes/FeedbackManager.php:282
+msgid "Poll not created successfully"
+msgstr ""
+
+#: includes/FeedbackManager.php:329
+msgid "Poll not found"
+msgstr ""
+
+#: includes/FeedbackManager.php:376
+#: includes/FeedbackManager.php:386
+msgid "Poll not deleted successfully"
+msgstr ""
+
+#: includes/FeedbackManager.php:408
+msgid "Poll ID cannot be empty"
+msgstr ""
+
 #: includes/helpers/functions.php:364
 msgid "Overview"
 msgstr ""
@@ -234,63 +278,28 @@ msgstr ""
 msgid "IP Details"
 msgstr ""
 
-#: includes/Model/Poll.php:225
+#: includes/Model/Poll.php:36
 msgid "Options are empty."
 msgstr ""
 
-#: includes/Model/Poll.php:229
+#: includes/Model/Poll.php:40
 #: templates/poll/poll.php:145
 #: src/poll/edit.js:164
 #: src/poll/edit.js:166
 msgid "This poll is closed"
 msgstr ""
 
-#: includes/Model/Poll.php:240
+#: includes/Model/Poll.php:51
 msgid "You have already voted."
 msgstr ""
 
-#: includes/Plugin.php:103
+#: includes/Plugin.php:113
 msgid "Get started"
-msgstr ""
-
-#. translators: %s: Field name
-#: includes/Polls.php:181
-msgid "Error: %s cannot be left empty. Please fill the required information"
-msgstr ""
-
-#: includes/Polls.php:206
-#: includes/Polls.php:209
-msgid "Options must contain type and option value"
-msgstr ""
-
-#: includes/Polls.php:215
-msgid "Client id is not valid"
-msgstr ""
-
-#: includes/Polls.php:252
-msgid "Poll not updated successfully"
-msgstr ""
-
-#: includes/Polls.php:280
-msgid "Poll not created successfully"
-msgstr ""
-
-#: includes/Polls.php:327
-msgid "Poll not found"
-msgstr ""
-
-#: includes/Polls.php:374
-#: includes/Polls.php:384
-msgid "Poll not deleted successfully"
-msgstr ""
-
-#: includes/Polls.php:453
-msgid "Poll ID cannot be empty"
 msgstr ""
 
 #: includes/REST/PollsController.php:78
 #: includes/REST/PollsController.php:268
-#: includes/REST/VotesController.php:117
+#: includes/REST/VotesController.php:116
 msgid "Unique identifier for the object."
 msgstr ""
 
@@ -334,40 +343,40 @@ msgstr ""
 msgid "The date the withdraw request has beed updated in the site's timezone."
 msgstr ""
 
-#: includes/REST/VotesController.php:56
+#: includes/REST/VotesController.php:55
 msgid "Unique identifier for the object for poll"
 msgstr ""
 
-#: includes/REST/VotesController.php:81
+#: includes/REST/VotesController.php:80
 msgid "Invalid nonce."
 msgstr ""
 
-#: includes/REST/VotesController.php:85
-#: includes/REST/VotesController.php:91
+#: includes/REST/VotesController.php:84
+#: includes/REST/VotesController.php:90
 msgid "Invalid poll"
 msgstr ""
 
-#: includes/REST/VotesController.php:124
+#: includes/REST/VotesController.php:123
 msgid "Option IDs"
 msgstr ""
 
-#: includes/REST/VotesController.php:129
+#: includes/REST/VotesController.php:128
 msgid "Return with result or not"
 msgstr ""
 
-#: includes/Votes.php:56
+#: includes/Votes.php:57
 msgid "Poll ID or Option ID is empty."
 msgstr ""
 
-#: includes/Votes.php:63
+#: includes/Votes.php:64
 msgid "Invalid poll data."
 msgstr ""
 
-#: includes/Votes.php:68
+#: includes/Votes.php:69
 msgid "Invalid poll option."
 msgstr ""
 
-#: includes/Votes.php:106
+#: includes/Votes.php:107
 msgid "Sorry vote not accepted."
 msgstr ""
 
@@ -437,6 +446,10 @@ msgstr ""
 #: templates/admin/overview.php:289
 #: templates/admin/overview.php:306
 msgid "Search by IP"
+msgstr ""
+
+#: templates/admin/polls.php:19
+msgid "Polls"
 msgstr ""
 
 #: templates/admin/polls.php:23

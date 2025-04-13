@@ -50,6 +50,7 @@ class Plugin {
 		$this->url        = plugin_dir_url( trailingslashit( dirname( __DIR__, 1 ) ) . 'pollify.php' );
 		$this->assets_dir = trailingslashit( $this->path ) . 'assets/';
 
+		$this->load_textdomain();
 		$this->load_hooks();
 		$this->load();
 	}
@@ -62,6 +63,15 @@ class Plugin {
 	public function activator(): void {
 		// phpcs:ignore;
 		register_activation_hook( dirname( __FILE__, 2 ) . '/pollify.php', [ Installer::get_instance(), 'run' ] );
+	}
+
+	/**
+	 * Load the text domain for translations.
+	 *
+	 * @return void
+	 */
+	public function load_textdomain(): void {
+		load_plugin_textdomain( 'poll-creator', false, dirname( __DIR__, 1 ) . '/languages' );
 	}
 
 	/**
