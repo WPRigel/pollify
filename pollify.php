@@ -8,6 +8,7 @@
  * Author URI: http://wprigel.com/
  * License: GPL2
  * Text Domain: poll-creator
+ * Domain Path: /languages
  *
  * @package wpRigel\Pollify
  */
