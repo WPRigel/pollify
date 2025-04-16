@@ -1,5 +1,5 @@
 === Pollify - Ultimate Poll Creator and Survey Maker ===
-Contributors: wprigel, sakiladnan
+Contributors: wprigel
 Tags: poll plugin, poll, poll maker, vote, survey
 Requires at least: 6.2
 Tested up to: 6.7.2
