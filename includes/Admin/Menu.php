@@ -253,7 +253,7 @@ class Menu {
 
 		$ip = pollify_filter_input( INPUT_GET, 'ip_address', POLLIFY_FILTER_SANITIZE_STRING );
 
-		if ( $action === 'pollify_remove_ip'
+		if ( 'pollify_remove_ip' === $action
 			&& current_user_can( 'manage_options' )
 			&& wp_verify_nonce( $nonce, 'pollify_remove_ip_' . $ip )
 		) {
@@ -291,7 +291,7 @@ class Menu {
 						'updated' => $message,
 					],
 					! empty( $redirect_url ) ? $redirect_url : admin_url( 'admin.php?page=pollify' )
-			 	)
+				)
 			);
 			exit;
 		}

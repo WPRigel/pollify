@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-04-13T18:55:43+00:00\n"
+"POT-Creation-Date: 2025-06-12T17:04:52+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.9.0\n"
 
@@ -47,34 +47,35 @@ msgstr ""
 
 #: includes/Admin/IPsListTable.php:79
 #: includes/Admin/VotesListTable.php:77
-#: templates/admin/overview.php:164
+#: templates/admin/overview.php:171
 msgid "Location"
 msgstr ""
 
 #: includes/Admin/IPsListTable.php:80
 #: includes/helpers/functions.php:377
-#: templates/admin/overview.php:113
+#: templates/admin/overview.php:120
 msgid "Votes"
 msgstr ""
 
 #: includes/Admin/IPsListTable.php:100
 #: includes/Admin/IPsListTable.php:102
+#: includes/Admin/IPsListTable.php:122
 msgid "N/A"
 msgstr ""
 
-#: includes/Admin/IPsListTable.php:124
+#: includes/Admin/IPsListTable.php:141
 #: includes/Admin/VotesListTable.php:155
-#: templates/admin/overview.php:134
-#: templates/admin/overview.php:176
+#: templates/admin/overview.php:141
+#: templates/admin/overview.php:183
 msgid "Unknown"
 msgstr ""
 
-#: includes/Admin/IPsListTable.php:143
+#: includes/Admin/IPsListTable.php:160
 #: includes/Admin/VotesListTable.php:186
 msgid "All countries"
 msgstr ""
 
-#: includes/Admin/IPsListTable.php:152
+#: includes/Admin/IPsListTable.php:169
 #: includes/Admin/PollsListTable.php:300
 #: includes/Admin/VotesListTable.php:205
 msgid "Filter"
@@ -91,6 +92,14 @@ msgstr ""
 
 #: includes/Admin/Menu.php:222
 msgid "Polls per page"
+msgstr ""
+
+#: includes/Admin/Menu.php:282
+msgid "IP address removed successfully."
+msgstr ""
+
+#: includes/Admin/Menu.php:284
+msgid "Failed to remove IP address."
 msgstr ""
 
 #: includes/Admin/PollsListTable.php:49
@@ -171,7 +180,7 @@ msgstr ""
 
 #. translators: %s: votes count
 #: includes/Admin/PollsListTable.php:248
-#: templates/admin/overview.php:65
+#: templates/admin/overview.php:72
 #: templates/results/horizointal-bar-chart.php:31
 msgid "%s votes"
 msgstr ""
@@ -201,7 +210,7 @@ msgid "Name"
 msgstr ""
 
 #: includes/Admin/VotesListTable.php:78
-#: templates/admin/overview.php:165
+#: templates/admin/overview.php:172
 msgid "IP Address"
 msgstr ""
 
@@ -214,7 +223,7 @@ msgid "Vote date"
 msgstr ""
 
 #: includes/Admin/VotesListTable.php:137
-#: templates/admin/overview.php:235
+#: templates/admin/overview.php:244
 msgid "Guest"
 msgstr ""
 
@@ -276,6 +285,14 @@ msgstr ""
 
 #: includes/helpers/functions.php:391
 msgid "IP Details"
+msgstr ""
+
+#: includes/helpers/functions.php:509
+msgid "Remove"
+msgstr ""
+
+#: includes/helpers/functions.php:513
+msgid "Are you sure you want to remove all votes from this IP? This operation cannot be undone. Just make sure before proceed"
 msgstr ""
 
 #: includes/Model/Poll.php:36
@@ -380,71 +397,75 @@ msgstr ""
 msgid "Sorry vote not accepted."
 msgstr ""
 
-#: templates/admin/overview.php:27
+#: includes/Votes.php:484
+msgid "Client ID or User IP is empty."
+msgstr ""
+
+#: templates/admin/overview.php:28
 msgid "Back to list"
 msgstr ""
 
-#: templates/admin/overview.php:50
+#: templates/admin/overview.php:57
 msgid "At a glance"
 msgstr ""
 
 #. translators: %s: percentage
-#: templates/admin/overview.php:71
 #: templates/admin/overview.php:78
+#: templates/admin/overview.php:85
 #: templates/results/horizointal-bar-chart.php:37
 #: templates/results/horizointal-bar-chart.php:44
 msgid "%s%"
 msgstr ""
 
 #. translators: %s: total votes
-#: templates/admin/overview.php:88
+#: templates/admin/overview.php:95
 msgid "Total votes: %s"
 msgstr ""
 
-#: templates/admin/overview.php:93
+#: templates/admin/overview.php:100
 #: templates/results/horizointal-bar-chart.php:59
 msgid "No results found for this poll"
 msgstr ""
 
-#: templates/admin/overview.php:101
+#: templates/admin/overview.php:108
 msgid "Popular Location"
 msgstr ""
 
-#: templates/admin/overview.php:113
+#: templates/admin/overview.php:120
 msgid "Country"
 msgstr ""
 
-#: templates/admin/overview.php:141
-#: templates/admin/overview.php:203
+#: templates/admin/overview.php:148
+#: templates/admin/overview.php:212
 msgid "No location data found for this poll"
 msgstr ""
 
-#: templates/admin/overview.php:148
+#: templates/admin/overview.php:155
 msgid "IP overviews"
 msgstr ""
 
-#: templates/admin/overview.php:166
+#: templates/admin/overview.php:173
 msgid "Vote count"
 msgstr ""
 
-#: templates/admin/overview.php:200
+#: templates/admin/overview.php:209
 msgid "See all IP's"
 msgstr ""
 
-#: templates/admin/overview.php:212
+#: templates/admin/overview.php:221
 msgid "Recent votes"
 msgstr ""
 
-#: templates/admin/overview.php:269
+#: templates/admin/overview.php:278
 msgid "See all votes"
 msgstr ""
 
-#: templates/admin/overview.php:273
+#: templates/admin/overview.php:282
 msgid "No recent votes found for this poll"
 msgstr ""
 
-#: templates/admin/overview.php:289
-#: templates/admin/overview.php:306
+#: templates/admin/overview.php:298
+#: templates/admin/overview.php:315
 msgid "Search by IP"
 msgstr ""
 
