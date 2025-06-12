@@ -247,13 +247,53 @@ class Menu {
 			if ( ! empty( $client_id ) ) {
 				\wpRigel\Pollify\Votes::get_instance()->reset_results( $client_id );
 
-				// Reset cache for the poll.
-				if ( wp_cache_supports( 'flush_group' ) ) {
-					wp_cache_flush_group( 'pollify_poll_cache' );
-				}
-
 				wp_safe_redirect( admin_url( 'admin.php?page=pollify&updated=1' ) );
 			}
+		}
+
+		$ip = pollify_filter_input( INPUT_GET, 'ip_address', POLLIFY_FILTER_SANITIZE_STRING );
+
+		if ( $action === 'pollify_remove_ip'
+			&& current_user_can( 'manage_options' )
+			&& wp_verify_nonce( $nonce, 'pollify_remove_ip_' . $ip )
+		) {
+
+			$poll_id = pollify_filter_input(
+				INPUT_GET,
+				'poll_id',
+				POLLIFY_FILTER_SANITIZE_STRING,
+			);
+
+			$redirect_url = pollify_filter_input(
+				INPUT_GET,
+				'redirect_url',
+				FILTER_VALIDATE_URL,
+			);
+
+			// Need to call remove_vote from Votes class to remove the IP address.
+			$result = \wpRigel\Pollify\Votes::get_instance()->remove_vote(
+				[
+					'client_id' => $poll_id,
+					'user_ip'   => $ip,
+				]
+			);
+
+			if ( $result ) {
+				$message = __( 'IP address removed successfully.', 'poll-creator' );
+			} else {
+				$message = __( 'Failed to remove IP address.', 'poll-creator' );
+			}
+
+			// Redirect back to the poll overview page.
+			wp_safe_redirect(
+				add_query_arg(
+					[
+						'updated' => $message,
+					],
+					! empty( $redirect_url ) ? $redirect_url : admin_url( 'admin.php?page=pollify' )
+			 	)
+			);
+			exit;
 		}
 	}
 }

@@ -311,6 +311,39 @@ table.toplevel_page_pollify {
 	}
 }
 
+.pollify-notice {
+	background: #fff;
+    border: 1px solid #c3c4c7;
+    border-left-width: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+    margin: 5px 0 15px;
+    padding: 1px 12px;
+
+	&.notice-error {
+		border-left-color: #d63638;
+	}
+
+	&.notice-success {
+		border-left-color: #00a32a;
+	}
+
+	&.notice-warning {
+		border-left-color: #dba617;
+	}
+
+	&.notice-info {
+		border-left-color: #72aee6;
+	}
+
+	p {
+		margin: 0;
+		font-size: 13px;
+		margin: 0.5em 0;
+		padding: 2px;
+		color: $normal_text_color;
+	}
+}
+
 .pollify-poll-details-wrap {
 
 	.flag-icon {
@@ -644,6 +677,11 @@ table.toplevel_page_pollify {
 							padding: 10px 12px;
 							border-bottom: 1px solid #EAECF0;
 							font-weight: 500;
+							width: 35%;
+
+							&:last-child {
+								width: 20%;
+							}
 						}
 					}
 				}
@@ -706,6 +744,7 @@ table.toplevel_page_pollify {
 						&.column-vote {
 							width: 30%;
 						}
+
 					}
 				}
 
@@ -739,6 +778,45 @@ table.toplevel_page_pollify {
 							}
 						}
 					}
+				}
+			}
+		}
+
+		table.ips-table {
+			margin-top: 16px;
+
+			thead {
+				tr {
+					th {
+						font-size: 1.2em;
+						text-align: left;
+						padding: 10px 12px;
+						border-bottom: 1px solid #EAECF0;
+						font-weight: 500;
+					}
+				}
+			}
+		}
+
+		.ip-address-data {
+			display: flex;
+			gap: 12px;
+			align-items: center;
+
+			span {
+				font-weight: 500;
+			}
+
+			.ip-actions {
+				display: none;
+			}
+
+			&:hover {
+				.ip-actions {
+					display: flex;
+					gap: 10px;
+					align-items: center;
+					font-size: 0.8125rem;
 				}
 			}
 		}

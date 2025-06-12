@@ -332,62 +332,63 @@ class Votes {
 			return [];
 		}
 
-		// Create some where condition regarding status, type, search etc.
 		$where = $wpdb->prepare( 'WHERE 1=%d', 1 );
 
-		// Check if client_id is empty or not.
 		if ( ! empty( $args['client_id'] ) ) {
 			$where .= $wpdb->prepare( ' AND v.client_id = %s', sanitize_text_field( $args['client_id'] ) );
 		}
 
-		// Check if client_id is empty or not.
 		if ( ! empty( $args['location'] ) ) {
 			$where .= $wpdb->prepare( ' AND v.user_location = %s', sanitize_text_field( $args['location'] ) );
 		}
 
-		// If search is set then add where condition for search.
 		if ( ! empty( $args['search'] ) ) {
 			$where .= $wpdb->prepare( ' AND v.user_ip LIKE %s', '%' . sanitize_text_field( $args['search'] ) . '%' );
 		}
 
 		$offset = ( $args['page'] - 1 ) * $args['per_page'];
 
+		// Table names
+		$vote_table      = $wpdb->prefix . $this->table_name;
+		$blocklist_table = $wpdb->prefix . 'pollify_ip_blocklist';
+
+		// Dynamic join and select
+		$join_sql   = $wpdb->prepare( 'LEFT JOIN %i b ON v.user_ip = b.ip_address', $blocklist_table );
+		$select_var = $wpdb->prepare( 'v.user_ip as ip, v.user_location as location, COUNT(*) as votes, IF(b.ip_address IS NOT NULL, %d, %d) as is_blocked', 1, 0 );
+
+		// Allow filtering join and select for future extension
+		$join_sql   = apply_filters( 'pollify_ip_votes_join_sql', $join_sql, $args );
+		$select_var = apply_filters( 'pollify_ip_votes_select_var', $select_var, $args );
+
+		$order_by = sanitize_sql_orderby( "{$args['orderby']} {$args['order']}" );
+
 		// If count is exist then return the count.
 		if ( ! empty( $args['count'] ) && $args['count'] ) {
-			// Implement cacjiing for count param.
 			$cache_count_key = 'pollify_ip_votes_count_' . md5( maybe_serialize( $args ) );
 			$votes           = wp_cache_get( $cache_count_key, 'pollify_vote_cache' );
 
 			if ( false === $votes ) {
-				// Get vote data.
-				$votes = $wpdb->get_var(
-					$wpdb->prepare(
-						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-						"SELECT COUNT(DISTINCT user_ip) FROM %i v {$where}",
-						$wpdb->prefix . $this->table_name
-					)
-				);
-
+				$sql = "SELECT COUNT(DISTINCT v.user_ip) FROM {$vote_table} v {$join_sql} {$where}";
+				$votes = $wpdb->get_var( $sql );
 				wp_cache_set( $cache_count_key, $votes, 'pollify_vote_cache', 30 * MINUTE_IN_SECONDS );
 			}
 
 			return intval( $votes ) ?? 0;
 		}
 
-		// Implement cache for getting rows.
 		$cache_key = 'pollify_ip_votes_' . md5( maybe_serialize( $args ) );
-		$votes     = wp_cache_get( $cache_key, 'pollify_vote_cache' );
-
-		// Set order by clause using prepare.
-		$order_by = sanitize_sql_orderby( "{$args['orderby']} {$args['order']}" );
+		$votes     = false; //wp_cache_get( $cache_key, 'pollify_vote_cache' );
 
 		if ( false === $votes ) {
-			// Get vote data.
 			$votes = $wpdb->get_results(
 				$wpdb->prepare(
-					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-					"SELECT user_ip as ip, user_location as location, COUNT(*) as votes FROM %i v {$where} GROUP BY user_ip ORDER BY {$order_by} LIMIT %d OFFSET %d",
-					$wpdb->prefix . $this->table_name,
+					"SELECT {$select_var}
+					 FROM {$vote_table} v
+					 {$join_sql}
+					 {$where}
+					 GROUP BY v.user_ip
+					 ORDER BY {$order_by}
+					 LIMIT %d OFFSET %d",
 					$args['per_page'],
 					$offset
 				),
@@ -453,6 +454,53 @@ class Votes {
 				'%s',
 			]
 		);
+
+		// Reset cache for the poll.
+		if ( wp_cache_supports( 'flush_group' ) ) {
+			wp_cache_flush_group( 'pollify_poll_cache' );
+		}
+
+		return (bool) $deleted;
+	}
+
+	/**
+	 * Remove entry from vote table depending on client ID and user IP.
+	 *
+	 * @params array $args Arguments for removing vote.
+	 *
+	 * @return bool|WP_Error
+	 */
+	public function remove_vote( array $args = [] ) {
+		global $wpdb;
+
+		$defaults = [
+			'client_id' => '',
+			'user_ip'   => '',
+		];
+
+		$args = wp_parse_args( $args, $defaults );
+
+		if ( empty( $args['client_id'] ) || empty( $args['user_ip'] ) ) {
+			return new WP_Error( 'empty_client_id_or_user_ip', __( 'Client ID or User IP is empty.', 'poll-creator' ) );
+		}
+
+		// Delete vote from database.
+		$deleted = $wpdb->delete(
+			$wpdb->prefix . $this->table_name,
+			[
+				'client_id' => $args['client_id'],
+				'user_ip'   => $args['user_ip'],
+			],
+			[
+				'%s',
+				'%s',
+			]
+		);
+
+		// Reset cache for the poll.
+		if ( wp_cache_supports( 'flush_group' ) ) {
+			wp_cache_flush_group( 'pollify_poll_cache' );
+		}
 
 		return (bool) $deleted;
 	}

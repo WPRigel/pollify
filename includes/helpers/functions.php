@@ -465,3 +465,79 @@ function pollify_generate_shorthand_border_styles( $type, $border ) {
 
 	return '';
 }
+
+/**
+ * Display IP address with actions.
+ *
+ * @param string $ip   The IP address to display.
+ * @param object $poll The poll object.
+ *
+ * @return string
+ */
+function pollify_display_ip_with_actions( $ip, $poll ) {
+	$tab = pollify_filter_input( INPUT_GET, 'tab', POLLIFY_FILTER_SANITIZE_STRING ) ?: '';
+
+	$remove_url = wp_nonce_url(
+		add_query_arg(
+			[
+				'action'       => 'pollify_remove_ip',
+				'poll_id'      => $poll->get_client_id(),
+				'ip_address'   => urlencode( $ip ),
+				'redirect_url' => urlencode(
+					add_query_arg(
+						[
+							'page'    => 'pollify',
+							'action'  => 'view_results',
+							'poll_id' => $poll->get_client_id(),
+							'tab'     => $tab,
+						],
+						admin_url( 'admin.php' )
+					)
+				),
+			]
+		),
+		'pollify_remove_ip_' . $ip,
+		'_nonce'
+	);
+
+	$row_actions = apply_filters(
+		'pollify_ip_view_row_actions',
+		[
+			'remove' => [
+				'url'     => $remove_url,
+				'class'   => 'pollify-remove-ip',
+				'label'   => __( 'Remove', 'poll-creator' ),
+				'style'   => 'color: red;',
+				'onclick' => sprintf(
+					"return confirm('%s');",
+					esc_js( __( 'Are you sure you want to remove all votes from this IP? This operation cannot be undone. Just make sure before proceed', 'poll-creator' ) )
+				),
+			],
+		],
+		$ip,
+		$poll
+	);
+	?>
+	<div class="ip-address-data">
+		<span><?php echo esc_html( $ip ); ?></span>
+		<div class="ip-actions">
+			<?php foreach ( $row_actions as $action ) : ?>
+				<a
+					href="<?php echo esc_url( $action['url'] ); ?>"
+					class="<?php echo esc_attr( $action['class'] ); ?>"
+					<?php
+					if ( ! empty( $action['style'] ) ) {
+						echo 'style="' . esc_attr( $action['style'] ) . '" ';
+					}
+					if ( ! empty( $action['onclick'] ) ) {
+						echo 'onclick="' . esc_attr( $action['onclick'] ) . '"';
+					}
+					?>
+				>
+					<?php echo esc_html( $action['label'] ); ?>
+				</a>
+			<?php endforeach; ?>
+		</div>
+	</div>
+	<?php
+}
