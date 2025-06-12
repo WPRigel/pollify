@@ -107,6 +107,23 @@ class IPsListTable extends \WP_List_Table {
 	}
 
 	/**
+	 * Render the column ip.
+	 *
+	 * @param array $item The current item.
+	 *
+	 * @return string
+	 */
+	public function column_ip( $item ) {
+		if ( ! empty( $item['ip'] ) ) {
+			ob_start();
+			pollify_display_ip_with_actions( $item['ip'], $this->poll );
+			return ob_get_clean();
+		} else {
+			return __( 'N/A', 'poll-creator' );
+		}
+	}
+
+	/**
 	 * Render the column location.
 	 *
 	 * @param array $item The current item.

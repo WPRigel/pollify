@@ -1,10 +1,10 @@
 === Pollify - Ultimate Poll Creator and Survey Maker ===
-Contributors: wprigel, sakiladnan
+Contributors: wprigel
 Tags: poll plugin, poll, poll maker, vote, survey
-Requires at least: 6.2
-Tested up to: 6.7.2
+Requires at least: 6.1
+Tested up to: 6.8.1
 Requires PHP: 8.0
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -129,6 +129,7 @@ Seamlessly collect user emails for community building and email marketing effort
         - View all polls with details like title, type, source/reference, status, total responses, and creation date.
         - Filtering, sorting, and searching functionality.
         - Reset poll results option.
+        - Remove vote using IP address.
     - Poll Overview Page:
         - At-a-glance overview of poll results.
         - Popular location analysis with map display.
@@ -196,6 +197,14 @@ Sure, there is! Check out our [official documentation](https://wprigel.com/docs/
 8. IP details
 
 == Changelog ==
+
+v1.0.5 -> June 12, 2025
+--------------------------------------------
+- [New] Added vote remove option using IP address.
+- [New] Added new notice and design for any kind of operation.
+- [Tweak] Added few filters for overriding the IP navigation.
+- [Tweak] Added few actions for extending the core.
+- [Tweak] Added dynamic filter in the vote class for overriding the votes results.
 
 v1.0.4 -> April 14, 2025
 --------------------------------------------

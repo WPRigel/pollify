@@ -12,21 +12,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$poll_id     = pollify_filter_input( INPUT_GET, 'poll_id', POLLIFY_FILTER_SANITIZE_STRING );
-$poll        = ! empty( $poll ) ? $poll : \wpRigel\Pollify\FeedbackManager::get_instance()->get( $poll_id );
-$nav_tab     = pollify_filter_input( INPUT_GET, 'tab', POLLIFY_FILTER_SANITIZE_STRING ) ?: 'overview';
-$navigations = pollify_poll_results_page_nav();
+$poll_id         = pollify_filter_input( INPUT_GET, 'poll_id', POLLIFY_FILTER_SANITIZE_STRING );
+$poll            = ! empty( $poll ) ? $poll : \wpRigel\Pollify\FeedbackManager::get_instance()->get( $poll_id );
+$nav_tab         = pollify_filter_input( INPUT_GET, 'tab', POLLIFY_FILTER_SANITIZE_STRING ) ?: 'overview';
+$navigations     = pollify_poll_results_page_nav();
+$updated_message = pollify_filter_input( INPUT_GET, 'updated', POLLIFY_FILTER_SANITIZE_STRING );
 ?>
 
 <div class="wrap pollify-poll-details-wrap">
 	<div class="heading-wrap">
-		<h1 class="wp-heading-inline">
+		<h1>
 			<span><?php echo wp_kses_post( $poll->get_title() ); ?></span>
 		</h1>
 		<a href="<?php echo esc_url( add_query_arg( [ 'page' => 'pollify' ], admin_url( 'admin.php' ) ) ); ?>" class="page-title-action">
 			<?php esc_html_e( 'Back to list', 'poll-creator' ); ?>
 		</a>
 	</div>
+
+	<?php if ( $updated_message ) : ?>
+	<div class="pollify-notice notice-success">
+		<p><?php echo esc_html( $updated_message ); ?></p>
+	</div>
+	<?php endif; ?>
 
 	<div class="navigation">
 		<ul>
@@ -176,7 +183,9 @@ $navigations = pollify_poll_results_page_nav();
 												<span class="country-name"><?php esc_html_e( 'Unknown', 'poll-creator' ); ?></span>
 												<?php endif; ?>
 											</td>
-											<td class="ip-address"><?php echo esc_html( $location_vote['ip'] ); ?></td>
+											<td class="ip-address">
+												<?php pollify_display_ip_with_actions( $location_vote['ip'], $poll ); ?>
+											</td>
 											<td class="count"><?php echo esc_html( $location_vote['votes'] ); ?></td>
 										</tr>
 									<?php endforeach; ?>
