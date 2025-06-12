@@ -472,7 +472,7 @@ function pollify_generate_shorthand_border_styles( $type, $border ) {
  * @param string $ip   The IP address to display.
  * @param object $poll The poll object.
  *
- * @return string
+ * @return void
  */
 function pollify_display_ip_with_actions( $ip, $poll ) {
 	$tab = pollify_filter_input( INPUT_GET, 'tab', POLLIFY_FILTER_SANITIZE_STRING ) ?: '';
@@ -482,8 +482,8 @@ function pollify_display_ip_with_actions( $ip, $poll ) {
 			[
 				'action'       => 'pollify_remove_ip',
 				'poll_id'      => $poll->get_client_id(),
-				'ip_address'   => urlencode( $ip ),
-				'redirect_url' => urlencode(
+				'ip_address'   => rawurlencode( $ip ),
+				'redirect_url' => rawurlencode(
 					add_query_arg(
 						[
 							'page'    => 'pollify',

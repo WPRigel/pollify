@@ -332,31 +332,34 @@ class Votes {
 			return [];
 		}
 
+		// Create some where condition regarding status, type, search etc.
 		$where = $wpdb->prepare( 'WHERE 1=%d', 1 );
 
+		// Check if client_id is empty or not.
 		if ( ! empty( $args['client_id'] ) ) {
 			$where .= $wpdb->prepare( ' AND v.client_id = %s', sanitize_text_field( $args['client_id'] ) );
 		}
 
+		// Check if client_id is empty or not.
 		if ( ! empty( $args['location'] ) ) {
 			$where .= $wpdb->prepare( ' AND v.user_location = %s', sanitize_text_field( $args['location'] ) );
 		}
 
+		// If search is set then add where condition for search.
 		if ( ! empty( $args['search'] ) ) {
 			$where .= $wpdb->prepare( ' AND v.user_ip LIKE %s', '%' . sanitize_text_field( $args['search'] ) . '%' );
 		}
 
 		$offset = ( $args['page'] - 1 ) * $args['per_page'];
 
-		// Table names
-		$vote_table      = $wpdb->prefix . $this->table_name;
-		$blocklist_table = $wpdb->prefix . 'pollify_ip_blocklist';
+		// Table names.
+		$vote_table = $wpdb->prefix . $this->table_name;
 
-		// Dynamic join and select
-		$join_sql   = $wpdb->prepare( 'LEFT JOIN %i b ON v.user_ip = b.ip_address', $blocklist_table );
-		$select_var = $wpdb->prepare( 'v.user_ip as ip, v.user_location as location, COUNT(*) as votes, IF(b.ip_address IS NOT NULL, %d, %d) as is_blocked', 1, 0 );
+		// Dynamic join and select.
+		$join_sql   = '';
+		$select_var = 'v.user_ip as ip, v.user_location as location, COUNT(*) as votes';
 
-		// Allow filtering join and select for future extension
+		// Allow filtering join and select for future extension.
 		$join_sql   = apply_filters( 'pollify_ip_votes_join_sql', $join_sql, $args );
 		$select_var = apply_filters( 'pollify_ip_votes_select_var', $select_var, $args );
 
@@ -368,27 +371,29 @@ class Votes {
 			$votes           = wp_cache_get( $cache_count_key, 'pollify_vote_cache' );
 
 			if ( false === $votes ) {
-				$sql = "SELECT COUNT(DISTINCT v.user_ip) FROM {$vote_table} v {$join_sql} {$where}";
-				$votes = $wpdb->get_var( $sql );
-				wp_cache_set( $cache_count_key, $votes, 'pollify_vote_cache', 30 * MINUTE_IN_SECONDS );
+				// Get vote data.
+				$votes = $wpdb->get_var(
+					$wpdb->prepare(
+						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+						"SELECT COUNT(DISTINCT user_ip) FROM %i v {$join_sql} {$where}",
+						$vote_table
+					)
+				);
+
+				wp_cache_set( $cache_count_key, $votes, 'pollify_vote_cache', 15 * MINUTE_IN_SECONDS );
 			}
 
 			return intval( $votes ) ?? 0;
 		}
 
 		$cache_key = 'pollify_ip_votes_' . md5( maybe_serialize( $args ) );
-		$votes     = false; //wp_cache_get( $cache_key, 'pollify_vote_cache' );
+		$votes     = wp_cache_get( $cache_key, 'pollify_vote_cache' );
 
 		if ( false === $votes ) {
 			$votes = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT {$select_var}
-					 FROM {$vote_table} v
-					 {$join_sql}
-					 {$where}
-					 GROUP BY v.user_ip
-					 ORDER BY {$order_by}
-					 LIMIT %d OFFSET %d",
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					"SELECT {$select_var} FROM {$vote_table} v {$join_sql} {$where} GROUP BY v.user_ip ORDER BY {$order_by} LIMIT %d OFFSET %d",
 					$args['per_page'],
 					$offset
 				),
@@ -466,7 +471,7 @@ class Votes {
 	/**
 	 * Remove entry from vote table depending on client ID and user IP.
 	 *
-	 * @params array $args Arguments for removing vote.
+	 * @param array $args Arguments for removing vote.
 	 *
 	 * @return bool|WP_Error
 	 */
