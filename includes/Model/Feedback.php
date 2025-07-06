@@ -19,11 +19,11 @@ use wpRigel\Pollify\Votes;
  */
 abstract class Feedback {
 
-		/**
-		 * Poll data.
-		 *
-		 * @var array
-		 */
+	/**
+	 * Poll data.
+	 *
+	 * @var array
+	 */
 	private array $data = [
 		'id'          => 0,
 		'client_id'   => '',
@@ -281,5 +281,41 @@ abstract class Feedback {
 		$result = Votes::get_instance()->get_ip_votes( $args );
 
 		return $result;
+	}
+
+	/**
+	 * Common validation for voting.
+	 *
+	 * @param array $options Vote options.
+	 *
+	 * @return true|WP_Error
+	 */
+	protected function validate_vote_request( array $options ) {
+		$settings = $this->get_settings();
+
+		if ( empty( $options ) ) {
+			return new WP_Error( 'empty-options', __( 'Options are empty.', 'poll-creator' ), [ 'status' => 400 ] );
+		}
+
+		if ( $this->is_poll_closed() ) {
+			return new WP_Error( 'poll-closed', wp_kses_post( $settings['closePollmessage'] ?? __( 'This poll is closed', 'poll-creator' ) ), [ 'status' => 400 ] );
+		}
+
+		$voter = new Voter();
+
+		if (
+			! empty( $settings['allowedPerComputerResponse'] )
+			&& $voter->is_already_voted( $this->get_client_id() )
+		) {
+			return new WP_Error( 'already-voted', __( 'You have already voted.', 'poll-creator' ), [ 'status' => 400 ] );
+		}
+
+		// Now introduce a filter to allow overriding the validation.
+		return apply_filters(
+			'pollify_feedback_validate_vote_request',
+			true,
+			$this,
+			$options
+		);
 	}
 }

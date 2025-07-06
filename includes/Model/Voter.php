@@ -182,23 +182,30 @@ class Voter {
 	 * @return boolean
 	 */
 	public function is_already_voted( string $client_id ): bool {
-		$votes = Votes::get_instance()->get_votes(
-			[
-				'per_page'  => 1,
-				'client_id' => $client_id,
-				'user_id'   => $this->get_user_id(),
-			]
-		);
+
+		$vote_args = [
+			'per_page'  => 1,
+			'client_id' => $client_id,
+		];
+
+		// Check if user is logged in or not. If logged then check the user ID. If not then check the user IP.
+		if ( $this->get_user_id() > 0 ) {
+			$vote_args['user_id'] = $this->get_user_id();
+		} else {
+			$vote_args['ip'] = $this->get_user_ip();
+		}
+
+		$votes = Votes::get_instance()->get_votes( $vote_args );
 
 		if ( ! empty( $votes ) ) {
 			return true;
 		}
 
-		$votes = Votes::get_instance()->get_ip_votes(
+		$votes = Votes::get_instance()->get_votes(
 			[
 				'per_page'  => 1,
 				'client_id' => $client_id,
-				'user_ip'   => $this->get_user_ip(),
+				'ip'        => $this->get_user_ip(),
 			]
 		);
 

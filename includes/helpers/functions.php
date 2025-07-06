@@ -356,11 +356,23 @@ function pollify_get_formatted_country_votes( $data ) {
  *
  * @return array
  */
-function pollify_poll_results_page_nav() {
-	$poll_id = pollify_filter_input( INPUT_GET, 'poll_id', POLLIFY_FILTER_SANITIZE_STRING );
+function pollify_poll_results_page_nav( $poll = null ) {
 
-	return [
-		[
+	// check if the poll is null or wp_error. then try to get the poll id from the request.
+	if ( is_null( $poll ) || is_wp_error( $poll ) ) {
+		// Get the poll ID from the request.
+		$poll_id = pollify_filter_input( INPUT_GET, 'poll_id', POLLIFY_FILTER_SANITIZE_STRING );
+
+		if ( empty( $poll_id ) ) {
+			return [];
+		}
+	} else {
+		// Get the poll ID from the poll object.
+		$poll_id = $poll->get_client_id();
+	}
+
+	$nav = [
+		'overview' => [
 			'title' => __( 'Overview', 'poll-creator' ),
 			'slug'  => 'overview',
 			'icon'  => 'dashicons-dashboard',
@@ -373,7 +385,7 @@ function pollify_poll_results_page_nav() {
 				admin_url( 'admin.php' )
 			),
 		],
-		[
+		'votes' => [
 			'title' => __( 'Votes', 'poll-creator' ),
 			'slug'  => 'votes',
 			'icon'  => 'dashicons-thumbs-up',
@@ -387,7 +399,7 @@ function pollify_poll_results_page_nav() {
 				admin_url( 'admin.php' )
 			),
 		],
-		[
+		'ip-details' => [
 			'title' => __( 'IP Details', 'poll-creator' ),
 			'slug'  => 'ip-details',
 			'icon'  => 'dashicons-chart-area',
@@ -402,6 +414,8 @@ function pollify_poll_results_page_nav() {
 			),
 		],
 	];
+
+	return apply_filters( 'pollify_poll_results_page_nav', $nav, $poll );
 }
 
 /**
@@ -472,7 +486,7 @@ function pollify_generate_shorthand_border_styles( $type, $border ) {
  * @param string $ip   The IP address to display.
  * @param object $poll The poll object.
  *
- * @return void
+ * @return string
  */
 function pollify_display_ip_with_actions( $ip, $poll ) {
 	$tab = pollify_filter_input( INPUT_GET, 'tab', POLLIFY_FILTER_SANITIZE_STRING ) ?: '';
@@ -482,8 +496,8 @@ function pollify_display_ip_with_actions( $ip, $poll ) {
 			[
 				'action'       => 'pollify_remove_ip',
 				'poll_id'      => $poll->get_client_id(),
-				'ip_address'   => rawurlencode( $ip ),
-				'redirect_url' => rawurlencode(
+				'ip_address'   => urlencode( $ip ),
+				'redirect_url' => urlencode(
 					add_query_arg(
 						[
 							'page'    => 'pollify',
@@ -507,11 +521,12 @@ function pollify_display_ip_with_actions( $ip, $poll ) {
 				'url'     => $remove_url,
 				'class'   => 'pollify-remove-ip',
 				'label'   => __( 'Remove', 'poll-creator' ),
-				'style'   => 'color: red;',
+				'style'   => 'color: red;margin-left: 8px;',
 				'onclick' => sprintf(
 					"return confirm('%s');",
 					esc_js( __( 'Are you sure you want to remove all votes from this IP? This operation cannot be undone. Just make sure before proceed', 'poll-creator' ) )
 				),
+				// 'data' => [ 'foo' => 'bar' ], // Example usage
 			],
 		],
 		$ip,
@@ -525,13 +540,15 @@ function pollify_display_ip_with_actions( $ip, $poll ) {
 				<a
 					href="<?php echo esc_url( $action['url'] ); ?>"
 					class="<?php echo esc_attr( $action['class'] ); ?>"
+					<?php if ( ! empty( $action['style'] ) ) : ?>style="<?php echo esc_attr( $action['style'] ); ?>"<?php endif; ?>
+					<?php if ( ! empty( $action['onclick'] ) ) : ?>onclick="<?php echo esc_attr( $action['onclick'] ); ?>"<?php endif; ?>
 					<?php
-					if ( ! empty( $action['style'] ) ) {
-						echo 'style="' . esc_attr( $action['style'] ) . '" ';
-					}
-					if ( ! empty( $action['onclick'] ) ) {
-						echo 'onclick="' . esc_attr( $action['onclick'] ) . '"';
-					}
+					// Add data attributes if provided.
+					if ( ! empty( $action['data'] ) && is_array( $action['data'] ) ) :
+						foreach ( $action['data'] as $data_key => $data_value ) :
+							printf( ' data-%s="%s"', esc_attr( $data_key ), esc_attr( $data_value ) );
+						endforeach;
+					endif;
 					?>
 				>
 					<?php echo esc_html( $action['label'] ); ?>
