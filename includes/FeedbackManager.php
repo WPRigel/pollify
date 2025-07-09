@@ -88,6 +88,27 @@ class FeedbackManager {
 		// Join with wp_pollify_vote table and get the total count of votes related to client id.
 		$join = $wpdb->prepare( 'LEFT JOIN %i AS vote ON vote.client_id = poll.client_id', $wpdb->prefix . 'pollify_vote' );
 
+		// If we pass count parament true in args then just count the polls and return the count.
+		if ( ! empty( $args['count'] ) && $args['count'] ) {
+			// Implement cache for poll data.
+			$cache_key_count = 'polls_count_' . md5( maybe_serialize( $args ) );
+			$count           = wp_cache_get( $cache_key_count, 'pollify_poll_cache' );
+
+			if ( false === $count ) {
+				$count = $wpdb->get_var(
+					$wpdb->prepare(
+						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+						"SELECT COUNT(poll.id) FROM %i as poll {$where}",
+						$table_name
+					)
+				);
+
+				wp_cache_set( $cache_key_count, $count, 'pollify_poll_cache', 15 * MINUTE_IN_SECONDS );
+			}
+
+			return intval( $count );
+		}
+
 		$where = apply_filters(
 			'pollify_all_polls_where_sql',
 			$where,
@@ -99,26 +120,6 @@ class FeedbackManager {
 			$join,
 			$args
 		);
-		// If we pass count parament true in args then just count the polls and return the count.
-		if ( ! empty( $args['count'] ) && $args['count'] ) {
-			// Implement cache for poll data.
-			$cache_key_count = 'polls_count_' . md5( maybe_serialize( $args ) );
-			$count           = wp_cache_get( $cache_key_count, 'pollify_poll_cache' );
-
-			if ( false === $count ) {
-				$count = $wpdb->get_var(
-					$wpdb->prepare(
-						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-						"SELECT COUNT(poll.id) FROM %i as poll $join {$where}",
-						$table_name
-					)
-				);
-
-				wp_cache_set( $cache_key_count, $count, 'pollify_poll_cache', 15 * MINUTE_IN_SECONDS );
-			}
-
-			return intval( $count );
-		}
 
 		// Implement orderby clause sanitization.
 		$order_by = sanitize_sql_orderby( "{$args['orderby']} {$args['order']}" );
