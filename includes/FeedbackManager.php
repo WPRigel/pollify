@@ -88,6 +88,17 @@ class FeedbackManager {
 		// Join with wp_pollify_vote table and get the total count of votes related to client id.
 		$join = $wpdb->prepare( 'LEFT JOIN %i AS vote ON vote.client_id = poll.client_id', $wpdb->prefix . 'pollify_vote' );
 
+		$where = apply_filters(
+			'pollify_all_polls_where_sql',
+			$where,
+			$args
+		);
+
+		$join = apply_filters(
+			'pollify_all_polls_join_sql',
+			$join,
+			$args
+		);
 		// If we pass count parament true in args then just count the polls and return the count.
 		if ( ! empty( $args['count'] ) && $args['count'] ) {
 			// Implement cache for poll data.
@@ -98,7 +109,7 @@ class FeedbackManager {
 				$count = $wpdb->get_var(
 					$wpdb->prepare(
 						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-						"SELECT COUNT(`id`) FROM %i as poll {$where}",
+						"SELECT COUNT(poll.id) FROM %i as poll $join {$where}",
 						$table_name
 					)
 				);
