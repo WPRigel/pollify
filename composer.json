@@ -2,6 +2,9 @@
     "name": "wprigel/pollify",
     "type": "wordpress-plugin",
     "description": "Ultimate Poll Creator and Survey Maker Plugin for WordPress",
+    "require": {
+        "freemius/wordpress-sdk": "^2.12"
+    },
     "require-dev": {
         "wp-coding-standards/wpcs": "^3.0",
         "phpcompatibility/phpcompatibility-wp": "*",

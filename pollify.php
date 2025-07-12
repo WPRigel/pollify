@@ -90,6 +90,44 @@ if ( ! autoload() ) {
 	return;
 }
 
+if ( ! function_exists( 'pollify_fs' ) ) {
+    // Create a helper function for easy SDK access.
+    function pollify_fs() {
+        global $pollify_fs;
+
+        if ( ! isset( $pollify_fs ) ) {
+            // Include Freemius SDK.
+            // SDK is auto-loaded through composer
+            $pollify_fs = fs_dynamic_init( array(
+                'id'                  => '19429',
+                'slug'                => 'poll-creator',
+                'type'                => 'plugin',
+                'public_key'          => 'pk_5f6196fbe970ff1f55a2b405720cf',
+                'is_premium'          => false,
+                'has_addons'          => false,
+                'has_paid_plans'      => true,
+                'menu'                => array(
+                    'slug' => 'pollify',
+                ),
+				'parallel_activation' => array(
+					'enabled'                  => true,
+					'premium_version_basename' => 'poll-creator-pro/pollify-pro.php',
+				),
+            ) );
+        }
+
+        return $pollify_fs;
+    }
+
+    // Init Freemius.
+    pollify_fs();
+    // Signal that SDK was initiated.
+    do_action( 'pollify_fs_loaded' );
+
+	pollify_fs()->add_filter( 'pricing/show_annual_in_monthly', '__return_false' );
+}
+
+
 // Load all common helper functions.
 require_once POLLIFY_PATH . '/includes/helpers/functions.php';
 

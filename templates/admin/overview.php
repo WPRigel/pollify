@@ -20,10 +20,11 @@ $updated_message = pollify_filter_input( INPUT_GET, 'updated', POLLIFY_FILTER_SA
 ?>
 
 <div class="wrap pollify-poll-details-wrap">
+	<h1></h1>
 	<div class="heading-wrap">
-		<h1>
+		<h3>
 			<span><?php echo wp_kses_post( $poll->get_title() ); ?></span>
-		</h1>
+		</h3>
 		<a href="<?php echo esc_url( add_query_arg( [ 'page' => 'pollify' ], admin_url( 'admin.php' ) ) ); ?>" class="page-title-action">
 			<?php esc_html_e( 'Back to list', 'poll-creator' ); ?>
 		</a>
