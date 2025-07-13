@@ -16,7 +16,7 @@
 		"start:custom": "wp-scripts start src/global/js/admin.js --output-path=assets/build",
 		"build:custom": "wp-scripts build src/global/js/admin.js --output-path=assets/build",
 		"test:unit": "wp-scripts test-unit-js",
-		"makepot": "rm -rf languages/poll-creator-pro.pot && wp i18n make-pot . languages/poll-creator-pro.pot --exclude=vendor,node_modules,build,assets/build --ignore-domain"
+		"makepot": "rm -rf languages/poll-creator.pot && wp i18n make-pot . languages/poll-creator.pot --exclude=vendor,node_modules,build,assets/build --ignore-domain"
 	},
 	"files": [
 		"assets",
