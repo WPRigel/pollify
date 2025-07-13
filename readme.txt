@@ -4,7 +4,7 @@ Tags: poll plugin, poll, poll maker, vote, survey
 Requires at least: 6.1
 Tested up to: 6.8.1
 Requires PHP: 8.0
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -198,6 +198,16 @@ Sure, there is! Check out our [official documentation](https://wprigel.com/docs/
 
 == Changelog ==
 
+v1.0.6 -> July 14, 2025
+--------------------------------------------
+- [New] Added feemius sdk
+- [New] Added few filters and actions for extending the features
+- [Tweak] Update few codebase for better performance
+- [Tweak] Added sql filter for chagning the quires
+- [Fix] Fixed a warning that comes for empty poll on list
+- [Fix] Fixed is already voted function issues which fails to determine the user status
+- [Fix] Fixed feedback count query
+
 v1.0.5 -> June 12, 2025
 --------------------------------------------
 - [New] Added vote remove option using IP address.
@@ -221,7 +231,9 @@ v1.0.3 -> December 25, 2024
 - [feat] Added user per response chceckout when user can vote multiple times depending on the poll settings.
 - [fix] Fixed delete block issue when some delete the block from editor.
 - [fix] Fixed some typo.
-- [fix] Fixed undefined warning on poll list table if status is not set.
+- [fix] Fixed a warning that comes for empty poll on list
+- [Fix] Fixed is already voted function issues which fails to determine the user status
+- [Fix] Fixed feedback count query
 
 v1.0.2 -> September 30, 2024
 --------------------------------------------
