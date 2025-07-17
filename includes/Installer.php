@@ -58,6 +58,9 @@ class Installer {
 		$this->create_poll_table();
 		$this->create_poll_option_table();
 		$this->create_poll_vote_table();
+
+		// Trigger an action after creating tables.
+		do_action( 'pollify_run_after_creating_tables' );
 	}
 
 	/**

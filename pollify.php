@@ -3,7 +3,7 @@
  * Plugin Name: Pollify
  * Plugin URI: http://wprigel.com/product/poll-creator/
  * Description: Pollify is the ultimate poll creator and survey maker plugin for WordPress, 100% powered by the Gutenberg editor. No short code required, no capping on vote counts. Enjoy the freedom & boost user engagement.
- * Version: 1.0.5
+ * Version: 1.0.6
  * Author: wprigel
  * Author URI: http://wprigel.com/
  * License: GPL2
@@ -49,7 +49,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define some constant for getting path and urls and version of the plugin.
-define( 'POLLIFY_VERSION', '1.0.5' );
+define( 'POLLIFY_VERSION', '1.0.6' );
 define( 'POLLIFY_PATH', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
 define( 'POLLIFY_ASSET_PATH', untrailingslashit( POLLIFY_PATH . '/assets' ) );
 define( 'POLLIFY_ASSET_BUILD_PATH', untrailingslashit( POLLIFY_PATH . '/assets/build' ) );
@@ -89,6 +89,43 @@ function autoload(): bool {
 if ( ! autoload() ) {
 	return;
 }
+
+if ( ! function_exists( 'pollify_fs' ) ) {
+    // Create a helper function for easy SDK access.
+    function pollify_fs() {
+        global $pollify_fs;
+
+        if ( ! isset( $pollify_fs ) ) {
+            // SDK is auto-loaded through composer
+            $pollify_fs = fs_dynamic_init( array(
+                'id'                  => '19429',
+                'slug'                => 'poll-creator',
+                'type'                => 'plugin',
+                'public_key'          => 'pk_5f6196fbe970ff1f55a2b405720cf',
+                'is_premium'          => false,
+                'has_addons'          => false,
+                'has_paid_plans'      => true,
+                'menu'                => array(
+                    'slug' => 'pollify',
+                ),
+				'parallel_activation' => array(
+					'enabled'                  => true,
+					'premium_version_basename' => 'poll-creator-pro/pollify-pro.php',
+				),
+            ) );
+        }
+
+        return $pollify_fs;
+    }
+
+    // Init Freemius.
+    pollify_fs();
+    // Signal that SDK was initiated.
+    do_action( 'pollify_fs_loaded' );
+
+	pollify_fs()->add_filter( 'pricing/show_annual_in_monthly', '__return_false' );
+}
+
 
 // Load all common helper functions.
 require_once POLLIFY_PATH . '/includes/helpers/functions.php';

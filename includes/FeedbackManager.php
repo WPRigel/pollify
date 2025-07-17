@@ -98,7 +98,7 @@ class FeedbackManager {
 				$count = $wpdb->get_var(
 					$wpdb->prepare(
 						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-						"SELECT COUNT(`id`) FROM %i as poll {$where}",
+						"SELECT COUNT(poll.id) FROM %i as poll {$where}",
 						$table_name
 					)
 				);
@@ -108,6 +108,18 @@ class FeedbackManager {
 
 			return intval( $count );
 		}
+
+		$where = apply_filters(
+			'pollify_all_polls_where_sql',
+			$where,
+			$args
+		);
+
+		$join = apply_filters(
+			'pollify_all_polls_join_sql',
+			$join,
+			$args
+		);
 
 		// Implement orderby clause sanitization.
 		$order_by = sanitize_sql_orderby( "{$args['orderby']} {$args['order']}" );

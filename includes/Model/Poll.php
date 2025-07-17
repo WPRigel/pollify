@@ -28,28 +28,14 @@ class Poll extends Feedback {
 	 * @return array|WP_Error
 	 */
 	public function vote( array $options = [], $request = [] ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
-		// Get poll settings.
+		// Use the shared validation method.
+		$validation = $this->validate_vote_request( $options );
+
+		if ( is_wp_error( $validation ) ) {
+			return $validation;
+		}
+
 		$settings = $this->get_settings();
-
-		// Check if options is empty or not.
-		if ( empty( $options ) ) {
-			return new WP_Error( 'empty-options', __( 'Options are empty.', 'poll-creator' ), [ 'status' => 400 ] );
-		}
-
-		if ( $this->is_poll_closed() ) {
-			return new WP_Error( 'poll-closed', wp_kses_post( $settings['closePollmessage'] ?? __( 'This poll is closed', 'poll-creator' ) ), [ 'status' => 400 ] );
-		}
-
-		// Get the voter details from Voter model class.
-		$voter = new Voter();
-
-		// If Poll settings is enabled for per computer vote then check if user already voted or not.
-		if (
-			! empty( $settings['allowedPerComputerResponse'] )
-			&& $voter->is_already_voted( $this->get_client_id() )
-		) {
-			return new WP_Error( 'already-voted', __( 'You have already voted.', 'poll-creator' ), [ 'status' => 400 ] );
-		}
 
 		// Save the vote data.
 		$vote = Votes::get_instance()->vote(

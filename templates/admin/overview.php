@@ -15,15 +15,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 $poll_id         = pollify_filter_input( INPUT_GET, 'poll_id', POLLIFY_FILTER_SANITIZE_STRING );
 $poll            = ! empty( $poll ) ? $poll : \wpRigel\Pollify\FeedbackManager::get_instance()->get( $poll_id );
 $nav_tab         = pollify_filter_input( INPUT_GET, 'tab', POLLIFY_FILTER_SANITIZE_STRING ) ?: 'overview';
-$navigations     = pollify_poll_results_page_nav();
+$navigations     = pollify_poll_results_page_nav( $poll );
 $updated_message = pollify_filter_input( INPUT_GET, 'updated', POLLIFY_FILTER_SANITIZE_STRING );
 ?>
 
 <div class="wrap pollify-poll-details-wrap">
+	<h1></h1>
 	<div class="heading-wrap">
-		<h1>
+		<h3>
 			<span><?php echo wp_kses_post( $poll->get_title() ); ?></span>
-		</h1>
+		</h3>
 		<a href="<?php echo esc_url( add_query_arg( [ 'page' => 'pollify' ], admin_url( 'admin.php' ) ) ); ?>" class="page-title-action">
 			<?php esc_html_e( 'Back to list', 'poll-creator' ); ?>
 		</a>
@@ -327,7 +328,7 @@ $updated_message = pollify_filter_input( INPUT_GET, 'updated', POLLIFY_FILTER_SA
 				 * @param string $nav_tab Navigation tab.
 				 * @param array  $navigations Navigations.
 				 */
-				do_action( 'pollify_load_results_nav_content', $nav_tab, $navigations );
+				do_action( 'pollify_load_results_nav_content', $nav_tab, $navigations, $poll );
 			?>
 		<?php endif; ?>
 	</div>

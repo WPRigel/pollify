@@ -227,14 +227,18 @@ class PollsListTable extends \WP_List_Table {
 	 */
 	public function column_response( $item ) {
 		// Get link for view-results page.
-		$view_results_link = add_query_arg(
-			[
-				'page'    => 'poll-creator',
-				'action'  => 'view_results',
-				'tab'     => 'votes',
-				'poll_id' => $item->get_client_id(),
-			],
-			admin_url( 'admin.php' )
+		$view_results_link = apply_filters(
+			'pollify_list_table_view_response_url',
+			add_query_arg(
+				[
+					'page'    => 'pollify',
+					'action'  => 'view_results',
+					'tab'     => 'votes',
+					'poll_id' => $item->get_client_id(),
+				],
+				admin_url( 'admin.php' )
+			),
+			$item
 		);
 
 		ob_start();

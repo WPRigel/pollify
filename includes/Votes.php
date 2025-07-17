@@ -179,9 +179,14 @@ class Votes {
 			$where .= $wpdb->prepare( ' AND v.user_ip LIKE %s', '%' . sanitize_text_field( $args['search'] ) . '%' );
 		}
 
-		$offset = ( $args['page'] - 1 ) * $args['per_page'];
+		// Filters for join, select, where
+		$join_sql   = '';
+		$select_var = 'v.*, o.option, o.option_id';
+		$where      = apply_filters( 'pollify_votes_where_sql', $where, $args );
+		$join_sql   = apply_filters( 'pollify_votes_join_sql', $join_sql, $args );
+		$select_var = apply_filters( 'pollify_votes_select_var', $select_var, $args );
 
-		// Set orderby clause using prepare.
+		$offset   = ( $args['page'] - 1 ) * $args['per_page'];
 		$order_by = sanitize_sql_orderby( "{$args['orderby']} {$args['order']}" );
 
 		if ( ! empty( $args['count'] ) && $args['count'] ) {
@@ -194,9 +199,8 @@ class Votes {
 				$votes = $wpdb->get_var(
 					$wpdb->prepare(
 						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-						"SELECT COUNT(v.id), o.option, o.option_id FROM %i v LEFT JOIN %i o ON v.option_id = o.option_id {$where}",
-						$wpdb->prefix . $this->table_name,
-						$wpdb->prefix . 'pollify_poll_options'
+						"SELECT COUNT(v.id) FROM %i v LEFT JOIN {$wpdb->prefix}pollify_poll_options o ON v.option_id = o.option_id {$join_sql} {$where}",
+						$wpdb->prefix . $this->table_name
 					)
 				);
 
@@ -215,7 +219,7 @@ class Votes {
 			$votes = $wpdb->get_results(
 				$wpdb->prepare(
 					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-					"SELECT v.*, o.option, o.option_id FROM {$wpdb->prefix}{$this->table_name} v LEFT JOIN {$wpdb->prefix}pollify_poll_options o ON v.option_id = o.option_id {$where} ORDER BY {$order_by} LIMIT %d OFFSET %d",
+					"SELECT {$select_var} FROM {$wpdb->prefix}{$this->table_name} v LEFT JOIN {$wpdb->prefix}pollify_poll_options o ON v.option_id = o.option_id {$join_sql} {$where} ORDER BY {$order_by} LIMIT %d OFFSET %d",
 					$args['per_page'],
 					$offset
 				),
@@ -253,6 +257,14 @@ class Votes {
 
 		// Get poll options.
 
+		// Filters for join, select, where
+		$join_sql   = '';
+		$select_var = 'option_id, COUNT(*) as votes, COUNT(DISTINCT user_ip) as unique_votes';
+		$where      = $wpdb->prepare( 'WHERE v.client_id = %s', $feedback->get_client_id() );
+		$where      = apply_filters( 'pollify_results_where_sql', $where, $feedback );
+		$join_sql   = apply_filters( 'pollify_results_join_sql', $join_sql, $feedback );
+		$select_var = apply_filters( 'pollify_results_select_var', $select_var, $feedback );
+
 		// Implement caching.
 		$cache_key = 'pollify_results_' . $feedback->get_client_id();
 		$results   = wp_cache_get( $cache_key, 'pollify_vote_cache' );
@@ -260,11 +272,8 @@ class Votes {
 		if ( false === $results ) {
 			// Get vote data.
 			$votes = $wpdb->get_results(
-				$wpdb->prepare(
-					'SELECT option_id, COUNT(*) as votes, COUNT(DISTINCT user_ip) as unique_votes FROM %i WHERE client_id = %s GROUP BY option_id',
-					$wpdb->prefix . $this->table_name,
-					$feedback->get_client_id()
-				),
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"SELECT {$select_var} FROM {$wpdb->prefix}{$this->table_name} v {$join_sql} {$where} GROUP BY option_id",
 				ARRAY_A
 			);
 
@@ -349,6 +358,9 @@ class Votes {
 		if ( ! empty( $args['search'] ) ) {
 			$where .= $wpdb->prepare( ' AND v.user_ip LIKE %s', '%' . sanitize_text_field( $args['search'] ) . '%' );
 		}
+
+		// Add filter for where SQL, for extensibility.
+		$where = apply_filters( 'pollify_ip_votes_where_sql', $where, $args );
 
 		$offset = ( $args['page'] - 1 ) * $args['per_page'];
 
