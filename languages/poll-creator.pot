@@ -2,14 +2,14 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Pollify 1.0.4\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pollify\n"
+"Project-Id-Version: Pollify 1.0.6\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/poll-creator\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-06-12T17:04:52+00:00\n"
+"POT-Creation-Date: 2025-07-13T18:32:01+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.9.0\n"
 
@@ -47,13 +47,13 @@ msgstr ""
 
 #: includes/Admin/IPsListTable.php:79
 #: includes/Admin/VotesListTable.php:77
-#: templates/admin/overview.php:171
+#: templates/admin/overview.php:172
 msgid "Location"
 msgstr ""
 
 #: includes/Admin/IPsListTable.php:80
-#: includes/helpers/functions.php:377
-#: templates/admin/overview.php:120
+#: includes/helpers/functions.php:389
+#: templates/admin/overview.php:121
 msgid "Votes"
 msgstr ""
 
@@ -65,8 +65,8 @@ msgstr ""
 
 #: includes/Admin/IPsListTable.php:141
 #: includes/Admin/VotesListTable.php:155
-#: templates/admin/overview.php:141
-#: templates/admin/overview.php:183
+#: templates/admin/overview.php:142
+#: templates/admin/overview.php:184
 msgid "Unknown"
 msgstr ""
 
@@ -76,7 +76,7 @@ msgid "All countries"
 msgstr ""
 
 #: includes/Admin/IPsListTable.php:169
-#: includes/Admin/PollsListTable.php:300
+#: includes/Admin/PollsListTable.php:304
 #: includes/Admin/VotesListTable.php:205
 msgid "Filter"
 msgstr ""
@@ -149,14 +149,14 @@ msgid "View frontend"
 msgstr ""
 
 #: includes/Admin/PollsListTable.php:193
-#: includes/Admin/PollsListTable.php:276
+#: includes/Admin/PollsListTable.php:280
 #: src/poll/edit.js:132
 msgid "Open"
 msgstr ""
 
 #: includes/Admin/PollsListTable.php:194
 #: includes/Admin/PollsListTable.php:208
-#: includes/Admin/PollsListTable.php:277
+#: includes/Admin/PollsListTable.php:281
 msgid "Closed"
 msgstr ""
 
@@ -179,21 +179,21 @@ msgid "Will be ended on %s"
 msgstr ""
 
 #. translators: %s: votes count
-#: includes/Admin/PollsListTable.php:248
-#: templates/admin/overview.php:72
+#: includes/Admin/PollsListTable.php:252
+#: templates/admin/overview.php:73
 #: templates/results/horizointal-bar-chart.php:31
 msgid "%s votes"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:275
+#: includes/Admin/PollsListTable.php:279
 msgid "All"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:296
+#: includes/Admin/PollsListTable.php:300
 msgid "All types"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:297
+#: includes/Admin/PollsListTable.php:301
 msgid "Poll"
 msgstr ""
 
@@ -210,7 +210,7 @@ msgid "Name"
 msgstr ""
 
 #: includes/Admin/VotesListTable.php:78
-#: templates/admin/overview.php:172
+#: templates/admin/overview.php:173
 msgid "IP Address"
 msgstr ""
 
@@ -223,7 +223,7 @@ msgid "Vote date"
 msgstr ""
 
 #: includes/Admin/VotesListTable.php:137
-#: templates/admin/overview.php:244
+#: templates/admin/overview.php:245
 msgid "Guest"
 msgstr ""
 
@@ -245,68 +245,68 @@ msgid "Invalid feedback type."
 msgstr ""
 
 #. translators: %s: Field name
-#: includes/FeedbackManager.php:183
+#: includes/FeedbackManager.php:195
 msgid "Error: %s cannot be left empty. Please fill the required information"
 msgstr ""
 
-#: includes/FeedbackManager.php:208
-#: includes/FeedbackManager.php:211
+#: includes/FeedbackManager.php:220
+#: includes/FeedbackManager.php:223
 msgid "Options must contain type and option value"
 msgstr ""
 
-#: includes/FeedbackManager.php:217
+#: includes/FeedbackManager.php:229
 msgid "Client id is not valid"
 msgstr ""
 
-#: includes/FeedbackManager.php:254
+#: includes/FeedbackManager.php:266
 msgid "Poll not updated successfully"
 msgstr ""
 
-#: includes/FeedbackManager.php:282
+#: includes/FeedbackManager.php:294
 msgid "Poll not created successfully"
 msgstr ""
 
-#: includes/FeedbackManager.php:329
+#: includes/FeedbackManager.php:341
 msgid "Poll not found"
 msgstr ""
 
-#: includes/FeedbackManager.php:376
-#: includes/FeedbackManager.php:386
+#: includes/FeedbackManager.php:388
+#: includes/FeedbackManager.php:398
 msgid "Poll not deleted successfully"
 msgstr ""
 
-#: includes/FeedbackManager.php:408
+#: includes/FeedbackManager.php:420
 msgid "Poll ID cannot be empty"
 msgstr ""
 
-#: includes/helpers/functions.php:364
+#: includes/helpers/functions.php:376
 msgid "Overview"
 msgstr ""
 
-#: includes/helpers/functions.php:391
+#: includes/helpers/functions.php:403
 msgid "IP Details"
 msgstr ""
 
-#: includes/helpers/functions.php:509
+#: includes/helpers/functions.php:523
 msgid "Remove"
 msgstr ""
 
-#: includes/helpers/functions.php:513
+#: includes/helpers/functions.php:527
 msgid "Are you sure you want to remove all votes from this IP? This operation cannot be undone. Just make sure before proceed"
 msgstr ""
 
-#: includes/Model/Poll.php:36
+#: includes/Model/Feedback.php:297
 msgid "Options are empty."
 msgstr ""
 
-#: includes/Model/Poll.php:40
+#: includes/Model/Feedback.php:301
 #: templates/poll/poll.php:145
 #: src/poll/edit.js:164
 #: src/poll/edit.js:166
 msgid "This poll is closed"
 msgstr ""
 
-#: includes/Model/Poll.php:51
+#: includes/Model/Feedback.php:310
 msgid "You have already voted."
 msgstr ""
 
@@ -397,75 +397,75 @@ msgstr ""
 msgid "Sorry vote not accepted."
 msgstr ""
 
-#: includes/Votes.php:484
+#: includes/Votes.php:501
 msgid "Client ID or User IP is empty."
 msgstr ""
 
-#: templates/admin/overview.php:28
+#: templates/admin/overview.php:29
 msgid "Back to list"
 msgstr ""
 
-#: templates/admin/overview.php:57
+#: templates/admin/overview.php:58
 msgid "At a glance"
 msgstr ""
 
 #. translators: %s: percentage
-#: templates/admin/overview.php:78
-#: templates/admin/overview.php:85
+#: templates/admin/overview.php:79
+#: templates/admin/overview.php:86
 #: templates/results/horizointal-bar-chart.php:37
 #: templates/results/horizointal-bar-chart.php:44
 msgid "%s%"
 msgstr ""
 
 #. translators: %s: total votes
-#: templates/admin/overview.php:95
+#: templates/admin/overview.php:96
 msgid "Total votes: %s"
 msgstr ""
 
-#: templates/admin/overview.php:100
+#: templates/admin/overview.php:101
 #: templates/results/horizointal-bar-chart.php:59
 msgid "No results found for this poll"
 msgstr ""
 
-#: templates/admin/overview.php:108
+#: templates/admin/overview.php:109
 msgid "Popular Location"
 msgstr ""
 
-#: templates/admin/overview.php:120
+#: templates/admin/overview.php:121
 msgid "Country"
 msgstr ""
 
-#: templates/admin/overview.php:148
-#: templates/admin/overview.php:212
+#: templates/admin/overview.php:149
+#: templates/admin/overview.php:213
 msgid "No location data found for this poll"
 msgstr ""
 
-#: templates/admin/overview.php:155
+#: templates/admin/overview.php:156
 msgid "IP overviews"
 msgstr ""
 
-#: templates/admin/overview.php:173
+#: templates/admin/overview.php:174
 msgid "Vote count"
 msgstr ""
 
-#: templates/admin/overview.php:209
+#: templates/admin/overview.php:210
 msgid "See all IP's"
 msgstr ""
 
-#: templates/admin/overview.php:221
+#: templates/admin/overview.php:222
 msgid "Recent votes"
 msgstr ""
 
-#: templates/admin/overview.php:278
+#: templates/admin/overview.php:279
 msgid "See all votes"
 msgstr ""
 
-#: templates/admin/overview.php:282
+#: templates/admin/overview.php:283
 msgid "No recent votes found for this poll"
 msgstr ""
 
-#: templates/admin/overview.php:298
-#: templates/admin/overview.php:315
+#: templates/admin/overview.php:299
+#: templates/admin/overview.php:316
 msgid "Search by IP"
 msgstr ""
 
