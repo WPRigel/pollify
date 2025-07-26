@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-07-13T18:32:01+00:00\n"
+"POT-Creation-Date: 2025-07-26T14:26:45+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.9.0\n"
 
@@ -245,37 +245,37 @@ msgid "Invalid feedback type."
 msgstr ""
 
 #. translators: %s: Field name
-#: includes/FeedbackManager.php:195
+#: includes/FeedbackManager.php:201
 msgid "Error: %s cannot be left empty. Please fill the required information"
 msgstr ""
 
-#: includes/FeedbackManager.php:220
-#: includes/FeedbackManager.php:223
+#: includes/FeedbackManager.php:226
+#: includes/FeedbackManager.php:229
 msgid "Options must contain type and option value"
 msgstr ""
 
-#: includes/FeedbackManager.php:229
+#: includes/FeedbackManager.php:235
 msgid "Client id is not valid"
 msgstr ""
 
-#: includes/FeedbackManager.php:266
+#: includes/FeedbackManager.php:272
 msgid "Poll not updated successfully"
 msgstr ""
 
-#: includes/FeedbackManager.php:294
+#: includes/FeedbackManager.php:300
 msgid "Poll not created successfully"
 msgstr ""
 
-#: includes/FeedbackManager.php:341
+#: includes/FeedbackManager.php:347
 msgid "Poll not found"
 msgstr ""
 
-#: includes/FeedbackManager.php:388
-#: includes/FeedbackManager.php:398
+#: includes/FeedbackManager.php:394
+#: includes/FeedbackManager.php:404
 msgid "Poll not deleted successfully"
 msgstr ""
 
-#: includes/FeedbackManager.php:420
+#: includes/FeedbackManager.php:426
 msgid "Poll ID cannot be empty"
 msgstr ""
 

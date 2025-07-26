@@ -4,7 +4,7 @@ Tags: poll plugin, poll, poll maker, vote, survey
 Requires at least: 6.1
 Tested up to: 6.8.1
 Requires PHP: 8.0
-Stable tag: 1.0.6
+Stable tag: 1.0.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,8 +19,8 @@ Using the Pollify poll maker plugin, you can easily integrate polls and surveys 
 There’s **no capping with the free version**, you can get unlimited votes. Create **dynamic polls** by allowing your users to select from single or multiple options. Also, customize every detail of your online poll including title, description, and vote button text.
 
 - [Pollify Poll Creator Features at a glance](https://wprigel.com/pollify/)
-- [Pollify Free Demo](https://pollifydemo.wprigel.com/)
 - [Pollify Documentation](https://wprigel.com/docs/pollify/)
+- [Pollify Pro Pricing](https://wprigel.com/pollify-pricing/)
 
 Pollify is the ultimate WordPress poll creator plugin **100% powered by Gutenberg editor**. Add as many polls/surveys as you need, and customize your polls just as you want. **Set a specific timeline** for your polls, schedule a poll for holidays or when you’re on a vacation; it’s all up to you!
 
@@ -63,35 +63,31 @@ Visualize results with bar charts with all vote details.
 **Anonymous Polls**
 Ensure participant privacy by collecting minimal data, compliant with GDPR
 
-**Information Form**
-Gather user data with customizable fields, enriching your insights and marketing efforts (Pro).
-
 **Email Notifications**
-Receive alerts for each vote submitted, ensuring timely updates without constant dashboard checks. (Upcoming)
+Receive alerts for each vote submitted, ensuring timely updates without constant dashboard checks. (Upcoming in pro)
 
 **User Role Limitation**
-Specify user roles eligible to participate, ensuring targeted engagement. (Upcoming)
+Specify user roles eligible to participate, ensuring targeted engagement. (Upcoming in pro)
 
 **Redirection Options**
-Redirect voters post-poll, enhancing engagement and driving traffic based on their responses.
-(Pro)
+Redirect voters post-poll, enhancing engagement and driving traffic based on their responses.(Upcoming in Pro)
 
 **Google Recaptcha integration**
-Safeguard poll privacy with Google Recaptcha-protected access, ideal for confidential or targeted surveys. (Pro)
+Safeguard poll privacy with Google Recaptcha-protected access, ideal for confidential or targeted surveys. (Upcoming in Pro)
 
 **Mailchimp Integration**
-Seamlessly collect user emails for community building and email marketing efforts. (Pro)
+Seamlessly collect user emails for community building and email marketing efforts. (Upcoming in Pro)
 
 === Poll Types with Pollify: ===
 **Pollify allows 7 types of polls (including but not limited to)-**
 
 * **Choosing**: Add multiple options for users to choose from, with the option to allow custom entries
-* **Dropdown**: Present users with a dropdown menu of options for selection. (Upcoming)
-* **Up and Down vote**: Enable users to vote using like/dislike or emojis, providing quick feedback on products or content. (Upcoming)
-* **Rating**: Create rating forms, utilizing stars or emojis, to gauge user opinions on products or topics. (Upcoming pro)
-* **NPS**: Allow users to select answers within a 1-10 range. (Upcoming pro)
-* **VS**: Facilitate competition between two options, such as products or individuals, with stylish versus voting formats. (Upcoming pro)
-* **Feedback**: Solicit detailed responses from participants, allowing them to provide comprehensive answers using short text or paragraphs. (Upcoming pro)
+* **Up and Down vote**: Enable users to vote using like/dislike or emojis, providing quick feedback on products or content. (Pro)
+* **Kudos**: feature allows users to give quick, positive feedback — such as clapping or applause — without needing to write anything (Pro)
+* **Rating**: Create rating forms, utilizing stars or emojis, to gauge user opinions on products or topics. (Upcoming in pro)
+* **NPS**: Allow users to select answers within a 1-10 range. (Pro)
+* **VS**: Facilitate competition between two options, such as products or individuals, with stylish versus voting formats. (Upcoming in pro)
+* **Feedback**: Solicit detailed responses from participants, allowing them to provide comprehensive answers using short text or paragraphs. (Upcoming in pro)
 
 === Pollify Poll Maker Plugin Free Features at a Glance: ===
 
@@ -141,18 +137,21 @@ Seamlessly collect user emails for community building and email marketing effort
     - IP Details Page:
         - Display all IP addresses with total vote counts and locations.
 
-=== Pollify Poll Maker Plugin Premium Features at a Glance: ===
-- VS Type of Poll (Versus) enables the creation of polls comparing options side by side
+=== Pollify Poll Maker Plugin [Premium Features](https://wprigel.com/pollify-pricing/) at a Glance: ===
+- Kudos Polls allow users to give quick, positive feedback — such as clapping or applause — without needing to write anything.
+- Up and Down Vote Polls enable users to vote using like/dislike or emojis, providing quick feedback on products or content.
+- NPS Polls allow users to select answers within a 1-10 range, ideal for gauging customer satisfaction or loyalty.
 - User Information Form that incorporates a form to gather user details alongside poll participation.
-- Extra 5 Themes or patterns provide additional visual themes for enhancing poll appearance and engagement.
 - Voted User Location displays the geographical location of users who have voted in the poll.
-- Import/Export Polls help in Importing and exporting poll configurations for easy sharing or backup.
-- Send mail to a user (integrated with email services )
-- Leaderboard
-- Export Results to CSV allows exporting poll data into CSV format for further analysis or reporting.
-- Vote by user and role ( upcoming )
-- Results with Charts presents poll results graphically, offering visual insights for easier interpretation.
-- Email campaign using email services.
+- Results with Charts presents poll results graphically, offering visual insights for easier interpretation
+- IP blocker allows blocking votes from specific IP addresses, preventing spam or unwanted participation.
+- IP and user wise vote restriction prevents multiple votes from the same IP address or user, ensuring fair polling.
+- VS Type of Poll (Versus) enables the creation of polls comparing options side by side (Upcoming in pro)
+- Import/Export Polls help in Importing and exporting poll configurations for easy sharing or backup. (Upcoming in pro)
+- Send mail to a user (integrated with email services ) (Upcoming in pro).
+- Export Results to CSV allows exporting poll data into CSV format for further analysis or reporting. (Upcoming in pro)
+- Vote by user and role (Upcoming in pro).
+- Email campaign using email services. (Upcoming in pro).
 
 === Acknowledgements ===
 This plugin utilizes the [GeoPlugin service](https://www.geoplugin.com/) to provide geolocation functionality. This third-party service helps us determine the geographic location of users based on their IP addresses. For more information on GeoPlugin's terms of use and privacy policies, please visit [GeoPlugin Terms of Use](https://www.geoplugin.com/aup) and [GeoPlugin Privacy Policy](https://www.geoplugin.com/privacy).
@@ -178,7 +177,7 @@ First, you need to install the Pollify plugin. Now go to any post or page you wa
 = Are there any limitations in asking questions for polls or getting votes? =
 No. There are no limitations in the way of making questions for the poll. You can make a Poll yourself and add as many questions as you want. Also, there’s no limit with Pollify to generate votes from users.
 = How to upgrade to the Poll PRO version? =
-All you need to do is to click on the Upgrade button from your admin panel. It will redirect you to our official website. Choose your plan and download and upload the pro version. No worries, you will not lose your previous data. Knock our support team for further help.
+All you need to do is to click on the Upgrade button from your admin panel. It will redirect you to our [official website](https://wprigel.com/pollify-pricing/). Choose your plan and download and upload the pro version. No worries, you will not lose your previous data. Knock our support team for further help.
 = Is there any way we can check the user's IP address after the vote? =
 Yes, we can check users by IP address from the admin dashboard.
 = How to check the results in Poll? =
@@ -197,6 +196,11 @@ Sure, there is! Check out our [official documentation](https://wprigel.com/docs/
 8. IP details
 
 == Changelog ==
+
+v1.0.7 -> July 26, 2025
+--------------------------------------------
+- [Fix] List polls query issues Fixed
+- [Fix] Updated readme
 
 v1.0.6 -> July 14, 2025
 --------------------------------------------
