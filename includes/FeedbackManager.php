@@ -121,6 +121,12 @@ class FeedbackManager {
 			$args
 		);
 
+		$select = apply_filters(
+			'pollify_all_polls_select_sql',
+			'poll.*, COUNT(vote.id) as response',
+			$args
+		);
+
 		// Implement orderby clause sanitization.
 		$order_by = sanitize_sql_orderby( "{$args['orderby']} {$args['order']}" );
 
@@ -133,7 +139,7 @@ class FeedbackManager {
 			$polls = $wpdb->get_results(
 				$wpdb->prepare(
 					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-					"SELECT poll.*, COUNT(vote.id) as response FROM %i AS poll {$join} {$where} GROUP BY poll.id ORDER BY {$order_by} {$limit}",
+					"SELECT {$select} FROM %i AS poll {$join} {$where} GROUP BY poll.id ORDER BY {$order_by} {$limit}",
 					$table_name
 				),
 				ARRAY_A
