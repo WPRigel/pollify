@@ -34,7 +34,7 @@ You have full control of your polling ecosystem with Pollify's user-friendly Adm
 
 [wpRigel](https://wprigel.com) provides everything you need to make data-driven decisions, from poll lists to IP details.
 
-Elevate your polling experience with an array of Pollify premium features. Compare options with VS Type polls, gather user data with custom forms, and add personalized options for enhanced user interaction.
+Elevate your polling experience with an array of [Pollify premium features](https://wprigel.com/pollify-pricing/). Compare options with VS Type polls, gather user data with custom forms, and add personalized options for enhanced user interaction.
 
 Visualize data effortlessly with Results Charts, export insights to CSV(upcoming) for in-depth analysis, and engage users with text-based results and vote reasoning options. Plus, ensure user privacy with **Anonymous Polls** and empower multilingual audiences with **Multilingual Polls**.
 
@@ -137,7 +137,7 @@ Seamlessly collect user emails for community building and email marketing effort
     - IP Details Page:
         - Display all IP addresses with total vote counts and locations.
 
-=== Pollify Poll Maker Plugin [Premium Features](https://wprigel.com/pollify-pricing/) at a Glance: ===
+=== Pollify Poll Maker Plugin Premium Features at a Glance: ===
 - Kudos Polls allow users to give quick, positive feedback — such as clapping or applause — without needing to write anything.
 - Up and Down Vote Polls enable users to vote using like/dislike or emojis, providing quick feedback on products or content.
 - NPS Polls allow users to select answers within a 1-10 range, ideal for gauging customer satisfaction or loyalty.
