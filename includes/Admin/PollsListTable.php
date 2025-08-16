@@ -296,7 +296,7 @@ class PollsListTable extends \WP_List_Table {
 	 *
 	 * @return void
 	 */
-	protected function extra_tablenav( $which ) {
+	protected function extra_tablenav_old( $which ) {
 		if ( 'top' === $which ) {
 			$type = pollify_filter_input( INPUT_POST, 'type', POLLIFY_FILTER_SANITIZE_STRING );
 			?>
@@ -312,6 +312,43 @@ class PollsListTable extends \WP_List_Table {
 			<?php
 		}
 	}
+
+	protected function extra_tablenav( $which ) {
+		if ( 'top' === $which ) {
+			$type = pollify_filter_input( INPUT_POST, 'type', POLLIFY_FILTER_SANITIZE_STRING );
+
+			/**
+			 * Filter the available poll types.
+			 *
+			 * @param array $poll_types Associative array of value => label.
+			 */
+			$poll_types = apply_filters( 'pollify_poll_types', [
+				'all' => __( 'All types', 'poll-creator' ),
+				'poll' => __( 'Poll', 'poll-creator' ),
+			] );
+			?>
+			<div class="alignleft actions bulkactions">
+				<select name="type">
+					<?php foreach ( $poll_types as $value => $label ) : ?>
+						<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $type, true ); ?>>
+							<?php echo esc_html( $label ); ?>
+						</option>
+					<?php endforeach; ?>
+				</select>
+				<?php
+				submit_button(
+					__( 'Filter', 'poll-creator' ),
+					'',
+					'filter_action',
+					false,
+					[ 'id' => 'pollify-filter-action-button' ]
+				);
+				?>
+			</div>
+			<?php
+		}
+	}
+
 
 	/**
 	 * Prepare the items for rendering on the table.
