@@ -126,12 +126,15 @@ class PollsListTable extends \WP_List_Table {
 	public function column_title( $item ) {
 		$page         = pollify_filter_input( INPUT_GET, 'page', POLLIFY_FILTER_SANITIZE_STRING );
 		$confirm_text = __( 'Are you sure you want to reset the results? If you do reset, the results are not achievable again.', 'poll-creator' );
+		$confirm_delete_text = __( 'Are you sure you want to delete this poll ? If you do delete, the results will be gone forever.', 'poll-creator' );
 
-		$nocne = wp_create_nonce( 'pollify_reset_results' );
+		$nonce = wp_create_nonce( 'pollify_reset_results' );
+		$delete_nonce = wp_create_nonce( 'pollify_delete_poll' );
 
 		$actions = array(
 			'view'  => sprintf( '<a href="?page=%s&action=%s&poll_id=%s">' . __( 'View results', 'poll-creator' ) . '</a>', $page, 'view_results', $item->get_client_id() ),
-			'trash' => sprintf( '<a class="submitdelete" onclick="return confirm(\'%s\')" href="?page=%s&action=%s&poll_id=%s&_nonce=%s">' . __( 'Reset Results', 'poll-creator' ) . '</a>', $confirm_text, $page, 'reset_results', $item->get_client_id(), $nocne ),
+			'trash' => sprintf( '<a class="submitdelete" onclick="return confirm(\'%s\')" href="?page=%s&action=%s&poll_id=%s&_nonce=%s">' . __( 'Reset Results', 'poll-creator' ) . '</a>', $confirm_text, $page, 'reset_results', $item->get_client_id(), $nonce ),
+    		'delete' => sprintf( '<a class="submitdelete" onclick="return confirm(\'%s\')" href="?page=%s&action=%s&poll_id=%s&reference_id=%s&_nonce=%s">' . __( 'Delete', 'poll-creator' ) . '</a>', $confirm_delete_text, $page, 'delete_poll', $item->get_client_id(), $item->get_reference(), $delete_nonce )
 		);
 
 		// Wrap the title with view result link.
