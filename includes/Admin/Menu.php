@@ -331,9 +331,12 @@ class Menu {
 	}
 
 	/**
-	 * Filter blocks recursively
+	 * Filter blocks recursively.
 	 *
-	 * @return filtered blocks
+	 * @param array $blocks Array of blocks to filter.
+	 * @param mixed $poll_client_id Poll client ID to match for filtering.
+	 * @param bool  &$changed Reference variable set to true if any block is filtered.
+	 * @return array Filtered blocks.
 	 */
 	public function pollify_filter_blocks_recursive( $blocks, $poll_client_id, &$changed ) {
 		$filtered = [];
@@ -342,7 +345,7 @@ class Menu {
 			$condition = isset( $block['blockName'] ) &&
 				$block['blockName'] === 'pollify/poll' &&
 				isset( $block['attrs']['pollClientId'] ) &&
-				$block['attrs']['pollClientId'] == $poll_client_id;
+				$block['attrs']['pollClientId'] === $poll_client_id;
 
 			if ( $condition ) {
 				$changed = true;
