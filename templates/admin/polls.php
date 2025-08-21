@@ -13,6 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $reseted = pollify_filter_input( INPUT_GET, 'updated', FILTER_VALIDATE_BOOLEAN );
+$deleted = pollify_filter_input( INPUT_GET, 'deleted', FILTER_VALIDATE_BOOLEAN );
 ?>
 
 <div class="wrap">
@@ -20,7 +21,16 @@ $reseted = pollify_filter_input( INPUT_GET, 'updated', FILTER_VALIDATE_BOOLEAN )
 
 	<?php if ( $reseted ) : ?>
 	<div id="message" class="notice is-dismissible updated">
-		<p><?php esc_html_e( 'Poll results has been reseted.', 'poll-creator' ); ?></p>
+		<p><?php esc_html_e( 'Poll results have been reset.', 'poll-creator' ); ?></p>
+		<button type="button" class="notice-dismiss">
+			<span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'poll-creator' ); ?></span>
+		</button>
+	</div>
+	<?php endif; ?>
+
+	<?php if ( $deleted ) : ?>
+	<div id="message" class="notice is-dismissible updated">
+		<p><?php esc_html_e( 'Poll has been deleted successfully.', 'poll-creator' ); ?></p>
 		<button type="button" class="notice-dismiss">
 			<span class="screen-reader-text"><?php esc_html_e( 'Dismiss this notice.', 'poll-creator' ); ?></span>
 		</button>

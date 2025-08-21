@@ -1,10 +1,10 @@
 === Pollify - Ultimate Poll Creator and Survey Maker ===
 Contributors: wprigel
 Tags: poll plugin, poll, poll maker, vote, survey
-Requires at least: 6.1
-Tested up to: 6.8.1
+Requires at least: 6.0
+Tested up to: 6.8.2
 Requires PHP: 8.0
-Stable tag: 1.0.7
+Stable tag: 1.0.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,7 +34,7 @@ You have full control of your polling ecosystem with Pollify's user-friendly Adm
 
 [wpRigel](https://wprigel.com) provides everything you need to make data-driven decisions, from poll lists to IP details.
 
-Elevate your polling experience with an array of Pollify premium features. Compare options with VS Type polls, gather user data with custom forms, and add personalized options for enhanced user interaction.
+Elevate your polling experience with an array of [Pollify premium features](https://wprigel.com/pollify-pricing/). Compare options with VS Type polls, gather user data with custom forms, and add personalized options for enhanced user interaction.
 
 Visualize data effortlessly with Results Charts, export insights to CSV(upcoming) for in-depth analysis, and engage users with text-based results and vote reasoning options. Plus, ensure user privacy with **Anonymous Polls** and empower multilingual audiences with **Multilingual Polls**.
 
@@ -137,7 +137,7 @@ Seamlessly collect user emails for community building and email marketing effort
     - IP Details Page:
         - Display all IP addresses with total vote counts and locations.
 
-=== Pollify Poll Maker Plugin [Premium Features](https://wprigel.com/pollify-pricing/) at a Glance: ===
+=== Pollify Poll Maker Plugin Premium Features at a Glance: ===
 - Kudos Polls allow users to give quick, positive feedback — such as clapping or applause — without needing to write anything.
 - Up and Down Vote Polls enable users to vote using like/dislike or emojis, providing quick feedback on products or content.
 - NPS Polls allow users to select answers within a 1-10 range, ideal for gauging customer satisfaction or loyalty.
@@ -196,6 +196,16 @@ Sure, there is! Check out our [official documentation](https://wprigel.com/docs/
 8. IP details
 
 == Changelog ==
+
+v1.0.8 -> August 21, 2025
+--------------------------------------------
+- [New] Added block deleting support from the pollify menu, which also delete the poll block from the editor.
+- [New] Added all type poll filtering suppports in the pollify menu.
+- [Fix] Innerblock filtering issues that causes the block is not saving properly and throwing Invalid poll error.
+- [Fix] Fixed some text formatting issues.
+- [Fix] Removed unused file that generated through npm run build.
+- [Fix] Fixed block deleteing logic that causes the block is not deleting properly in few cases like InnerBlocks.
+- [Fix] Removed auto opt-in from freemius.
 
 v1.0.7 -> July 26, 2025
 --------------------------------------------

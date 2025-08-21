@@ -251,6 +251,44 @@ class Menu {
 			}
 		}
 
+		if ( 'delete_poll' === $action && wp_verify_nonce( $nonce, 'pollify_delete_poll' ) ) {
+			$client_id    = pollify_filter_input( INPUT_GET, 'poll_id', POLLIFY_FILTER_SANITIZE_STRING );
+			$reference_id = pollify_filter_input( INPUT_GET, 'reference_id', FILTER_VALIDATE_INT );
+
+			if ( ! empty( $client_id ) && ! empty( $reference_id ) ) {
+				$post = get_post( $reference_id );
+
+				if ( $post && ! is_wp_error( $post ) ) {
+					$content = $post->post_content;
+					$blocks  = parse_blocks( $content );
+					$changed = false;
+
+					// Remove the poll block with matching client_id.
+					$filtered_blocks = $this->pollify_filter_blocks_recursive( $blocks, $client_id, $changed );
+
+					if ( $changed ) {
+						$new_content = serialize_blocks( $filtered_blocks );
+
+						$result = wp_update_post(
+							[
+								'ID'           => $reference_id,
+								'post_content' => $new_content,
+							]
+						);
+
+						if ( is_wp_error( $result ) ) {
+							wp_die( esc_html__( 'Failed to update the post content.', 'poll-creator' ) );
+						}
+					}
+
+					// Now delete the poll data.
+					\wpRigel\Pollify\FeedbackManager::get_instance()->delete( $client_id );
+				}
+
+				wp_safe_redirect( admin_url( 'admin.php?page=pollify&deleted=1' ) );
+			}
+		}
+
 		$ip = pollify_filter_input( INPUT_GET, 'ip_address', POLLIFY_FILTER_SANITIZE_STRING );
 
 		if ( 'pollify_remove_ip' === $action
@@ -293,7 +331,42 @@ class Menu {
 					! empty( $redirect_url ) ? $redirect_url : admin_url( 'admin.php?page=pollify' )
 				)
 			);
+
 			exit;
 		}
+	}
+
+	/**
+	 * Filter blocks recursively.
+	 *
+	 * @param array $blocks Array of blocks to filter.
+	 * @param mixed $poll_client_id Poll client ID to match for filtering.
+	 * @param bool  &$changed Reference variable set to true if any block is filtered.
+	 * @return array Filtered blocks.
+	 */
+	public function pollify_filter_blocks_recursive( $blocks, $poll_client_id, &$changed ) {
+		$filtered = [];
+
+		foreach ( $blocks as $block ) {
+
+			$condition = isset( $block['blockName'] ) &&
+				isset( $block['attrs']['pollClientId'] ) &&
+				$block['attrs']['pollClientId'] === $poll_client_id;
+
+			if ( $condition ) {
+				$changed = true;
+				// Skip this block (delete).
+				continue;
+			}
+
+			// Recursively check inner blocks.
+			if ( ! empty( $block['innerBlocks'] ) ) {
+				$block['innerBlocks'] = $this->pollify_filter_blocks_recursive( $block['innerBlocks'], $poll_client_id, $changed );
+			}
+
+			$filtered[] = $block;
+		}
+
+		return $filtered;
 	}
 }

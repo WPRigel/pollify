@@ -354,6 +354,8 @@ function pollify_get_formatted_country_votes( $data ) {
 /**
  * Get admin results nav.
  *
+ * @param null|object $poll Poll object.
+ *
  * @return array
  */
 function pollify_poll_results_page_nav( $poll = null ) {
@@ -372,7 +374,7 @@ function pollify_poll_results_page_nav( $poll = null ) {
 	}
 
 	$nav = [
-		'overview' => [
+		'overview'   => [
 			'title' => __( 'Overview', 'poll-creator' ),
 			'slug'  => 'overview',
 			'icon'  => 'dashicons-dashboard',
@@ -385,7 +387,7 @@ function pollify_poll_results_page_nav( $poll = null ) {
 				admin_url( 'admin.php' )
 			),
 		],
-		'votes' => [
+		'votes'      => [
 			'title' => __( 'Votes', 'poll-creator' ),
 			'slug'  => 'votes',
 			'icon'  => 'dashicons-thumbs-up',
@@ -486,7 +488,7 @@ function pollify_generate_shorthand_border_styles( $type, $border ) {
  * @param string $ip   The IP address to display.
  * @param object $poll The poll object.
  *
- * @return string
+ * @return void
  */
 function pollify_display_ip_with_actions( $ip, $poll ) {
 	$tab = pollify_filter_input( INPUT_GET, 'tab', POLLIFY_FILTER_SANITIZE_STRING ) ?: '';
@@ -496,8 +498,8 @@ function pollify_display_ip_with_actions( $ip, $poll ) {
 			[
 				'action'       => 'pollify_remove_ip',
 				'poll_id'      => $poll->get_client_id(),
-				'ip_address'   => urlencode( $ip ),
-				'redirect_url' => urlencode(
+				'ip_address'   => rawurlencode( $ip ),
+				'redirect_url' => rawurlencode(
 					add_query_arg(
 						[
 							'page'    => 'pollify',
@@ -526,7 +528,6 @@ function pollify_display_ip_with_actions( $ip, $poll ) {
 					"return confirm('%s');",
 					esc_js( __( 'Are you sure you want to remove all votes from this IP? This operation cannot be undone. Just make sure before proceed', 'poll-creator' ) )
 				),
-				// 'data' => [ 'foo' => 'bar' ], // Example usage
 			],
 		],
 		$ip,
@@ -540,8 +541,14 @@ function pollify_display_ip_with_actions( $ip, $poll ) {
 				<a
 					href="<?php echo esc_url( $action['url'] ); ?>"
 					class="<?php echo esc_attr( $action['class'] ); ?>"
-					<?php if ( ! empty( $action['style'] ) ) : ?>style="<?php echo esc_attr( $action['style'] ); ?>"<?php endif; ?>
-					<?php if ( ! empty( $action['onclick'] ) ) : ?>onclick="<?php echo esc_attr( $action['onclick'] ); ?>"<?php endif; ?>
+					<?php
+					if ( ! empty( $action['style'] ) ) :
+						?>
+						style="<?php echo esc_attr( $action['style'] ); ?>"<?php endif; ?>
+					<?php
+					if ( ! empty( $action['onclick'] ) ) :
+						?>
+						onclick="<?php echo esc_attr( $action['onclick'] ); ?>"<?php endif; ?>
 					<?php
 					// Add data attributes if provided.
 					if ( ! empty( $action['data'] ) && is_array( $action['data'] ) ) :
@@ -557,4 +564,54 @@ function pollify_display_ip_with_actions( $ip, $poll ) {
 		</div>
 	</div>
 	<?php
+}
+
+/**
+ * Recursively filter allowed blocks.
+ *
+ * Supports:
+ * - Exact matches: ['pollify/poll']
+ * - Wildcard prefix matches using *: ['pollify/*'] (matches any block starting with pollify/)
+ *
+ * @param array $blocks         The blocks to filter.
+ * @param array $allowed_blocks The allowed block names or wildcard prefixes.
+ *
+ * @return array Filtered blocks.
+ */
+function pollify_filter_allowed_blocks_recursive( array $blocks, array $allowed_blocks ): array {
+	$found = [];
+
+	foreach ( $blocks as $block ) {
+		// Ensure blockName is always a string.
+		$block_name = isset( $block['blockName'] ) ? (string) $block['blockName'] : '';
+
+		if ( ! empty( $block_name ) ) {
+			foreach ( $allowed_blocks as $allowed ) {
+				if ( ! empty( $allowed ) && '*' === substr( $allowed, -1 ) ) {
+					// Handle wildcard prefix, e.g., "pollify/*".
+					$prefix = substr( $allowed, 0, -1 );
+
+					if ( strpos( $block_name, $prefix ) === 0 ) {
+						$found[] = $block;
+						break;
+					}
+				} elseif ( $block_name === $allowed ) {
+					// Handle exact match.
+					$found[] = $block;
+					break;
+				}
+			}
+		}
+
+		// Recursively check inner blocks if they exist.
+		if ( ! empty( $block['innerBlocks'] ) && is_array( $block['innerBlocks'] ) ) {
+			$child_blocks = pollify_filter_allowed_blocks_recursive( $block['innerBlocks'], $allowed_blocks );
+
+			if ( ! empty( $child_blocks ) ) {
+				array_push( $found, ...$child_blocks );
+			}
+		}
+	}
+
+	return $found;
 }
