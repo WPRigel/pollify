@@ -109,12 +109,7 @@ class Blocks {
 
 		$blocks = parse_blocks( $post->post_content );
 
-		$polls = array_filter(
-			$blocks,
-			function ( $block ) {
-				return 'pollify/poll' === $block['blockName'];
-			}
-		);
+		$polls = pollify_filter_allowed_blocks_recursive( $blocks, [ 'pollify/poll' ] );
 
 		if ( empty( $polls ) ) {
 			return;
@@ -160,6 +155,7 @@ class Blocks {
 			$data['reference'] = $post_id;
 			$data['settings']  = serialize_block_attributes( $poll['attrs'] );
 
+			// Now it's time to save the poll data.
 			FeedbackManager::get_instance()->save( $data );
 		}
 	}
@@ -184,17 +180,8 @@ class Blocks {
 
 		$blocks = parse_blocks( $post->post_content );
 
-		$polls = array_filter(
-			$blocks,
-			function ( $block ) {
-				if ( ! empty( $block['blockName'] ) ) {
-					// Return true if the block name start with `pollify/`.
-					return 0 === strpos( $block['blockName'], 'pollify/' );
-				}
-
-				return false;
-			}
-		);
+		// Use recursive helper with wildcard to include any block starting with pollify/.
+		$polls = pollify_filter_allowed_blocks_recursive( $blocks, [ 'pollify/*' ] );
 
 		$poll_ids = array_map(
 			function ( $poll ) {
@@ -218,6 +205,10 @@ class Blocks {
 
 	/**
 	 * Register block styles.
+	 *
+	 * This function is used to register block styles for the poll block.
+	 *
+	 * @since 1.0.0
 	 */
 	public function register_block_styles() {
 		$block_styles = [
@@ -237,6 +228,10 @@ class Blocks {
 
 	/**
 	 * Localize script.
+	 *
+	 * This function is used to localize the script for nonces.
+	 *
+	 * @return void
 	 */
 	public function localize_script() {
 		wp_localize_script(
