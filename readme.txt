@@ -1,10 +1,10 @@
 === Pollify - Ultimate Poll Creator and Survey Maker ===
 Contributors: wprigel
 Tags: poll plugin, poll, poll maker, vote, survey
-Requires at least: 6.1
-Tested up to: 6.8.1
+Requires at least: 6.0
+Tested up to: 6.8.2
 Requires PHP: 8.0
-Stable tag: 1.0.7
+Stable tag: 1.0.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -196,6 +196,16 @@ Sure, there is! Check out our [official documentation](https://wprigel.com/docs/
 8. IP details
 
 == Changelog ==
+
+v1.0.8 -> August 21, 2025
+--------------------------------------------
+- [New] Added block deleting support from the pollify menu, which also delete the poll block from the editor.
+- [New] Added all type poll filtering suppports in the pollify menu.
+- [Fix] Innerblock filtering issues that causes the block is not saving properly and throwing Invalid poll error.
+- [Fix] Fixed some text formatting issues.
+- [Fix] Removed unused file that generated through npm run build.
+- [Fix] Fixed block deleteing logic that causes the block is not deleting properly in few cases like InnerBlocks.
+- [Fix] Removed auto opt-in from freemius.
 
 v1.0.7 -> July 26, 2025
 --------------------------------------------
