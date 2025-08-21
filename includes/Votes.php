@@ -179,7 +179,7 @@ class Votes {
 			$where .= $wpdb->prepare( ' AND v.user_ip LIKE %s', '%' . sanitize_text_field( $args['search'] ) . '%' );
 		}
 
-		// Filters for join, select, where
+		// Filters for join, select, where.
 		$join_sql   = '';
 		$select_var = 'v.*, o.option, o.option_id';
 		$where      = apply_filters( 'pollify_votes_where_sql', $where, $args );
@@ -257,7 +257,7 @@ class Votes {
 
 		// Get poll options.
 
-		// Filters for join, select, where
+		// Filters for join, select, where.
 		$join_sql   = '';
 		$select_var = 'option_id, COUNT(*) as votes, COUNT(DISTINCT user_ip) as unique_votes';
 		$where      = $wpdb->prepare( 'WHERE v.client_id = %s', $feedback->get_client_id() );

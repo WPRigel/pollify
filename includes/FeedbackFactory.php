@@ -93,4 +93,13 @@ class FeedbackFactory {
 		// Create feedback object.
 		return new $class( (array) $this->feedback );
 	}
+
+	/**
+	 * Get class map.
+	 *
+	 * @return array
+	 */
+	public static function get_class_map(): array {
+		return self::$class_map;
+	}
 }
