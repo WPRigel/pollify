@@ -1,10 +1,10 @@
-=== Pollify - Ultimate Poll Creator and Survey Maker ===
+=== Pollify - Feedback Polls, Anonymous Polls, Up/down Voting and NPS Surveys ===
 Contributors: wprigel
 Tags: poll plugin, poll, poll maker, vote, survey
 Requires at least: 6.0
 Tested up to: 6.8.2
 Requires PHP: 8.0
-Stable tag: 1.0.8
+Stable tag: 1.0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -154,7 +154,7 @@ Seamlessly collect user emails for community building and email marketing effort
 - Email campaign using email services. (Upcoming in pro).
 
 === Acknowledgements ===
-This plugin utilizes the [GeoPlugin service](https://www.geoplugin.com/) to provide geolocation functionality. This third-party service helps us determine the geographic location of users based on their IP addresses. For more information on GeoPlugin's terms of use and privacy policies, please visit [GeoPlugin Terms of Use](https://www.geoplugin.com/aup) and [GeoPlugin Privacy Policy](https://www.geoplugin.com/privacy).
+This plugin utilizes the **ipinfo** service to provide geolocation functionality. This third-party service helps us determine the geographic location of users based on their IP addresses.
 
 Additionally, our plugin uses Google Charts (https://www.gstatic.com/charts/loader.js) for charting and data visualization. For more information on Google Charts' terms of use and privacy policies, please visit Google Charts [Terms of Service](https://developers.google.com/chart/terms) and Google [Privacy Policy](https://developers.google.com/chart/interactive/docs/security_privacy).
 
@@ -196,6 +196,13 @@ Sure, there is! Check out our [official documentation](https://wprigel.com/docs/
 8. IP details
 
 == Changelog ==
+
+v1.0.9 -> September 15, 2025
+--------------------------------------------
+- [New] Added individual vote response delete option.
+- [New] Added a new button for viewing the poll on the frontend from all sub menu items.
+- [New] Changed ip lookup service for better accuracy.
+- [Fix] Fixed vote location flag icon style issue.
 
 v1.0.8 -> August 21, 2025
 --------------------------------------------

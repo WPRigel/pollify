@@ -521,4 +521,44 @@ class Votes {
 
 		return (bool) $deleted;
 	}
+
+	/**
+	 * Delete a single vote row by ID.
+	 *
+	 * @param int $id Vote row ID.
+	 *
+	 * @return bool|WP_Error
+	 */
+	public function delete_vote_by_id( int $id = 0 ) {
+		global $wpdb;
+
+		if ( $id <= 0 ) {
+			return new WP_Error( 'invalid_vote_id', __( 'Invalid vote ID.', 'poll-creator' ) );
+		}
+
+		$deleted = $wpdb->delete(
+			$wpdb->prefix . $this->table_name,
+			[
+				'id' => $id,
+			],
+			[
+				'%d',
+			]
+		);
+
+		if ( wp_cache_supports( 'flush_group' ) ) {
+			wp_cache_flush_group( 'pollify_poll_cache' );
+			wp_cache_flush_group( 'pollify_vote_cache' );
+		}
+
+		/**
+		 * Fires after a single vote has been deleted.
+		 *
+		 * @param int  $id      Vote ID.
+		 * @param bool $deleted Whether the delete was successful.
+		 */
+		do_action( 'pollify_vote_deleted', $id, (bool) $deleted );
+
+		return (bool) $deleted;
+	}
 }

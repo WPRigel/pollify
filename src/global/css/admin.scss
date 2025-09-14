@@ -363,6 +363,18 @@ table.toplevel_page_pollify {
 			gap: 8px;
 			font-size: 1.5rem;
 		}
+
+		.action-wrapper {
+			display: flex;
+			gap: 10px;
+			align-items: center;
+
+			a.page-title-action {
+				display: flex;
+				align-items: center;
+				gap: 6px;
+			}
+		}
 	}
 
 	.navigation {
@@ -770,12 +782,14 @@ table.toplevel_page_pollify {
 						td {
 							border-bottom: 1px solid #EAECF0;
 							font-size: 1.1em;
-							padding: 15px;
+							padding: 10px 15px;
 
 							&.column-location {
-								display: flex;
-								gap: 10px;
-								align-items: center;
+								.vote-location {
+									display: flex;
+									gap: 10px;
+									align-items: center;
+								}
 							}
 						}
 					}

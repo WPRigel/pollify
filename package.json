@@ -1,7 +1,7 @@
 {
 	"name": "poll-creator",
-	"version": "1.0.8",
-	"description": "Ultimate Poll Creator and Survey Maker Plugin for WordPress",
+	"version": "1.0.9",
+	"description": "Feedback Polls, Anonymous Polls, Up/down Voting and NPS Surveys",
 	"author": "wpRigel",
 	"license": "GPL-2.0-or-later",
 	"main": "build/index.js",

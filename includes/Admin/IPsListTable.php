@@ -133,7 +133,7 @@ class IPsListTable extends \WP_List_Table {
 	public function column_location( $item ) {
 		if ( ! empty( $item['location'] ) ) {
 			return sprintf(
-				'<span class="flag-icon fi fi-%s fib"></span> %s',
+				'<div class="vote-location"><span class="flag-icon fi fi-%s fib"></span> %s</div>',
 				esc_html( strtolower( $item['location'] ) ),
 				esc_html( pollify_get_country_name( $item['location'] ) )
 			);
