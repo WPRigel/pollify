@@ -134,7 +134,48 @@ class VotesListTable extends \WP_List_Table {
 			$user = get_user_by( 'ID', $user_id );
 		}
 
-		return ! empty( $user ) ? esc_html( $user->display_name ) : esc_html__( 'Guest', 'poll-creator' );
+		$name = ! empty( $user ) ? esc_html( $user->display_name ) : esc_html__( 'Guest', 'poll-creator' );
+
+		// Build row actions including delete.
+		$actions = [];
+
+		$poll_id = $this->poll->get_client_id();
+		$vote_id = intval( $item['id'] ?? 0 );
+		$tab     = pollify_filter_input( INPUT_GET, 'tab', POLLIFY_FILTER_SANITIZE_STRING ) ?: '';
+
+		if ( current_user_can( 'edit_posts' ) && $vote_id ) {
+			$delete_url = wp_nonce_url(
+				add_query_arg(
+					[
+						'action'   => 'pollify_delete_vote',
+						'vote_id'  => $vote_id,
+						'poll_id'  => $poll_id,
+						'redirect_url' => rawurlencode(
+							add_query_arg(
+								[
+									'page'    => 'pollify',
+									'tab'     => $tab,
+									'action'  => 'view_results',
+									'poll_id' => $poll_id,
+								],
+								admin_url( 'admin.php' )
+							)
+						),
+					],
+					remove_query_arg( [ '_wpnonce', 'action', 'vote_id' ] )
+				),
+				'pollify_delete_vote_' . $vote_id
+			);
+
+			$actions['delete'] = sprintf(
+				'<a href="%s" class="pollify-delete-vote" onclick="return confirm(\'%s\');">%s</a>',
+				esc_url( $delete_url ),
+				esc_js( __( 'Are you sure you want to delete this vote? This action cannot be undone.', 'poll-creator' ) ),
+				esc_html__( 'Delete', 'poll-creator' )
+			);
+		}
+
+		return sprintf( '%1$s %2$s', $name, $this->row_actions( $actions ) );
 	}
 
 	/**
@@ -147,7 +188,7 @@ class VotesListTable extends \WP_List_Table {
 	public function column_location( $item ) {
 		if ( ! empty( $item['user_location'] ) ) {
 			return sprintf(
-				'<span class="flag-icon fi fi-%s fib"></span> %s',
+				'<div class="vote-location"><span class="flag-icon fi fi-%s fib"></span> %s</div>',
 				esc_html( strtolower( $item['user_location'] ) ),
 				esc_html( pollify_get_country_name( $item['user_location'] ) )
 			);

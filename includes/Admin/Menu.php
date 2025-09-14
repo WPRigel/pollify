@@ -334,6 +334,29 @@ class Menu {
 
 			exit;
 		}
+
+		// Handle single row deletion early so list reflects updated data.
+		if ( 'pollify_delete_vote' === $action ) {
+			$vote_id      = absint( pollify_filter_input( INPUT_GET, 'vote_id', POLLIFY_FILTER_SANITIZE_STRING ) );
+			$nonce        = pollify_filter_input( INPUT_GET, '_wpnonce', POLLIFY_FILTER_SANITIZE_STRING );
+			$redirect_url = pollify_filter_input( INPUT_GET, 'redirect_url', FILTER_VALIDATE_URL ) ?? '';
+
+			if ( $vote_id && wp_verify_nonce( $nonce, 'pollify_delete_vote_' . $vote_id ) && current_user_can( 'edit_posts' ) ) {
+				\wpRigel\Pollify\Votes::get_instance()->delete_vote_by_id( $vote_id );
+
+				// Redirect to remove query args to avoid repeat deletion on refresh.
+				wp_safe_redirect(
+					add_query_arg(
+						[
+							'updated' => __( 'Vote deleted successfully.', 'poll-creator' ),
+						],
+						! empty( $redirect_url ) ? $redirect_url : admin_url( 'admin.php?page=pollify' )
+					)
+				);
+
+				exit;
+			}
+		}
 	}
 
 	/**
