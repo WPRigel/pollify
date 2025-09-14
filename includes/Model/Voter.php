@@ -142,7 +142,7 @@ class Voter {
 			$ip = '';
 		}
 
-		$url  = 'http://www.geoplugin.net/json.gp?ip=' . $ip;
+		$url  = 'http://ipinfo.io/' . $ip . '/json';
 		$data = wp_remote_get( $url );
 
 		if ( ! is_wp_error( $data ) ) {
@@ -151,7 +151,7 @@ class Voter {
 			$response = json_decode( $body, true );
 		}
 
-		return $response['geoplugin_countryCode'] ?? '';
+		return $response['country'] ?? '';
 	}
 
 	/**
