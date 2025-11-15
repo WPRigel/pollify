@@ -1,8 +1,8 @@
 <?php
 /**
- * Miusages rest route endpoint.
+ * Votes rest route endpoint.
  *
- * @package AwesomeMotive\Miusage
+ * @package wpRigel\Pollify
  */
 
 declare(strict_types=1);
@@ -17,7 +17,7 @@ use WP_REST_Controller;
 use wpRigel\Pollify\FeedbackManager;
 
 /**
- * MiusageController class.
+ * VotesController class.
  *
  * @package wpRigel\Pollify\API
  */
