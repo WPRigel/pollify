@@ -88,8 +88,9 @@ $updated_message = pollify_filter_input( INPUT_GET, 'updated', POLLIFY_FILTER_SA
 									</div>
 									<div class="horizointal-bar-chart__bar-indicator">
 										<?php
-											/* translators: %s: percentage */
-											$percentage_width = wp_sprintf( __( '%s%', 'poll-creator' ), $result_option['percentage'] );
+										// Convert localized percentage back to float and format for CSS (must use period as decimal separator).
+										$percentage_value = (float) str_replace( ',', '.', (string) $result_option['percentage'] );
+										$percentage_width = number_format( $percentage_value, 2, '.', '' ) . '%';
 										?>
 										<div class="bar-fill" style="width:<?php echo esc_html( $percentage_width ); ?>"></div>
 									</div>

@@ -294,7 +294,6 @@ class Votes {
 
 							// Calculate percentage.
 							$options[ $key ]['percentage'] = (int) $vote['votes'] > 0 ? number_format_i18n( ( (int) $vote['votes'] / (int) $total_votes ) * 100, 2 ) : 0;
-
 						}
 					}
 				}
