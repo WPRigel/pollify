@@ -40,8 +40,9 @@ $data = ! empty( $data ) ? $data : [];
 				</div>
 				<div class="horizointal-bar-chart__bar-indicator">
 					<?php
-					/* translators: %s: percentage */
-					$percentage_style = wp_sprintf( __( '%s%', 'poll-creator' ), $result_option['percentage'] )
+					// Convert localized percentage back to float and format for CSS (must use period as decimal separator).
+					$percentage_value = (float) str_replace( ',', '.', (string) $result_option['percentage'] );
+					$percentage_style = number_format( $percentage_value, 2, '.', '' ) . '%';
 					?>
 					<div class="bar-fill" style="width:<?php echo esc_html( $percentage_style ); ?>"></div>
 				</div>

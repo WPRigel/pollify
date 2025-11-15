@@ -2,7 +2,7 @@
 /**
  * Singleton trait which implements Singleton pattern in any class in which this trait is used.
  *
- * @package AwesomeMotive\Miusage
+ * @package wpRigel\Pollify
  */
 
 declare(strict_types=1);

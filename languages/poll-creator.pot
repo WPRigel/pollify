@@ -2,14 +2,14 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Pollify 1.0.9\n"
+"Project-Id-Version: Pollify 1.0.10\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/poll-creator\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-09-14T18:38:32+00:00\n"
+"POT-Creation-Date: 2025-11-15T09:07:21+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.9.0\n"
 
@@ -47,13 +47,13 @@ msgstr ""
 
 #: includes/Admin/IPsListTable.php:79
 #: includes/Admin/VotesListTable.php:77
-#: templates/admin/overview.php:178
+#: templates/admin/overview.php:179
 msgid "Location"
 msgstr ""
 
 #: includes/Admin/IPsListTable.php:80
 #: includes/helpers/functions.php:391
-#: templates/admin/overview.php:127
+#: templates/admin/overview.php:128
 msgid "Votes"
 msgstr ""
 
@@ -65,8 +65,8 @@ msgstr ""
 
 #: includes/Admin/IPsListTable.php:141
 #: includes/Admin/VotesListTable.php:196
-#: templates/admin/overview.php:148
-#: templates/admin/overview.php:190
+#: templates/admin/overview.php:149
+#: templates/admin/overview.php:191
 msgid "Unknown"
 msgstr ""
 
@@ -76,7 +76,7 @@ msgid "All countries"
 msgstr ""
 
 #: includes/Admin/IPsListTable.php:169
-#: includes/Admin/PollsListTable.php:320
+#: includes/Admin/PollsListTable.php:331
 #: includes/Admin/VotesListTable.php:246
 msgid "Filter"
 msgstr ""
@@ -157,56 +157,56 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:172
+#: includes/Admin/PollsListTable.php:183
 msgid "Edit"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:173
+#: includes/Admin/PollsListTable.php:184
 msgid "View frontend"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:196
-#: includes/Admin/PollsListTable.php:283
+#: includes/Admin/PollsListTable.php:207
+#: includes/Admin/PollsListTable.php:294
 #: src/poll/edit.js:132
 msgid "Open"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:197
-#: includes/Admin/PollsListTable.php:211
-#: includes/Admin/PollsListTable.php:284
+#: includes/Admin/PollsListTable.php:208
+#: includes/Admin/PollsListTable.php:222
+#: includes/Admin/PollsListTable.php:295
 msgid "Closed"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:198
+#: includes/Admin/PollsListTable.php:209
 msgid "Schedule"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:199
+#: includes/Admin/PollsListTable.php:210
 msgid "Trash"
 msgstr ""
 
 #. translators: %s: poll end date
-#: includes/Admin/PollsListTable.php:207
+#: includes/Admin/PollsListTable.php:218
 msgid "Ended at %s"
 msgstr ""
 
 #. translators: %s: poll end date
-#: includes/Admin/PollsListTable.php:215
+#: includes/Admin/PollsListTable.php:226
 msgid "Will be ended on %s"
 msgstr ""
 
 #. translators: %s: votes count
-#: includes/Admin/PollsListTable.php:255
+#: includes/Admin/PollsListTable.php:266
 #: templates/admin/overview.php:79
 #: templates/results/horizointal-bar-chart.php:31
 msgid "%s votes"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:282
+#: includes/Admin/PollsListTable.php:293
 msgid "All"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:305
+#: includes/Admin/PollsListTable.php:316
 msgid "All types"
 msgstr ""
 
@@ -223,7 +223,7 @@ msgid "Name"
 msgstr ""
 
 #: includes/Admin/VotesListTable.php:78
-#: templates/admin/overview.php:179
+#: templates/admin/overview.php:180
 msgid "IP Address"
 msgstr ""
 
@@ -236,7 +236,7 @@ msgid "Vote date"
 msgstr ""
 
 #: includes/Admin/VotesListTable.php:137
-#: templates/admin/overview.php:251
+#: templates/admin/overview.php:252
 msgid "Guest"
 msgstr ""
 
@@ -414,11 +414,11 @@ msgstr ""
 msgid "Sorry vote not accepted."
 msgstr ""
 
-#: includes/Votes.php:501
+#: includes/Votes.php:500
 msgid "Client ID or User IP is empty."
 msgstr ""
 
-#: includes/Votes.php:536
+#: includes/Votes.php:535
 msgid "Invalid vote ID."
 msgstr ""
 
@@ -436,61 +436,59 @@ msgstr ""
 
 #. translators: %s: percentage
 #: templates/admin/overview.php:85
-#: templates/admin/overview.php:92
 #: templates/results/horizointal-bar-chart.php:37
-#: templates/results/horizointal-bar-chart.php:44
 msgid "%s%"
 msgstr ""
 
 #. translators: %s: total votes
-#: templates/admin/overview.php:102
+#: templates/admin/overview.php:103
 msgid "Total votes: %s"
 msgstr ""
 
-#: templates/admin/overview.php:107
-#: templates/results/horizointal-bar-chart.php:59
+#: templates/admin/overview.php:108
+#: templates/results/horizointal-bar-chart.php:60
 msgid "No results found for this poll"
 msgstr ""
 
-#: templates/admin/overview.php:115
+#: templates/admin/overview.php:116
 msgid "Popular Location"
 msgstr ""
 
-#: templates/admin/overview.php:127
+#: templates/admin/overview.php:128
 msgid "Country"
 msgstr ""
 
-#: templates/admin/overview.php:155
-#: templates/admin/overview.php:219
+#: templates/admin/overview.php:156
+#: templates/admin/overview.php:220
 msgid "No location data found for this poll"
 msgstr ""
 
-#: templates/admin/overview.php:162
+#: templates/admin/overview.php:163
 msgid "IP overviews"
 msgstr ""
 
-#: templates/admin/overview.php:180
+#: templates/admin/overview.php:181
 msgid "Vote count"
 msgstr ""
 
-#: templates/admin/overview.php:216
+#: templates/admin/overview.php:217
 msgid "See all IP's"
 msgstr ""
 
-#: templates/admin/overview.php:228
+#: templates/admin/overview.php:229
 msgid "Recent votes"
 msgstr ""
 
-#: templates/admin/overview.php:285
+#: templates/admin/overview.php:286
 msgid "See all votes"
 msgstr ""
 
-#: templates/admin/overview.php:289
+#: templates/admin/overview.php:290
 msgid "No recent votes found for this poll"
 msgstr ""
 
-#: templates/admin/overview.php:305
-#: templates/admin/overview.php:322
+#: templates/admin/overview.php:306
+#: templates/admin/overview.php:323
 msgid "Search by IP"
 msgstr ""
 
@@ -516,7 +514,7 @@ msgid "Search by title"
 msgstr ""
 
 #. translators: %s: total votes
-#: templates/results/horizointal-bar-chart.php:54
+#: templates/results/horizointal-bar-chart.php:55
 msgid "Total votes %s"
 msgstr ""
 

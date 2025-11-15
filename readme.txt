@@ -1,10 +1,10 @@
-=== Pollify - Feedback Polls, Anonymous Polls, Up/down Voting and NPS Surveys ===
+=== Pollify - Feedback Polls, Anonymous Polls, Up/down Voting, NPS Surveys, Export data ===
 Contributors: wprigel
 Tags: poll plugin, poll, poll maker, vote, survey
 Requires at least: 6.0
 Tested up to: 6.8.2
 Requires PHP: 8.0
-Stable tag: 1.0.9
+Stable tag: 1.0.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -84,10 +84,10 @@ Seamlessly collect user emails for community building and email marketing effort
 * **Choosing**: Add multiple options for users to choose from, with the option to allow custom entries
 * **Up and Down vote**: Enable users to vote using like/dislike or emojis, providing quick feedback on products or content. (Pro)
 * **Kudos**: feature allows users to give quick, positive feedback — such as clapping or applause — without needing to write anything (Pro)
-* **Rating**: Create rating forms, utilizing stars or emojis, to gauge user opinions on products or topics. (Upcoming in pro)
+* **Engagement**: Boost interaction by seamlessly gathering user feedback directly from your website’s frontend (Pro)
 * **NPS**: Allow users to select answers within a 1-10 range. (Pro)
+* **Rating**: Create rating forms, utilizing stars or emojis, to gauge user opinions on products or topics. (Upcoming in pro)
 * **VS**: Facilitate competition between two options, such as products or individuals, with stylish versus voting formats. (Upcoming in pro)
-* **Feedback**: Solicit detailed responses from participants, allowing them to provide comprehensive answers using short text or paragraphs. (Upcoming in pro)
 
 === Pollify Poll Maker Plugin Free Features at a Glance: ===
 
@@ -146,10 +146,11 @@ Seamlessly collect user emails for community building and email marketing effort
 - Results with Charts presents poll results graphically, offering visual insights for easier interpretation
 - IP blocker allows blocking votes from specific IP addresses, preventing spam or unwanted participation.
 - IP and user wise vote restriction prevents multiple votes from the same IP address or user, ensuring fair polling.
+- Engagement Block: Collect user feedback directly from the frontend using a dedicated block.
+- Export poll results in multiple formats, including CSV, PDF, DOCX, and Excel
 - VS Type of Poll (Versus) enables the creation of polls comparing options side by side (Upcoming in pro)
 - Import/Export Polls help in Importing and exporting poll configurations for easy sharing or backup. (Upcoming in pro)
 - Send mail to a user (integrated with email services ) (Upcoming in pro).
-- Export Results to CSV allows exporting poll data into CSV format for further analysis or reporting. (Upcoming in pro)
 - Vote by user and role (Upcoming in pro).
 - Email campaign using email services. (Upcoming in pro).
 
@@ -196,6 +197,13 @@ Sure, there is! Check out our [official documentation](https://wprigel.com/docs/
 8. IP details
 
 == Changelog ==
+
+v1.0.10 -> November 15, 2025
+--------------------------------------------
+- [Fix] Fixed number format issues for other countries
+- [Fix] Added custom svg icon support for rendering on backend poll
+- [Fix] Fix some typo on class defination
+- [Fix] Fixed vote location flag icon style issue.
 
 v1.0.9 -> September 15, 2025
 --------------------------------------------
