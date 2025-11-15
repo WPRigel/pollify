@@ -151,7 +151,18 @@ class PollsListTable extends \WP_List_Table {
 	 * @return string
 	 */
 	public function column_type( $item ) {
-		return sprintf( '<span tooltip="%s" flow="right">%s</span>', ucfirst( $item->get_type() ?? '' ), $item->get_icon() );
+		$icon = $item->get_icon();
+
+		// Check if the icon is an SVG string
+		if ( strpos( $icon, '<svg' ) !== false ) {
+			// If it's an SVG, render it directly
+			$icon_html = $icon;
+		} else {
+			// If it's a dashicon class or other string, wrap it in dashicons format
+			$icon_html = sprintf( '<span class="dashicons dashicons-%s"></span>', esc_attr( $icon ) );
+		}
+
+		return sprintf( '<span tooltip="%s" flow="right">%s</span>', ucfirst( $item->get_type() ?? '' ), $icon_html );
 	}
 
 	/**
