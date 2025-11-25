@@ -20,6 +20,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $attributes = ! empty( $attributes ) ? $attributes : [];
 
+// Validate that the poll still exists in the database.
+if ( ! empty( $attributes['pollClientId'] ) ) {
+	$poll_check = \wpRigel\Pollify\FeedbackManager::get_instance()->get( $attributes['pollClientId'] );
+	// If poll doesn't exist (deleted or invalid), don't render anything.
+	if ( is_wp_error( $poll_check ) ) {
+		return;
+	}
+}
+
 $styles = '';
 
 if ( ! empty( $attributes['submitButtonBgColor'] ) ) {
@@ -68,7 +77,10 @@ $is_schedule_with_show_close_banner = ( 'schedule' === $attributes['status'] && 
 
 $voter            = new \wpRigel\Pollify\Model\Voter();
 $results          = \wpRigel\Pollify\Votes::get_instance()->get_results( $attributes['pollClientId'] );
-$is_already_voted = ( ! empty( $attributes['allowedPerComputerResponse'] ) && $voter->is_already_voted( $attributes['pollClientId'] ) );
+$is_anonymous     = ! empty( $attributes['anonymousVoting'] );
+// For anonymous voting, skip server-side check (handled client-side).
+// For normal voting, check if user already voted when allowedPerComputerResponse is enabled.
+$is_already_voted = ( ! $is_anonymous && ! empty( $attributes['allowedPerComputerResponse'] ) && $voter->is_already_voted( $attributes['pollClientId'] ) );
 ?>
 <div
 <?php
@@ -100,7 +112,10 @@ echo wp_kses(
 			?>
 		<?php else : ?>
 			<?php if ( ! ( $is_already_voted || $is_draft_with_show_close_banner || $is_schedule_with_show_close_banner ) ) : ?>
-			<form action="post" class="poll-form">
+			<form action="post" class="poll-form"
+				data-anonymous-voting="<?php echo ! empty( $attributes['anonymousVoting'] ) ? '1' : '0'; ?>"
+				data-allow-duplicate-prevention="<?php echo ! empty( $attributes['allowedPerComputerResponse'] ) ? '1' : '0'; ?>"
+				data-voting-method="<?php echo esc_attr( $attributes['anonymousVotingMethod'] ?? 'localStorage' ); ?>">
 				<?php
 					pollify_load_template(
 						'poll/options.php',

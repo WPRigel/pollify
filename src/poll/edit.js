@@ -82,6 +82,8 @@ const Edit = ( props ) => {
 		confirmationMessage,
 		viewResultconfirmationMessage,
 		allowedPerComputerResponse,
+		anonymousVoting,
+		anonymousVotingMethod,
 	} = attributes;
 
 	const handlePollStatusChange = ( status ) => {
@@ -208,11 +210,38 @@ const Edit = ( props ) => {
 				</PanelBody>
 				<PanelBody title={ __( 'Response settings', 'poll-creator' ) } className="pollify-response-settings-sidebar-wrap">
 					<CheckboxControl
-						label={ __( 'Allowed one response per computer', 'poll-creator' ) }
-						help={ __( 'If checked, only one response per computer will be allowed.', 'poll-creator' ) }
+						label={ __( 'Enable Anonymous Voting', 'poll-creator' ) }
+						help={ __( 'When enabled, no personal data (IP, location, user agent) will be collected. GDPR compliant.', 'poll-creator' ) }
+						checked={ anonymousVoting }
+						onChange={ ( anonymousVoting ) => setAttributes( { anonymousVoting } ) }
+					/>
+
+					<CheckboxControl
+						label={ anonymousVoting
+							? __( 'Prevent duplicate votes', 'poll-creator' )
+							: __( 'Allowed one response per computer', 'poll-creator' )
+						}
+						help={ anonymousVoting
+							? __( 'If checked, users can only vote once using browser storage. If unchecked, users can vote unlimited times (truly anonymous).', 'poll-creator' )
+							: __( 'If checked, only one response per computer will be allowed (tracked by IP address).', 'poll-creator' )
+						}
 						checked={ allowedPerComputerResponse }
 						onChange={ ( allowedPerComputerResponse ) => setAttributes( { allowedPerComputerResponse } ) }
 					/>
+
+					{ anonymousVoting && allowedPerComputerResponse && (
+						<SelectControl
+							label={ __( 'Storage method for duplicate prevention', 'poll-creator' ) }
+							value={ anonymousVotingMethod }
+							options={ [
+								{ label: __( 'Local Storage - Persistent (prevents revoting even after browser restart)', 'poll-creator' ), value: 'localStorage' },
+								{ label: __( 'Session Storage - Temporary (allows revoting after browser closes)', 'poll-creator' ), value: 'sessionStorage' },
+								{ label: __( 'Cookie - Persistent with expiration (prevents revoting for 30 days)', 'poll-creator' ), value: 'cookie' },
+							] }
+							help={ __( 'Choose how to store the vote flag on user\'s browser.', 'poll-creator' ) }
+							onChange={ ( anonymousVotingMethod ) => setAttributes( { anonymousVotingMethod } ) }
+						/>
+					) }
 				</PanelBody>
 			</InspectorControls>
 			<InspectorControls group="styles">

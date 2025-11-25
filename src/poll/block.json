@@ -127,6 +127,14 @@
 			"type": "boolean",
 			"default": false
 		},
+		"anonymousVoting" : {
+			"type": "boolean",
+			"default": false
+		},
+		"anonymousVotingMethod" : {
+			"type": "string",
+			"default": "localStorage"
+		},
 		"style": {
 			"type": "object",
 			"default": {

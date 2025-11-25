@@ -303,8 +303,14 @@ abstract class Feedback {
 
 		$voter = new Voter();
 
+		// Check if anonymous voting is enabled.
+		$is_anonymous = ! empty( $settings['anonymousVoting'] );
+
+		// For anonymous voting, duplicate check is handled client-side.
+		// For normal voting, check server-side if allowedPerComputerResponse is enabled.
 		if (
-			! empty( $settings['allowedPerComputerResponse'] )
+			! $is_anonymous
+			&& ! empty( $settings['allowedPerComputerResponse'] )
 			&& $voter->is_already_voted( $this->get_client_id() )
 		) {
 			return new WP_Error( 'already-voted', __( 'You have already voted.', 'poll-creator' ), [ 'status' => 400 ] );

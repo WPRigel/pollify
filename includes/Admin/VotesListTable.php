@@ -193,7 +193,22 @@ class VotesListTable extends \WP_List_Table {
 				esc_html( pollify_get_country_name( $item['user_location'] ) )
 			);
 		} else {
-			return __( 'Unknown', 'poll-creator' );
+			return '<span title="' . esc_attr__( 'No location collected (anonymous voting enabled)', 'poll-creator' ) . '">' . esc_html__( 'N/A', 'poll-creator' ) . '</span>';
+		}
+	}
+
+	/**
+	 * Render the column ip_address.
+	 *
+	 * @param array $item The current item.
+	 *
+	 * @return string
+	 */
+	public function column_ip_address( $item ) {
+		if ( ! empty( $item['user_ip'] ) ) {
+			return esc_html( $item['user_ip'] );
+		} else {
+			return '<span title="' . esc_attr__( 'No IP collected (anonymous voting enabled)', 'poll-creator' ) . '">' . esc_html__( 'N/A', 'poll-creator' ) . '</span>';
 		}
 	}
 
