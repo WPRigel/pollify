@@ -65,6 +65,9 @@ class FeedbackManager {
 		// If status is set then add where condition for status.
 		if ( ! empty( $args['status'] ) && 'all' !== $args['status'] ) {
 			$where .= $wpdb->prepare( ' AND status = %s', $args['status'] );
+		} elseif ( 'all' === $args['status'] ) {
+			// Exclude trash from 'all' status.
+			$where .= $wpdb->prepare( ' AND status != %s', 'trash' );
 		}
 
 		// If type is set then add where condition for type.
@@ -365,7 +368,98 @@ class FeedbackManager {
 	}
 
 	/**
-	 * Delete a Poll.
+	 * Move poll to trash.
+	 *
+	 * @param string $client_id Poll client ID.
+	 *
+	 * @return bool|WP_Error
+	 */
+	public function trash( $client_id ) {
+		global $wpdb;
+
+		// Get poll to verify it exists.
+		$poll = $this->get( $client_id );
+
+		if ( is_wp_error( $poll ) ) {
+			return $poll;
+		}
+
+		// Update status to trash.
+		$updated = $wpdb->update(
+			$wpdb->prefix . $this->poll_table_name,
+			[
+				'status'     => 'trash',
+				'updated_at' => current_time( 'mysql' ),
+			],
+			[ 'client_id' => $client_id ],
+			[ '%s', '%s' ],
+			[ '%s' ]
+		);
+
+		if ( false === $updated ) {
+			return new WP_Error( 'trash-failed', __( 'Poll not moved to trash', 'poll-creator' ), [ 'status' => 422 ] );
+		}
+
+		if ( wp_cache_supports( 'flush_group' ) ) {
+			wp_cache_flush_group( 'pollify_poll_cache' );
+		}
+
+		return true;
+	}
+
+	/**
+	 * Get poll statistics for delete warning.
+	 *
+	 * @param string $client_id Poll client ID.
+	 *
+	 * @return array|WP_Error
+	 */
+	public function get_poll_stats( $client_id ) {
+		// Get poll to verify it exists.
+		$poll = $this->get( $client_id );
+
+		if ( is_wp_error( $poll ) ) {
+			return $poll;
+		}
+
+		// Get vote counts.
+		$total_votes = Votes::get_instance()->get_votes(
+			[
+				'client_id' => $client_id,
+				'count'     => true,
+			]
+		);
+
+		// Check if anonymous voting is enabled.
+		$settings     = $poll->get_settings();
+		$is_anonymous = ! empty( $settings['anonymousVoting'] );
+
+		// Get unique voters count (distinct IPs or user IDs).
+		global $wpdb;
+
+		if ( $is_anonymous ) {
+			// For anonymous polls, we can't track unique voters reliably.
+			$unique_voters = null;
+		} else {
+			$unique_voters = $wpdb->get_var(
+				$wpdb->prepare(
+					'SELECT COUNT(DISTINCT CASE WHEN user_id > 0 THEN user_id ELSE user_ip END) FROM ' . $wpdb->prefix . 'pollify_vote WHERE client_id = %s',
+					$client_id
+				)
+			);
+		}
+
+		return [
+			'title'          => $poll->get_title(),
+			'type'           => $poll->get_type(),
+			'total_votes'    => (int) $total_votes,
+			'unique_voters'  => $unique_voters !== null ? (int) $unique_voters : null,
+			'created_at'     => $poll->get_created_at(),
+		];
+	}
+
+	/**
+	 * Delete a Poll permanently.
 	 *
 	 * @param int $client_id Poll client ID.
 	 *
@@ -384,20 +478,29 @@ class FeedbackManager {
 
 		$poll_id = $poll->get_id();
 
-		$deleted = $wpdb->delete(
-			$wpdb->prefix . $this->poll_table_name,
+		// Delete all votes first.
+		$wpdb->delete(
+			$wpdb->prefix . 'pollify_vote',
 			[ 'client_id' => $client_id ],
 			[ '%s' ]
+		);
+
+		// Delete poll options.
+		$deleted = $wpdb->delete(
+			$wpdb->prefix . 'pollify_poll_options',
+			[ 'poll_id' => $poll_id ],
+			[ '%d' ]
 		);
 
 		if ( ! $deleted ) {
 			return new WP_Error( 'deletion-failed', __( 'Poll not deleted successfully', 'poll-creator' ), [ 'status' => 422 ] );
 		}
 
+		// Delete poll.
 		$deleted = $wpdb->delete(
-			$wpdb->prefix . 'pollify_poll_options',
-			[ 'poll_id' => $poll_id ],
-			[ '%d' ]
+			$wpdb->prefix . $this->poll_table_name,
+			[ 'client_id' => $client_id ],
+			[ '%s' ]
 		);
 
 		if ( ! $deleted ) {

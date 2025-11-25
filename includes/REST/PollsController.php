@@ -104,6 +104,46 @@ class PollsController extends WP_REST_Controller {
 
 			]
 		);
+
+		register_rest_route(
+			$this->namespace,
+			'/' . $this->action . '/(?P<client_id>[a-zA-Z0-9_-]+)/stats',
+			[
+				'args' => [
+					'client_id' => [
+						'description' => __( 'Client ID for the poll.', 'poll-creator' ),
+						'type'        => 'string',
+					],
+				],
+				[
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => [ $this, 'get_poll_stats' ],
+					'permission_callback' => function () {
+						return current_user_can( 'edit_posts' );
+					},
+				],
+			]
+		);
+
+		register_rest_route(
+			$this->namespace,
+			'/' . $this->action . '/(?P<client_id>[a-zA-Z0-9_-]+)/permanent-delete',
+			[
+				'args' => [
+					'client_id' => [
+						'description' => __( 'Client ID for the poll.', 'poll-creator' ),
+						'type'        => 'string',
+					],
+				],
+				[
+					'methods'             => WP_REST_Server::DELETABLE,
+					'callback'            => [ $this, 'permanent_delete' ],
+					'permission_callback' => function () {
+						return current_user_can( 'edit_posts' );
+					},
+				],
+			]
+		);
 	}
 
 	/**
@@ -208,6 +248,52 @@ class PollsController extends WP_REST_Controller {
 			[
 				'success' => true,
 				'message' => __( 'Poll deleted successfully', 'poll-creator' ),
+			]
+		);
+	}
+
+	/**
+	 * Get poll stats for delete warning.
+	 *
+	 * @param WP_REST_Request $request Full details about the request.
+	 *
+	 * @return WP_REST_Response|WP_Error
+	 */
+	public function get_poll_stats( $request ) {
+		// Get rest parameters.
+		$params = $request->get_params();
+
+		$stats = FeedbackManager::get_instance()->get_poll_stats( $params['client_id'] );
+
+		if ( is_wp_error( $stats ) ) {
+			return $stats;
+		}
+
+		return rest_ensure_response( $stats );
+	}
+
+	/**
+	 * Permanently delete a poll from trash.
+	 *
+	 * @param WP_REST_Request $request Full details about the request.
+	 *
+	 * @return WP_REST_Response|WP_Error
+	 */
+	public function permanent_delete( $request ) {
+		// Get rest parameters.
+		$params = $request->get_params();
+
+		// Delete the poll permanently.
+		$deleted = FeedbackManager::get_instance()->delete( $params['client_id'] );
+
+		if ( is_wp_error( $deleted ) ) {
+			return $deleted;
+		}
+
+		return rest_ensure_response(
+			[
+				'success' => true,
+				'message' => __( 'Poll permanently deleted', 'poll-creator' ),
 			]
 		);
 	}
