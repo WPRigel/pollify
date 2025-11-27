@@ -72,11 +72,27 @@ class Votes {
 		// Get user data from Voter class.
 		$voter = new Voter();
 
+		// Check if anonymous voting is enabled.
+		$settings     = $poll->get_settings();
+		$is_anonymous = ! empty( $settings['anonymousVoting'] );
+
+		// Apply filter to allow customization.
+		$is_anonymous = apply_filters( 'pollify_is_anonymous_voting', $is_anonymous, $poll, $settings );
+
 		// Set all user parameters.
-		$args['user_id']       = $voter->get_user_id();
-		$args['user_ip']       = $voter->get_user_ip();
-		$args['user_agent']    = $voter->get_user_agent();
-		$args['user_location'] = $voter->get_user_country();
+		if ( $is_anonymous ) {
+			// For anonymous voting, don't collect personal data.
+			$args['user_id']       = $voter->get_user_id(); // Keep user_id if logged in.
+			$args['user_ip']       = null;
+			$args['user_agent']    = null;
+			$args['user_location'] = null;
+		} else {
+			// Normal voting - collect all data.
+			$args['user_id']       = $voter->get_user_id();
+			$args['user_ip']       = $voter->get_user_ip();
+			$args['user_agent']    = $voter->get_user_agent();
+			$args['user_location'] = $voter->get_user_country();
+		}
 
 		// Loop through all option ids and set vote for each option.
 		foreach ( $args['option_ids'] ?? [] as $option_id ) {

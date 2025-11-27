@@ -188,7 +188,7 @@ $updated_message = pollify_filter_input( INPUT_GET, 'updated', POLLIFY_FILTER_SA
 												<span class="flag-icon fi fi-<?php echo esc_html( strtolower( $location_vote['location'] ) ); ?> fib"></span>
 												<span class="country-name"><?php echo wp_kses_post( pollify_get_country_name( $location_vote['location'] ) ); ?></span>
 												<?php else : ?>
-												<span class="country-name"><?php esc_html_e( 'Unknown', 'poll-creator' ); ?></span>
+												<span class="country-name" title="<?php esc_attr__( 'No location collected (anonymous voting enabled)', 'poll-creator' ); ?>"><?php esc_html_e( 'Unknown', 'poll-creator' ); ?></span>
 												<?php endif; ?>
 											</td>
 											<td class="ip-address">
@@ -256,7 +256,15 @@ $updated_message = pollify_filter_input( INPUT_GET, 'updated', POLLIFY_FILTER_SA
 											<?php if ( ! empty( $recent_vote['user_location'] ) ) : ?>
 											<span class="flag-icon fi fi-<?php echo esc_html( strtolower( $recent_vote['user_location'] ) ); ?> fib"></span>
 											<?php endif; ?>
-											<span class="user-ip"><?php echo esc_html( $recent_vote['user_ip'] ); ?></span>
+											<span class="user-ip">
+												<?php
+												if ( ! empty( $recent_vote['user_ip'] ) ) {
+													echo esc_html( $recent_vote['user_ip'] );
+												} else {
+													echo wp_kses_post( '<span title="' . esc_attr__( 'No IP address collected (anonymous voting enabled)', 'poll-creator' ) . '">' . esc_html__( 'N/A', 'poll-creator' ) . '</span>' );
+												}
+												?>
+											</span>
 										</div>
 									</div>
 									<div class="vote-details">

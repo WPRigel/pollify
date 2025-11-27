@@ -195,7 +195,7 @@ class Blocks {
 		if ( ! empty( $saved_poll_ids ) ) {
 			foreach ( $saved_poll_ids as $saved_poll_id ) {
 				if ( ! in_array( $saved_poll_id, $poll_ids, true ) ) {
-					FeedbackManager::get_instance()->delete( $saved_poll_id );
+					FeedbackManager::get_instance()->trash( $saved_poll_id );
 				}
 			}
 		}

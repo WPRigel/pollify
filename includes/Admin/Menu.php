@@ -132,6 +132,67 @@ class Menu {
 		wp_enqueue_style( 'pollify-admin' );
 		wp_enqueue_script( 'pollify-admin' );
 
+		// Localize script for trash delete functionality.
+		wp_localize_script(
+			'pollify-admin',
+			'pollifyAdmin',
+			array(
+				'restUrl'   => rest_url( 'pollify/v1/polls/' ),
+				'nonce'     => wp_create_nonce( 'wp_rest' ),
+				'confirmMsg' => __( 'This poll will be permanently deleted and cannot be recovered.', 'poll-creator' ),
+			)
+		);
+
+		// Add inline script for permanent delete handling.
+		$inline_script = "
+		(function($) {
+			$(document).ready(function() {
+				$('.pollify-delete-permanently').on('click', function(e) {
+					e.preventDefault();
+					var pollId = $(this).data('poll-id');
+					var row = $(this).closest('tr');
+
+					// Fetch poll stats first
+					$.ajax({
+						url: pollifyAdmin.restUrl + pollId + '/stats',
+						method: 'GET',
+						beforeSend: function(xhr) {
+							xhr.setRequestHeader('X-WP-Nonce', pollifyAdmin.nonce);
+						},
+						success: function(stats) {
+							var message = pollifyAdmin.confirmMsg + '\\n\\n';
+							message += 'Total Votes: ' + stats.total_votes + '\\n';
+							message += 'Unique Voters: ' + (stats.unique_voters !== null ? stats.unique_voters : 'N/A (Anonymous Poll)');
+
+							if (confirm(message)) {
+								// Delete permanently
+								$.ajax({
+									url: pollifyAdmin.restUrl + pollId + '/permanent-delete',
+									method: 'DELETE',
+									beforeSend: function(xhr) {
+										xhr.setRequestHeader('X-WP-Nonce', pollifyAdmin.nonce);
+									},
+									success: function(response) {
+										row.fadeOut(300, function() {
+											$(this).remove();
+										});
+									},
+									error: function(xhr) {
+										alert('Error deleting poll: ' + (xhr.responseJSON?.message || 'Unknown error'));
+									}
+								});
+							}
+						},
+						error: function(xhr) {
+							alert('Error fetching poll stats: ' + (xhr.responseJSON?.message || 'Unknown error'));
+						}
+					});
+				});
+			});
+		})(jQuery);
+		";
+		wp_add_inline_script( 'pollify-admin', $inline_script );
+
 		$action = pollify_filter_input( INPUT_GET, 'action', POLLIFY_FILTER_SANITIZE_STRING );
 
 		if ( ! empty( $action ) ) {
@@ -213,8 +274,8 @@ class Menu {
 
 		$action = pollify_filter_input( INPUT_GET, 'action', POLLIFY_FILTER_SANITIZE_STRING );
 
-		// Check if has action and the value is view_results or reset_results. Then return.
-		if ( $action && in_array( $action, [ 'view_results', 'reset_results' ], true ) ) {
+		// Check if has action and the value is view_results, reset_results or trash_poll. Then return.
+		if ( $action && in_array( $action, [ 'view_results', 'reset_results', 'trash_poll' ], true ) ) {
 			return;
 		}
 
@@ -248,6 +309,43 @@ class Menu {
 				\wpRigel\Pollify\Votes::get_instance()->reset_results( $client_id );
 
 				wp_safe_redirect( admin_url( 'admin.php?page=pollify&updated=1' ) );
+			}
+		}
+
+		if ( 'trash_poll' === $action && wp_verify_nonce( $nonce, 'pollify_trash_poll' ) ) {
+			$client_id    = pollify_filter_input( INPUT_GET, 'poll_id', POLLIFY_FILTER_SANITIZE_STRING );
+			$reference_id = pollify_filter_input( INPUT_GET, 'reference_id', FILTER_VALIDATE_INT );
+
+			if ( ! empty( $client_id ) ) {
+				// First, remove the block from post if there's a reference.
+				if ( ! empty( $reference_id ) ) {
+					$post = get_post( $reference_id );
+
+					if ( $post && ! is_wp_error( $post ) ) {
+						$content = $post->post_content;
+						$blocks  = parse_blocks( $content );
+						$changed = false;
+
+						// Remove the poll block with matching client_id.
+						$filtered_blocks = $this->pollify_filter_blocks_recursive( $blocks, $client_id, $changed );
+
+						if ( $changed ) {
+							$new_content = serialize_blocks( $filtered_blocks );
+
+							wp_update_post(
+								[
+									'ID'           => $reference_id,
+									'post_content' => $new_content,
+								]
+							);
+						}
+					}
+				}
+
+				// Now move the poll to trash.
+				\wpRigel\Pollify\FeedbackManager::get_instance()->trash( $client_id );
+
+				wp_safe_redirect( admin_url( 'admin.php?page=pollify&trashed=1' ) );
 			}
 		}
 

@@ -491,6 +491,12 @@ function pollify_generate_shorthand_border_styles( $type, $border ) {
  * @return void
  */
 function pollify_display_ip_with_actions( $ip, $poll ) {
+	// Handle null IP for anonymous voting.
+	if ( null === $ip || '' === $ip ) {
+		echo '<span title="' . esc_attr__( 'No IP collected (anonymous voting enabled)', 'poll-creator' ) . '">' . esc_html__( 'N/A', 'poll-creator' ) . '</span>';
+		return;
+	}
+
 	$tab = pollify_filter_input( INPUT_GET, 'tab', POLLIFY_FILTER_SANITIZE_STRING ) ?: '';
 
 	$remove_url = wp_nonce_url(

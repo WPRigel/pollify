@@ -126,16 +126,24 @@ class PollsListTable extends \WP_List_Table {
 	public function column_title( $item ) {
 		$page                = pollify_filter_input( INPUT_GET, 'page', POLLIFY_FILTER_SANITIZE_STRING );
 		$confirm_text        = __( 'Are you sure you want to reset the results? If you do reset, the results are not achievable again.', 'poll-creator' );
-		$confirm_delete_text = __( 'Are you sure you want to delete this poll ? If you do delete, the results will be gone forever. Also it will remove the block from post.', 'poll-creator' );
+		$confirm_trash_text  = __( 'Are you sure you want to move this poll to trash? It will also removed the poll block from the editor and you will not be able to roll it back anymore.', 'poll-creator' );
 
-		$nonce        = wp_create_nonce( 'pollify_reset_results' );
-		$delete_nonce = wp_create_nonce( 'pollify_delete_poll' );
+		$nonce       = wp_create_nonce( 'pollify_reset_results' );
+		$trash_nonce = wp_create_nonce( 'pollify_trash_poll' );
 
-		$actions = array(
-			'view'   => sprintf( '<a href="?page=%s&action=%s&poll_id=%s">' . __( 'View results', 'poll-creator' ) . '</a>', $page, 'view_results', $item->get_client_id() ),
-			'trash'  => sprintf( '<a class="submitdelete" onclick="return confirm(\'%s\')" href="?page=%s&action=%s&poll_id=%s&_nonce=%s">' . __( 'Reset Results', 'poll-creator' ) . '</a>', $confirm_text, $page, 'reset_results', $item->get_client_id(), $nonce ),
-			'delete' => sprintf( '<a class="submitdelete" onclick="return confirm(\'%s\')" href="?page=%s&action=%s&poll_id=%s&reference_id=%s&_nonce=%s">' . __( 'Delete', 'poll-creator' ) . '</a>', $confirm_delete_text, $page, 'delete_poll', $item->get_client_id(), $item->get_reference(), $delete_nonce ),
-		);
+		// Different actions for trash vs normal polls.
+		if ( 'trash' === $item->get_status() ) {
+			$actions = array(
+				'view'               => sprintf( '<a href="?page=%s&action=%s&poll_id=%s">' . __( 'View results', 'poll-creator' ) . '</a>', $page, 'view_results', $item->get_client_id() ),
+				'delete_permanently' => sprintf( '<a class="submitdelete pollify-delete-permanently" data-poll-id="%s" href="#">' . __( 'Delete Permanently', 'poll-creator' ) . '</a>', $item->get_client_id() ),
+			);
+		} else {
+			$actions = array(
+				'view'  => sprintf( '<a href="?page=%s&action=%s&poll_id=%s">' . __( 'View results', 'poll-creator' ) . '</a>', $page, 'view_results', $item->get_client_id() ),
+				'reset' => sprintf( '<a class="submitdelete" onclick="return confirm(\'%s\')" href="?page=%s&action=%s&poll_id=%s&_nonce=%s">' . __( 'Reset Results', 'poll-creator' ) . '</a>', $confirm_text, $page, 'reset_results', $item->get_client_id(), $nonce ),
+				'trash' => sprintf( '<a class="submitdelete" onclick="return confirm(\'%s\')" href="?page=%s&action=%s&poll_id=%s&reference_id=%s&_nonce=%s">' . __( 'Trash', 'poll-creator' ) . '</a>', $confirm_trash_text, $page, 'trash_poll', $item->get_client_id(), $item->get_reference(), $trash_nonce ),
+			);
+		}
 
 		// Wrap the title with view result link.
 		$title = sprintf( '<a href="?page=%s&action=%s&poll_id=%s">%s</a>', $page, 'view_results', $item->get_client_id(), $item->get_title() );
@@ -289,10 +297,44 @@ class PollsListTable extends \WP_List_Table {
 	 * @return array
 	 */
 	protected function get_views() {
+		$current_status = pollify_filter_input( INPUT_GET, 'status', POLLIFY_FILTER_SANITIZE_STRING );
+
+		// Get counts for each status.
+		global $wpdb;
+		$counts = $wpdb->get_results(
+			"SELECT status, COUNT(*) as count FROM {$wpdb->prefix}pollify_poll GROUP BY status",
+			ARRAY_A
+		);
+
+		$status_counts = [
+			'all'     => 0,
+			'publish' => 0,
+			'draft'   => 0,
+			'trash'   => 0,
+		];
+
+		foreach ( $counts as $count_row ) {
+			$status = $count_row['status'];
+			$count = (int) $count_row['count'];
+
+			if ( 'trash' === $status ) {
+				$status_counts['trash'] = $count;
+			} elseif ( 'publish' === $status ) {
+				$status_counts['publish'] = $count;
+			} elseif ( 'draft' === $status ) {
+				$status_counts['draft'] = $count;
+			}
+
+			if ( 'trash' !== $status ) {
+				$status_counts['all'] += $count;
+			}
+		}
+
 		$views = [
-			'all'     => '<a href="' . admin_url( 'admin.php?page=pollify' ) . '" class="' . ( empty( pollify_filter_input( INPUT_GET, 'status', POLLIFY_FILTER_SANITIZE_STRING ) ) ? 'current' : '' ) . '">' . __( 'All', 'poll-creator' ) . '</a>',
-			'publish' => '<a href="' . admin_url( 'admin.php?page=pollify&status=publish' ) . '" class="' . ( 'publish' === pollify_filter_input( INPUT_GET, 'status', POLLIFY_FILTER_SANITIZE_STRING ) ? 'current' : '' ) . '">' . __( 'Open', 'poll-creator' ) . '</a>',
-			'draft'   => '<a href="' . admin_url( 'admin.php?page=pollify&status=draft' ) . '" class="' . ( 'draft' === pollify_filter_input( INPUT_GET, 'status', POLLIFY_FILTER_SANITIZE_STRING ) ? 'current' : '' ) . '">' . __( 'Closed', 'poll-creator' ) . '</a>',
+			'all'     => '<a href="' . admin_url( 'admin.php?page=pollify' ) . '" class="' . ( empty( $current_status ) ? 'current' : '' ) . '">' . __( 'All', 'poll-creator' ) . ' <span class="count">(' . $status_counts['all'] . ')</span></a>',
+			'publish' => '<a href="' . admin_url( 'admin.php?page=pollify&status=publish' ) . '" class="' . ( 'publish' === $current_status ? 'current' : '' ) . '">' . __( 'Open', 'poll-creator' ) . ' <span class="count">(' . $status_counts['publish'] . ')</span></a>',
+			'draft'   => '<a href="' . admin_url( 'admin.php?page=pollify&status=draft' ) . '" class="' . ( 'draft' === $current_status ? 'current' : '' ) . '">' . __( 'Closed', 'poll-creator' ) . ' <span class="count">(' . $status_counts['draft'] . ')</span></a>',
+			'trash'   => '<a href="' . admin_url( 'admin.php?page=pollify&status=trash' ) . '" class="' . ( 'trash' === $current_status ? 'current' : '' ) . '">' . __( 'Trash', 'poll-creator' ) . ' <span class="count">(' . $status_counts['trash'] . ')</span></a>',
 		];
 
 		return $views;

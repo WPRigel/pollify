@@ -4,7 +4,7 @@ Tags: poll plugin, poll, poll maker, vote, survey
 Requires at least: 6.0
 Tested up to: 6.8.2
 Requires PHP: 8.0
-Stable tag: 1.0.10
+Stable tag: 1.0.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -197,6 +197,13 @@ Sure, there is! Check out our [official documentation](https://wprigel.com/docs/
 8. IP details
 
 == Changelog ==
+
+v1.0.11 -> November 27, 2025
+--------------------------------------------
+- [New] Introduced anonymous voting to enhance personal data privacy in compliance with GDPR guidelines.
+- [New] Added trash poll option when removing poll blocks from editor
+- [Fix] Fix get_result undefined issues once poll is deleted from editor
+- [Fix] Added few aria-label for accesibility on poll rednering
 
 v1.0.10 -> November 15, 2025
 --------------------------------------------

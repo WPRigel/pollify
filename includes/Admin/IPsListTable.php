@@ -119,7 +119,7 @@ class IPsListTable extends \WP_List_Table {
 			pollify_display_ip_with_actions( $item['ip'], $this->poll );
 			return ob_get_clean();
 		} else {
-			return __( 'N/A', 'poll-creator' );
+			return '<span title="' . esc_attr__( 'No IP collected (anonymous voting enabled)', 'poll-creator' ) . '">' . esc_html__( 'N/A', 'poll-creator' ) . '</span>';
 		}
 	}
 
@@ -138,7 +138,7 @@ class IPsListTable extends \WP_List_Table {
 				esc_html( pollify_get_country_name( $item['location'] ) )
 			);
 		} else {
-			return __( 'Unknown', 'poll-creator' );
+			return '<span title="' . esc_attr__( 'No location collected (anonymous voting enabled)', 'poll-creator' ) . '">' . esc_html__( 'N/A', 'poll-creator' ) . '</span>';
 		}
 	}
 
