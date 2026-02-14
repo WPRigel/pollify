@@ -2,9 +2,9 @@
 Contributors: wprigel
 Tags: poll plugin, poll, poll maker, vote, survey
 Requires at least: 6.0
-Tested up to: 6.8.2
+Tested up to: 6.9.1
 Requires PHP: 8.0
-Stable tag: 1.0.11
+Stable tag: 1.0.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -65,6 +65,9 @@ Ensure participant privacy by collecting minimal data, compliant with GDPR
 
 **Email Notifications**
 Receive alerts for each vote submitted, ensuring timely updates without constant dashboard checks. (Upcoming in pro)
+
+**Logged in user Limitation**
+Limit polling access so that only logged-in users can participate, ensuring poll integrity. This feature is configurable within the block settings, allowing you to require login before a user is able to vote on a poll.
 
 **User Role Limitation**
 Specify user roles eligible to participate, ensuring targeted engagement. (Upcoming in pro)
@@ -148,6 +151,7 @@ Seamlessly collect user emails for community building and email marketing effort
 - IP and user wise vote restriction prevents multiple votes from the same IP address or user, ensuring fair polling.
 - Engagement Block: Collect user feedback directly from the frontend using a dedicated block.
 - Export poll results in multiple formats, including CSV, PDF, DOCX, and Excel
+- Logged-in Restriction feature allows you to restrict poll voting to only logged-in users, with customizable messages and login prompts.
 - VS Type of Poll (Versus) enables the creation of polls comparing options side by side (Upcoming in pro)
 - Import/Export Polls help in Importing and exporting poll configurations for easy sharing or backup. (Upcoming in pro)
 - Send mail to a user (integrated with email services ) (Upcoming in pro).
@@ -197,6 +201,12 @@ Sure, there is! Check out our [official documentation](https://wprigel.com/docs/
 8. IP details
 
 == Changelog ==
+
+v1.0.12 -> February 14, 2026
+--------------------------------------------
+- [New] Introduced user logged in restriction features for all types of poll
+- [Fix] Few security issues for submitting the vote.
+- [Fix] Fixed minor issues for coding standard
 
 v1.0.11 -> November 27, 2025
 --------------------------------------------

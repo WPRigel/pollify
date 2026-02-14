@@ -450,11 +450,11 @@ class FeedbackManager {
 		}
 
 		return [
-			'title'          => $poll->get_title(),
-			'type'           => $poll->get_type(),
-			'total_votes'    => (int) $total_votes,
-			'unique_voters'  => $unique_voters !== null ? (int) $unique_voters : null,
-			'created_at'     => $poll->get_created_at(),
+			'title'         => $poll->get_title(),
+			'type'          => $poll->get_type(),
+			'total_votes'   => (int) $total_votes,
+			'unique_voters' => null !== $unique_voters ? (int) $unique_voters : null,
+			'created_at'    => $poll->get_created_at(),
 		];
 	}
 

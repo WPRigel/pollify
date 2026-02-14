@@ -137,8 +137,8 @@ class Menu {
 			'pollify-admin',
 			'pollifyAdmin',
 			array(
-				'restUrl'   => rest_url( 'pollify/v1/polls/' ),
-				'nonce'     => wp_create_nonce( 'wp_rest' ),
+				'restUrl'    => rest_url( 'pollify/v1/polls/' ),
+				'nonce'      => wp_create_nonce( 'wp_rest' ),
 				'confirmMsg' => __( 'This poll will be permanently deleted and cannot be recovered.', 'poll-creator' ),
 			)
 		);
