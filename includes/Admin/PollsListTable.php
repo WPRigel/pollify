@@ -124,9 +124,9 @@ class PollsListTable extends \WP_List_Table {
 	 * @return array
 	 */
 	public function column_title( $item ) {
-		$page                = pollify_filter_input( INPUT_GET, 'page', POLLIFY_FILTER_SANITIZE_STRING );
-		$confirm_text        = __( 'Are you sure you want to reset the results? If you do reset, the results are not achievable again.', 'poll-creator' );
-		$confirm_trash_text  = __( 'Are you sure you want to move this poll to trash? It will also removed the poll block from the editor and you will not be able to roll it back anymore.', 'poll-creator' );
+		$page               = pollify_filter_input( INPUT_GET, 'page', POLLIFY_FILTER_SANITIZE_STRING );
+		$confirm_text       = __( 'Are you sure you want to reset the results? If you do reset, the results are not achievable again.', 'poll-creator' );
+		$confirm_trash_text = __( 'Are you sure you want to move this poll to trash? It will also removed the poll block from the editor and you will not be able to roll it back anymore.', 'poll-creator' );
 
 		$nonce       = wp_create_nonce( 'pollify_reset_results' );
 		$trash_nonce = wp_create_nonce( 'pollify_trash_poll' );
@@ -161,12 +161,12 @@ class PollsListTable extends \WP_List_Table {
 	public function column_type( $item ) {
 		$icon = $item->get_icon();
 
-		// Check if the icon is an SVG string
+		// Check if the icon is an SVG string.
 		if ( strpos( $icon, '<svg' ) !== false ) {
-			// If it's an SVG, render it directly
+			// If it's an SVG, render it directly.
 			$icon_html = $icon;
 		} else {
-			// If it's a dashicon class or other string, wrap it in dashicons format
+			// If it's a dashicon class or other string, wrap it in dashicons format.
 			$icon_html = sprintf( '<span class="dashicons dashicons-%s"></span>', esc_attr( $icon ) );
 		}
 
@@ -315,7 +315,7 @@ class PollsListTable extends \WP_List_Table {
 
 		foreach ( $counts as $count_row ) {
 			$status = $count_row['status'];
-			$count = (int) $count_row['count'];
+			$count  = (int) $count_row['count'];
 
 			if ( 'trash' === $status ) {
 				$status_counts['trash'] = $count;

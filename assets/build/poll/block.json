@@ -147,6 +147,18 @@
       "type": "string",
       "default": "Please log in to vote."
     },
+    "requireLoginAction": {
+      "type": "string",
+      "default": "hide",
+      "enum": [
+        "hide",
+        "popup"
+      ]
+    },
+    "requireLoginUrl": {
+      "type": "string",
+      "default": ""
+    },
     "style": {
       "type": "object",
       "default": {

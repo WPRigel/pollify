@@ -34,7 +34,7 @@ $require_login_action = $attributes['requireLoginAction'] ?? 'hide';
 $user_not_logged_in   = $require_login && ! is_user_logged_in();
 $custom_login_url     = ! empty( $attributes['requireLoginUrl'] ) ? $attributes['requireLoginUrl'] : '';
 $login_url            = $custom_login_url
-	? add_query_arg( 'redirect_to', urlencode( get_permalink() ), $custom_login_url )
+	? add_query_arg( 'redirect_to', rawurlencode( get_permalink() ), $custom_login_url )
 	: wp_login_url( get_permalink() );
 
 if ( $user_not_logged_in && 'popup' !== $require_login_action ) {
@@ -110,9 +110,9 @@ $is_schedule_with_show_results = ( 'schedule' === $attributes['status'] && strto
 $is_draft_with_show_close_banner    = ( 'draft' === $attributes['status'] && 'show-message' === $attributes['closePollState'] );
 $is_schedule_with_show_close_banner = ( 'schedule' === $attributes['status'] && strtotime( $attributes['endDate'] ) < time() && 'show-message' === $attributes['closePollState'] );
 
-$voter            = new \wpRigel\Pollify\Model\Voter();
-$results          = \wpRigel\Pollify\Votes::get_instance()->get_results( $attributes['pollClientId'] );
-$is_anonymous     = ! empty( $attributes['anonymousVoting'] );
+$voter        = new \wpRigel\Pollify\Model\Voter();
+$results      = \wpRigel\Pollify\Votes::get_instance()->get_results( $attributes['pollClientId'] );
+$is_anonymous = ! empty( $attributes['anonymousVoting'] );
 
 // When requireLogin is on, always check server-side by user_id (even if anonymous).
 // When requireLogin is off, only check server-side if NOT anonymous.
