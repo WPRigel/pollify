@@ -1,15 +1,15 @@
-# Copyright (C) 2025 wprigel
+# Copyright (C) 2026 wprigel
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Pollify 1.0.11\n"
+"Project-Id-Version: Pollify 1.0.12\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/poll-creator\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-11-27T12:59:28+00:00\n"
+"POT-Creation-Date: 2026-02-14T17:29:12+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.9.0\n"
 
@@ -137,7 +137,7 @@ msgid "Source"
 msgstr ""
 
 #: includes/Admin/PollsListTable.php:52
-#: src/poll/edit.js:131
+#: src/poll/edit.js:136
 msgid "Status"
 msgstr ""
 
@@ -159,7 +159,7 @@ msgstr ""
 
 #: includes/Admin/PollsListTable.php:137
 #: includes/Admin/PollsListTable.php:142
-#: src/poll/edit.js:182
+#: src/poll/edit.js:187
 msgid "View results"
 msgstr ""
 
@@ -187,7 +187,7 @@ msgstr ""
 
 #: includes/Admin/PollsListTable.php:215
 #: includes/Admin/PollsListTable.php:335
-#: src/poll/edit.js:134
+#: src/poll/edit.js:139
 msgid "Open"
 msgstr ""
 
@@ -341,14 +341,20 @@ msgid "Options are empty."
 msgstr ""
 
 #: includes/Model/Feedback.php:301
-#: templates/poll/poll.php:160
-#: src/poll/edit.js:166
-#: src/poll/edit.js:168
+#: templates/poll/poll.php:205
+#: src/poll/edit.js:171
+#: src/poll/edit.js:173
 msgid "This poll is closed"
 msgstr ""
 
-#: includes/Model/Feedback.php:316
-#: src/poll/view.js:152
+#: includes/Model/Feedback.php:309
+#: src/poll/edit.js:227
+#: src/poll/edit.js:228
+msgid "Please log in to vote."
+msgstr ""
+
+#: includes/Model/Feedback.php:325
+#: src/poll/view.js:225
 msgid "You have already voted."
 msgstr ""
 
@@ -556,158 +562,206 @@ msgstr ""
 msgid "Search by title"
 msgstr ""
 
+#: templates/poll/poll.php:60
+msgid "Please log in to vote"
+msgstr ""
+
+#: templates/poll/poll.php:60
+msgid "Login"
+msgstr ""
+
 #. translators: %s: total votes
 #: templates/results/horizointal-bar-chart.php:55
 msgid "Total votes %s"
 msgstr ""
 
-#: src/poll/edit.js:129
+#: src/poll/edit.js:134
 msgid "General settings"
 msgstr ""
 
-#: src/poll/edit.js:135
+#: src/poll/edit.js:140
 msgid "Close"
 msgstr ""
 
-#: src/poll/edit.js:136
+#: src/poll/edit.js:141
 msgid "Close after"
 msgstr ""
 
-#: src/poll/edit.js:152
+#: src/poll/edit.js:157
 msgid "When poll is closed"
 msgstr ""
 
-#: src/poll/edit.js:155
+#: src/poll/edit.js:160
 msgid "Show poll result"
 msgstr ""
 
-#: src/poll/edit.js:156
+#: src/poll/edit.js:161
 msgid "Hide poll"
 msgstr ""
 
-#: src/poll/edit.js:157
+#: src/poll/edit.js:162
 msgid "Show poll close message"
 msgstr ""
 
-#: src/poll/edit.js:167
+#: src/poll/edit.js:172
 msgid "Close message text"
 msgstr ""
 
-#: src/poll/edit.js:177
+#: src/poll/edit.js:182
 msgid "Confiramtion message"
 msgstr ""
 
-#: src/poll/edit.js:179
+#: src/poll/edit.js:184
 msgid "On submission"
 msgstr ""
 
-#: src/poll/edit.js:183
+#: src/poll/edit.js:188
 msgid "View message"
 msgstr ""
 
-#: src/poll/edit.js:190
-#: src/poll/edit.js:192
-#: src/poll/edit.js:201
-#: src/poll/edit.js:203
+#: src/poll/edit.js:195
+#: src/poll/edit.js:197
+#: src/poll/edit.js:206
+#: src/poll/edit.js:208
 msgid "Thanks for voting!"
 msgstr ""
 
-#: src/poll/edit.js:191
+#: src/poll/edit.js:196
 msgid "Message text"
 msgstr ""
 
-#: src/poll/edit.js:202
+#: src/poll/edit.js:207
 msgid "View result message text"
 msgstr ""
 
-#: src/poll/edit.js:211
+#: src/poll/edit.js:216
 msgid "Response settings"
 msgstr ""
 
-#: src/poll/edit.js:213
-msgid "Enable Anonymous Voting"
+#: src/poll/edit.js:218
+msgid "Require login to vote"
 msgstr ""
 
-#: src/poll/edit.js:214
-msgid "When enabled, no personal data (IP, location, user agent) will be collected. GDPR compliant."
-msgstr ""
-
-#: src/poll/edit.js:221
-msgid "Prevent duplicate votes"
-msgstr ""
-
-#: src/poll/edit.js:222
-msgid "Allowed one response per computer"
-msgstr ""
-
-#: src/poll/edit.js:225
-msgid "If checked, users can only vote once using browser storage. If unchecked, users can vote unlimited times (truly anonymous)."
+#: src/poll/edit.js:219
+msgid "When enabled, only logged-in users can vote. Duplicate prevention uses user account instead of IP or browser storage."
 msgstr ""
 
 #: src/poll/edit.js:226
-msgid "If checked, only one response per computer will be allowed (tracked by IP address)."
+msgid "Login required message"
 msgstr ""
 
-#: src/poll/edit.js:234
-msgid "Storage method for duplicate prevention"
+#: src/poll/edit.js:235
+msgid "Custom login URL"
 msgstr ""
 
-#: src/poll/edit.js:237
-msgid "Local Storage - Persistent (prevents revoting even after browser restart)"
+#: src/poll/edit.js:236
+msgid "Leave empty to use the default WordPress login page. Useful for third-party login plugins."
 msgstr ""
 
-#: src/poll/edit.js:238
-msgid "Session Storage - Temporary (allows revoting after browser closes)"
+#: src/poll/edit.js:245
+msgid "When not logged in, show:"
 msgstr ""
 
-#: src/poll/edit.js:239
-msgid "Cookie - Persistent with expiration (prevents revoting for 30 days)"
-msgstr ""
-
-#: src/poll/edit.js:241
-msgid "Choose how to store the vote flag on user's browser."
+#: src/poll/edit.js:248
+msgid "Login message (hide the poll)"
 msgstr ""
 
 #: src/poll/edit.js:249
-msgid "Submit button colors"
+msgid "Poll with results + login popup on vote"
 msgstr ""
 
-#: src/poll/edit.js:255
-#: src/poll/edit.js:332
-msgid "Background Color"
+#: src/poll/edit.js:256
+msgid "Enable Anonymous Voting"
 msgstr ""
 
-#: src/poll/edit.js:260
-#: src/poll/edit.js:337
-msgid "Text Color"
+#: src/poll/edit.js:257
+msgid "When enabled, no personal data (IP, location, user agent) will be collected. GDPR compliant."
 msgstr ""
 
-#: src/poll/edit.js:265
-msgid "Hover Background Color"
+#: src/poll/edit.js:264
+msgid "One vote per user"
+msgstr ""
+
+#: src/poll/edit.js:266
+msgid "Prevent duplicate votes"
+msgstr ""
+
+#: src/poll/edit.js:267
+msgid "Allowed one response per computer"
 msgstr ""
 
 #: src/poll/edit.js:270
-msgid "Hover Text Color"
+msgid "If checked, each logged-in user can only vote once (tracked by user account)."
 msgstr ""
 
-#: src/poll/edit.js:274
-#: src/poll/edit.js:275
-msgid "Button width"
+#: src/poll/edit.js:272
+msgid "If checked, users can only vote once using browser storage. If unchecked, users can vote unlimited times (truly anonymous)."
+msgstr ""
+
+#: src/poll/edit.js:273
+msgid "If checked, only one response per computer will be allowed (tracked by IP address)."
+msgstr ""
+
+#: src/poll/edit.js:281
+msgid "Storage method for duplicate prevention"
+msgstr ""
+
+#: src/poll/edit.js:284
+msgid "Local Storage - Persistent (prevents revoting even after browser restart)"
+msgstr ""
+
+#: src/poll/edit.js:285
+msgid "Session Storage - Temporary (allows revoting after browser closes)"
+msgstr ""
+
+#: src/poll/edit.js:286
+msgid "Cookie - Persistent with expiration (prevents revoting for 30 days)"
+msgstr ""
+
+#: src/poll/edit.js:288
+msgid "Choose how to store the vote flag on user's browser."
+msgstr ""
+
+#: src/poll/edit.js:296
+msgid "Submit button colors"
 msgstr ""
 
 #: src/poll/edit.js:302
+#: src/poll/edit.js:379
+msgid "Background Color"
+msgstr ""
+
+#: src/poll/edit.js:307
+#: src/poll/edit.js:384
+msgid "Text Color"
+msgstr ""
+
+#: src/poll/edit.js:312
+msgid "Hover Background Color"
+msgstr ""
+
+#: src/poll/edit.js:317
+msgid "Hover Text Color"
+msgstr ""
+
+#: src/poll/edit.js:321
+#: src/poll/edit.js:322
+msgid "Button width"
+msgstr ""
+
+#: src/poll/edit.js:349
 msgid "Button alignment"
 msgstr ""
 
-#: src/poll/edit.js:326
+#: src/poll/edit.js:373
 msgid "Poll closing banner"
 msgstr ""
 
-#: src/poll/edit.js:363
+#: src/poll/edit.js:410
 msgid "Enter the poll question"
 msgstr ""
 
-#: src/poll/edit.js:371
+#: src/poll/edit.js:418
 msgid "Add a description (optional)"
 msgstr ""
 

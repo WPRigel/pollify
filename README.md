@@ -2,9 +2,9 @@
 **Contributors:** [wprigel](https://profiles.wordpress.org/wprigel)<br>
 **Tags:** poll-creator, poll, survey, vote<br>
 **Requires at least:** 4.4<br>
-**Tested up to:** 6.8.2<br>
+**Tested up to:** 6.9.1<br>
 **Requires PHP:** 8.0<br>
-**Stable tag:** 1.0.10<br>
+**Stable tag:** 1.0.12<br>
 **License:** GPLv3 or later<br>
 **License URI:** http://www.gnu.org/licenses/gpl-3.0.html<br>
 

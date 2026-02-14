@@ -147,9 +147,9 @@ class VotesListTable extends \WP_List_Table {
 			$delete_url = wp_nonce_url(
 				add_query_arg(
 					[
-						'action'   => 'pollify_delete_vote',
-						'vote_id'  => $vote_id,
-						'poll_id'  => $poll_id,
+						'action'       => 'pollify_delete_vote',
+						'vote_id'      => $vote_id,
+						'poll_id'      => $poll_id,
 						'redirect_url' => rawurlencode(
 							add_query_arg(
 								[
