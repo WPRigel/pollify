@@ -1,4 +1,4 @@
-# Copyright (C) 2025 wprigel
+# Copyright (C) 2026 wprigel
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-11-27T12:59:28+00:00\n"
+"POT-Creation-Date: 2026-02-10T17:47:58+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.9.0\n"
 
@@ -17,6 +17,9 @@ msgstr ""
 #: includes/Admin/Menu.php:103
 #: includes/Admin/Menu.php:104
 #: includes/Blocks.php:65
+#: poll-creator/includes/Admin/Menu.php:103
+#: poll-creator/includes/Admin/Menu.php:104
+#: poll-creator/includes/Blocks.php:65
 msgid "Pollify"
 msgstr ""
 
@@ -38,21 +41,30 @@ msgstr ""
 
 #: includes/Admin/IPsListTable.php:62
 #: includes/Admin/IPsListTable.php:78
+#: poll-creator/includes/Admin/IPsListTable.php:62
+#: poll-creator/includes/Admin/IPsListTable.php:78
 msgid "IP"
 msgstr ""
 
 #: includes/Admin/IPsListTable.php:63
+#: poll-creator/includes/Admin/IPsListTable.php:63
 msgid "IP's"
 msgstr ""
 
 #: includes/Admin/IPsListTable.php:79
 #: includes/Admin/VotesListTable.php:77
+#: poll-creator/includes/Admin/IPsListTable.php:79
+#: poll-creator/includes/Admin/VotesListTable.php:77
+#: poll-creator/templates/admin/overview.php:179
 #: templates/admin/overview.php:179
 msgid "Location"
 msgstr ""
 
 #: includes/Admin/IPsListTable.php:80
 #: includes/helpers/functions.php:391
+#: poll-creator/includes/Admin/IPsListTable.php:80
+#: poll-creator/includes/helpers/functions.php:391
+#: poll-creator/templates/admin/overview.php:128
 #: templates/admin/overview.php:128
 msgid "Votes"
 msgstr ""
@@ -64,6 +76,14 @@ msgstr ""
 #: includes/Admin/VotesListTable.php:196
 #: includes/Admin/VotesListTable.php:211
 #: includes/helpers/functions.php:496
+#: poll-creator/includes/Admin/IPsListTable.php:100
+#: poll-creator/includes/Admin/IPsListTable.php:102
+#: poll-creator/includes/Admin/IPsListTable.php:122
+#: poll-creator/includes/Admin/IPsListTable.php:141
+#: poll-creator/includes/Admin/VotesListTable.php:196
+#: poll-creator/includes/Admin/VotesListTable.php:211
+#: poll-creator/includes/helpers/functions.php:496
+#: poll-creator/templates/admin/overview.php:264
 #: templates/admin/overview.php:264
 msgid "N/A"
 msgstr ""
@@ -71,655 +91,881 @@ msgstr ""
 #: includes/Admin/IPsListTable.php:122
 #: includes/Admin/VotesListTable.php:211
 #: includes/helpers/functions.php:496
+#: poll-creator/includes/Admin/IPsListTable.php:122
+#: poll-creator/includes/Admin/VotesListTable.php:211
+#: poll-creator/includes/helpers/functions.php:496
 msgid "No IP collected (anonymous voting enabled)"
 msgstr ""
 
 #: includes/Admin/IPsListTable.php:141
 #: includes/Admin/VotesListTable.php:196
+#: poll-creator/includes/Admin/IPsListTable.php:141
+#: poll-creator/includes/Admin/VotesListTable.php:196
+#: poll-creator/templates/admin/overview.php:191
 #: templates/admin/overview.php:191
 msgid "No location collected (anonymous voting enabled)"
 msgstr ""
 
 #: includes/Admin/IPsListTable.php:160
 #: includes/Admin/VotesListTable.php:242
+#: poll-creator/includes/Admin/IPsListTable.php:160
+#: poll-creator/includes/Admin/VotesListTable.php:242
 msgid "All countries"
 msgstr ""
 
 #: includes/Admin/IPsListTable.php:169
 #: includes/Admin/PollsListTable.php:373
 #: includes/Admin/VotesListTable.php:261
+#: poll-creator/includes/Admin/IPsListTable.php:169
+#: poll-creator/includes/Admin/PollsListTable.php:373
+#: poll-creator/includes/Admin/VotesListTable.php:261
 msgid "Filter"
 msgstr ""
 
 #: includes/Admin/Menu.php:86
+#: poll-creator/includes/Admin/Menu.php:86
 msgid "Contact us"
 msgstr ""
 
 #: includes/Admin/Menu.php:88
 #: includes/Plugin.php:114
+#: poll-creator/includes/Admin/Menu.php:88
+#: poll-creator/includes/Plugin.php:114
 msgid "Documentation"
 msgstr ""
 
 #: includes/Admin/Menu.php:142
+#: poll-creator/includes/Admin/Menu.php:142
 msgid "This poll will be permanently deleted and cannot be recovered."
 msgstr ""
 
 #: includes/Admin/Menu.php:283
+#: poll-creator/includes/Admin/Menu.php:283
 msgid "Polls per page"
 msgstr ""
 
 #: includes/Admin/Menu.php:378
+#: poll-creator/includes/Admin/Menu.php:378
 msgid "Failed to update the post content."
 msgstr ""
 
 #: includes/Admin/Menu.php:418
+#: poll-creator/includes/Admin/Menu.php:418
 msgid "IP address removed successfully."
 msgstr ""
 
 #: includes/Admin/Menu.php:420
+#: poll-creator/includes/Admin/Menu.php:420
 msgid "Failed to remove IP address."
 msgstr ""
 
 #: includes/Admin/Menu.php:449
+#: poll-creator/includes/Admin/Menu.php:449
 msgid "Vote deleted successfully."
 msgstr ""
 
 #: includes/Admin/PollsListTable.php:49
+#: poll-creator/includes/Admin/PollsListTable.php:49
 msgid "Title"
 msgstr ""
 
 #: includes/Admin/PollsListTable.php:50
+#: poll-creator/includes/Admin/PollsListTable.php:50
 msgid "Type"
 msgstr ""
 
 #: includes/Admin/PollsListTable.php:51
+#: poll-creator/includes/Admin/PollsListTable.php:51
 msgid "Source"
 msgstr ""
 
 #: includes/Admin/PollsListTable.php:52
-#: src/poll/edit.js:131
+#: poll-creator/includes/Admin/PollsListTable.php:52
+#: poll-creator/src/poll/edit.js:131
+#: src/poll/edit.js:133
 msgid "Status"
 msgstr ""
 
 #: includes/Admin/PollsListTable.php:53
+#: poll-creator/includes/Admin/PollsListTable.php:53
 msgid "Total Response"
 msgstr ""
 
 #: includes/Admin/PollsListTable.php:54
+#: poll-creator/includes/Admin/PollsListTable.php:54
 msgid "Created at"
 msgstr ""
 
 #: includes/Admin/PollsListTable.php:128
+#: poll-creator/includes/Admin/PollsListTable.php:128
 msgid "Are you sure you want to reset the results? If you do reset, the results are not achievable again."
 msgstr ""
 
 #: includes/Admin/PollsListTable.php:129
+#: poll-creator/includes/Admin/PollsListTable.php:129
 msgid "Are you sure you want to move this poll to trash? It will also removed the poll block from the editor and you will not be able to roll it back anymore."
 msgstr ""
 
 #: includes/Admin/PollsListTable.php:137
 #: includes/Admin/PollsListTable.php:142
-#: src/poll/edit.js:182
+#: poll-creator/includes/Admin/PollsListTable.php:137
+#: poll-creator/includes/Admin/PollsListTable.php:142
+#: poll-creator/src/poll/edit.js:182
+#: src/poll/edit.js:184
 msgid "View results"
 msgstr ""
 
 #: includes/Admin/PollsListTable.php:138
+#: poll-creator/includes/Admin/PollsListTable.php:138
 msgid "Delete Permanently"
 msgstr ""
 
 #: includes/Admin/PollsListTable.php:143
+#: poll-creator/includes/Admin/PollsListTable.php:143
 msgid "Reset Results"
 msgstr ""
 
 #: includes/Admin/PollsListTable.php:144
 #: includes/Admin/PollsListTable.php:218
 #: includes/Admin/PollsListTable.php:337
+#: poll-creator/includes/Admin/PollsListTable.php:144
+#: poll-creator/includes/Admin/PollsListTable.php:218
+#: poll-creator/includes/Admin/PollsListTable.php:337
 msgid "Trash"
 msgstr ""
 
 #: includes/Admin/PollsListTable.php:191
+#: poll-creator/includes/Admin/PollsListTable.php:191
 msgid "Edit"
 msgstr ""
 
 #: includes/Admin/PollsListTable.php:192
+#: poll-creator/includes/Admin/PollsListTable.php:192
 msgid "View frontend"
 msgstr ""
 
 #: includes/Admin/PollsListTable.php:215
 #: includes/Admin/PollsListTable.php:335
-#: src/poll/edit.js:134
+#: poll-creator/includes/Admin/PollsListTable.php:215
+#: poll-creator/includes/Admin/PollsListTable.php:335
+#: poll-creator/src/poll/edit.js:134
+#: src/poll/edit.js:136
 msgid "Open"
 msgstr ""
 
 #: includes/Admin/PollsListTable.php:216
 #: includes/Admin/PollsListTable.php:230
 #: includes/Admin/PollsListTable.php:336
+#: poll-creator/includes/Admin/PollsListTable.php:216
+#: poll-creator/includes/Admin/PollsListTable.php:230
+#: poll-creator/includes/Admin/PollsListTable.php:336
 msgid "Closed"
 msgstr ""
 
 #: includes/Admin/PollsListTable.php:217
+#: poll-creator/includes/Admin/PollsListTable.php:217
 msgid "Schedule"
 msgstr ""
 
 #. translators: %s: poll end date
 #: includes/Admin/PollsListTable.php:226
+#: poll-creator/includes/Admin/PollsListTable.php:226
 msgid "Ended at %s"
 msgstr ""
 
 #. translators: %s: poll end date
 #: includes/Admin/PollsListTable.php:234
+#: poll-creator/includes/Admin/PollsListTable.php:234
 msgid "Will be ended on %s"
 msgstr ""
 
 #. translators: %s: votes count
 #: includes/Admin/PollsListTable.php:274
+#: poll-creator/includes/Admin/PollsListTable.php:274
+#: poll-creator/templates/admin/overview.php:79
+#: poll-creator/templates/results/horizointal-bar-chart.php:31
 #: templates/admin/overview.php:79
 #: templates/results/horizointal-bar-chart.php:31
 msgid "%s votes"
 msgstr ""
 
 #: includes/Admin/PollsListTable.php:334
+#: poll-creator/includes/Admin/PollsListTable.php:334
 msgid "All"
 msgstr ""
 
 #: includes/Admin/PollsListTable.php:358
+#: poll-creator/includes/Admin/PollsListTable.php:358
 msgid "All types"
 msgstr ""
 
 #: includes/Admin/VotesListTable.php:62
+#: poll-creator/includes/Admin/VotesListTable.php:62
 msgid "Vote"
 msgstr ""
 
 #: includes/Admin/VotesListTable.php:63
+#: poll-creator/includes/Admin/VotesListTable.php:63
 msgid "Votess"
 msgstr ""
 
 #: includes/Admin/VotesListTable.php:76
+#: poll-creator/includes/Admin/VotesListTable.php:76
 msgid "Name"
 msgstr ""
 
 #: includes/Admin/VotesListTable.php:78
+#: poll-creator/includes/Admin/VotesListTable.php:78
+#: poll-creator/templates/admin/overview.php:180
 #: templates/admin/overview.php:180
 msgid "IP Address"
 msgstr ""
 
 #: includes/Admin/VotesListTable.php:79
+#: poll-creator/includes/Admin/VotesListTable.php:79
 msgid "Vote answer"
 msgstr ""
 
 #: includes/Admin/VotesListTable.php:80
+#: poll-creator/includes/Admin/VotesListTable.php:80
 msgid "Vote date"
 msgstr ""
 
 #: includes/Admin/VotesListTable.php:137
+#: poll-creator/includes/Admin/VotesListTable.php:137
+#: poll-creator/templates/admin/overview.php:252
 #: templates/admin/overview.php:252
 msgid "Guest"
 msgstr ""
 
 #: includes/Admin/VotesListTable.php:173
+#: poll-creator/includes/Admin/VotesListTable.php:173
 msgid "Are you sure you want to delete this vote? This action cannot be undone."
 msgstr ""
 
 #: includes/Admin/VotesListTable.php:174
+#: poll-creator/includes/Admin/VotesListTable.php:174
 msgid "Delete"
 msgstr ""
 
 #: includes/Admin/VotesListTable.php:254
+#: poll-creator/includes/Admin/VotesListTable.php:254
 msgid "All answers"
 msgstr ""
 
 #: includes/Blocks.php:219
+#: poll-creator/includes/Blocks.php:219
 msgid "Inline list"
 msgstr ""
 
 #: includes/FeedbackFactory.php:57
+#: poll-creator/includes/FeedbackFactory.php:57
 msgid "Invalid feedback."
 msgstr ""
 
 #: includes/FeedbackFactory.php:72
 #: includes/FeedbackFactory.php:87
+#: poll-creator/includes/FeedbackFactory.php:72
+#: poll-creator/includes/FeedbackFactory.php:87
 msgid "Invalid feedback type."
 msgstr ""
 
 #. translators: %s: Field name
 #: includes/FeedbackManager.php:204
+#: poll-creator/includes/FeedbackManager.php:204
 msgid "Error: %s cannot be left empty. Please fill the required information"
 msgstr ""
 
 #: includes/FeedbackManager.php:229
 #: includes/FeedbackManager.php:232
+#: poll-creator/includes/FeedbackManager.php:229
+#: poll-creator/includes/FeedbackManager.php:232
 msgid "Options must contain type and option value"
 msgstr ""
 
 #: includes/FeedbackManager.php:238
+#: poll-creator/includes/FeedbackManager.php:238
 msgid "Client id is not valid"
 msgstr ""
 
 #: includes/FeedbackManager.php:275
+#: poll-creator/includes/FeedbackManager.php:275
 msgid "Poll not updated successfully"
 msgstr ""
 
 #: includes/FeedbackManager.php:303
+#: poll-creator/includes/FeedbackManager.php:303
 msgid "Poll not created successfully"
 msgstr ""
 
 #: includes/FeedbackManager.php:350
+#: poll-creator/includes/FeedbackManager.php:350
 msgid "Poll not found"
 msgstr ""
 
 #: includes/FeedbackManager.php:400
+#: poll-creator/includes/FeedbackManager.php:400
 msgid "Poll not moved to trash"
 msgstr ""
 
 #: includes/FeedbackManager.php:496
 #: includes/FeedbackManager.php:507
+#: poll-creator/includes/FeedbackManager.php:496
+#: poll-creator/includes/FeedbackManager.php:507
 msgid "Poll not deleted successfully"
 msgstr ""
 
 #: includes/FeedbackManager.php:529
+#: poll-creator/includes/FeedbackManager.php:529
 msgid "Poll ID cannot be empty"
 msgstr ""
 
 #: includes/helpers/functions.php:378
+#: poll-creator/includes/helpers/functions.php:378
 msgid "Overview"
 msgstr ""
 
 #: includes/helpers/functions.php:405
+#: poll-creator/includes/helpers/functions.php:405
 msgid "IP Details"
 msgstr ""
 
 #: includes/helpers/functions.php:531
+#: poll-creator/includes/helpers/functions.php:531
 msgid "Remove"
 msgstr ""
 
 #: includes/helpers/functions.php:535
+#: poll-creator/includes/helpers/functions.php:535
 msgid "Are you sure you want to remove all votes from this IP? This operation cannot be undone. Just make sure before proceed"
 msgstr ""
 
 #: includes/Model/Feedback.php:297
+#: poll-creator/includes/Model/Feedback.php:297
 msgid "Options are empty."
 msgstr ""
 
 #: includes/Model/Feedback.php:301
-#: templates/poll/poll.php:160
-#: src/poll/edit.js:166
+#: poll-creator/includes/Model/Feedback.php:301
+#: poll-creator/templates/poll/poll.php:160
+#: templates/poll/poll.php:198
+#: poll-creator/src/poll/edit.js:166
+#: poll-creator/src/poll/edit.js:168
 #: src/poll/edit.js:168
+#: src/poll/edit.js:170
 msgid "This poll is closed"
 msgstr ""
 
-#: includes/Model/Feedback.php:316
-#: src/poll/view.js:152
+#: includes/Model/Feedback.php:309
+#: templates/poll/poll.php:55
+#: src/poll/edit.js:224
+#: src/poll/edit.js:225
+msgid "Please log in to vote."
+msgstr ""
+
+#: includes/Model/Feedback.php:325
+#: poll-creator/includes/Model/Feedback.php:316
+#: poll-creator/src/poll/view.js:152
+#: src/poll/view.js:154
 msgid "You have already voted."
 msgstr ""
 
 #: includes/Plugin.php:113
+#: poll-creator/includes/Plugin.php:113
 msgid "Get started"
 msgstr ""
 
 #: includes/REST/PollsController.php:78
 #: includes/REST/PollsController.php:354
 #: includes/REST/VotesController.php:116
+#: poll-creator/includes/REST/PollsController.php:78
+#: poll-creator/includes/REST/PollsController.php:354
+#: poll-creator/includes/REST/VotesController.php:116
 msgid "Unique identifier for the object."
 msgstr ""
 
 #: includes/REST/PollsController.php:114
 #: includes/REST/PollsController.php:134
+#: poll-creator/includes/REST/PollsController.php:114
+#: poll-creator/includes/REST/PollsController.php:134
 msgid "Client ID for the poll."
 msgstr ""
 
 #: includes/REST/PollsController.php:250
+#: poll-creator/includes/REST/PollsController.php:250
 msgid "Poll deleted successfully"
 msgstr ""
 
 #: includes/REST/PollsController.php:296
+#: poll-creator/includes/REST/PollsController.php:296
 msgid "Poll permanently deleted"
 msgstr ""
 
 #: includes/REST/PollsController.php:311
+#: poll-creator/includes/REST/PollsController.php:311
 msgid "Invalid resource id."
 msgstr ""
 
 #: includes/REST/PollsController.php:360
+#: poll-creator/includes/REST/PollsController.php:360
 msgid "Poll title"
 msgstr ""
 
 #: includes/REST/PollsController.php:367
+#: poll-creator/includes/REST/PollsController.php:367
 msgid "Poll description"
 msgstr ""
 
 #: includes/REST/PollsController.php:373
+#: poll-creator/includes/REST/PollsController.php:373
 msgid "The poll type. It can be normal poll, quize or NPS"
 msgstr ""
 
 #: includes/REST/PollsController.php:380
+#: poll-creator/includes/REST/PollsController.php:380
 msgid "Poll status"
 msgstr ""
 
 #: includes/REST/PollsController.php:388
+#: poll-creator/includes/REST/PollsController.php:388
 msgid "From where the poll was created"
 msgstr ""
 
 #: includes/REST/PollsController.php:394
+#: poll-creator/includes/REST/PollsController.php:394
 msgid "Poll options"
 msgstr ""
 
 #: includes/REST/PollsController.php:399
+#: poll-creator/includes/REST/PollsController.php:399
 msgid "The date the withdraw request has beed created in the site's timezone."
 msgstr ""
 
 #: includes/REST/PollsController.php:405
+#: poll-creator/includes/REST/PollsController.php:405
 msgid "The date the withdraw request has beed updated in the site's timezone."
 msgstr ""
 
 #: includes/REST/VotesController.php:55
+#: poll-creator/includes/REST/VotesController.php:55
 msgid "Unique identifier for the object for poll"
 msgstr ""
 
 #: includes/REST/VotesController.php:80
+#: poll-creator/includes/REST/VotesController.php:80
 msgid "Invalid nonce."
 msgstr ""
 
 #: includes/REST/VotesController.php:84
 #: includes/REST/VotesController.php:90
+#: poll-creator/includes/REST/VotesController.php:84
+#: poll-creator/includes/REST/VotesController.php:90
 msgid "Invalid poll"
 msgstr ""
 
 #: includes/REST/VotesController.php:123
+#: poll-creator/includes/REST/VotesController.php:123
 msgid "Option IDs"
 msgstr ""
 
 #: includes/REST/VotesController.php:128
+#: poll-creator/includes/REST/VotesController.php:128
 msgid "Return with result or not"
 msgstr ""
 
 #: includes/Votes.php:57
+#: poll-creator/includes/Votes.php:57
 msgid "Poll ID or Option ID is empty."
 msgstr ""
 
 #: includes/Votes.php:64
+#: poll-creator/includes/Votes.php:64
 msgid "Invalid poll data."
 msgstr ""
 
 #: includes/Votes.php:69
+#: poll-creator/includes/Votes.php:69
 msgid "Invalid poll option."
 msgstr ""
 
 #: includes/Votes.php:123
+#: poll-creator/includes/Votes.php:123
 msgid "Sorry vote not accepted."
 msgstr ""
 
 #: includes/Votes.php:516
+#: poll-creator/includes/Votes.php:516
 msgid "Client ID or User IP is empty."
 msgstr ""
 
 #: includes/Votes.php:551
+#: poll-creator/includes/Votes.php:551
 msgid "Invalid vote ID."
 msgstr ""
 
+#: poll-creator/templates/admin/overview.php:30
 #: templates/admin/overview.php:30
 msgid "View on frontend"
 msgstr ""
 
+#: poll-creator/templates/admin/overview.php:34
 #: templates/admin/overview.php:34
 msgid "Back to list"
 msgstr ""
 
+#: poll-creator/templates/admin/overview.php:64
 #: templates/admin/overview.php:64
 msgid "At a glance"
 msgstr ""
 
 #. translators: %s: percentage
+#: poll-creator/templates/admin/overview.php:85
+#: poll-creator/templates/results/horizointal-bar-chart.php:37
 #: templates/admin/overview.php:85
 #: templates/results/horizointal-bar-chart.php:37
 msgid "%s%"
 msgstr ""
 
 #. translators: %s: total votes
+#: poll-creator/templates/admin/overview.php:103
 #: templates/admin/overview.php:103
 msgid "Total votes: %s"
 msgstr ""
 
+#: poll-creator/templates/admin/overview.php:108
+#: poll-creator/templates/results/horizointal-bar-chart.php:60
 #: templates/admin/overview.php:108
 #: templates/results/horizointal-bar-chart.php:60
 msgid "No results found for this poll"
 msgstr ""
 
+#: poll-creator/templates/admin/overview.php:116
 #: templates/admin/overview.php:116
 msgid "Popular Location"
 msgstr ""
 
+#: poll-creator/templates/admin/overview.php:128
 #: templates/admin/overview.php:128
 msgid "Country"
 msgstr ""
 
+#: poll-creator/templates/admin/overview.php:149
+#: poll-creator/templates/admin/overview.php:191
 #: templates/admin/overview.php:149
 #: templates/admin/overview.php:191
 msgid "Unknown"
 msgstr ""
 
+#: poll-creator/templates/admin/overview.php:156
+#: poll-creator/templates/admin/overview.php:220
 #: templates/admin/overview.php:156
 #: templates/admin/overview.php:220
 msgid "No location data found for this poll"
 msgstr ""
 
+#: poll-creator/templates/admin/overview.php:163
 #: templates/admin/overview.php:163
 msgid "IP overviews"
 msgstr ""
 
+#: poll-creator/templates/admin/overview.php:181
 #: templates/admin/overview.php:181
 msgid "Vote count"
 msgstr ""
 
+#: poll-creator/templates/admin/overview.php:217
 #: templates/admin/overview.php:217
 msgid "See all IP's"
 msgstr ""
 
+#: poll-creator/templates/admin/overview.php:229
 #: templates/admin/overview.php:229
 msgid "Recent votes"
 msgstr ""
 
+#: poll-creator/templates/admin/overview.php:264
 #: templates/admin/overview.php:264
 msgid "No IP address collected (anonymous voting enabled)"
 msgstr ""
 
+#: poll-creator/templates/admin/overview.php:294
 #: templates/admin/overview.php:294
 msgid "See all votes"
 msgstr ""
 
+#: poll-creator/templates/admin/overview.php:298
 #: templates/admin/overview.php:298
 msgid "No recent votes found for this poll"
 msgstr ""
 
+#: poll-creator/templates/admin/overview.php:314
+#: poll-creator/templates/admin/overview.php:331
 #: templates/admin/overview.php:314
 #: templates/admin/overview.php:331
 msgid "Search by IP"
 msgstr ""
 
+#: poll-creator/templates/admin/polls.php:20
 #: templates/admin/polls.php:20
 msgid "Polls"
 msgstr ""
 
+#: poll-creator/templates/admin/polls.php:24
 #: templates/admin/polls.php:24
 msgid "Poll results have been reset."
 msgstr ""
 
+#: poll-creator/templates/admin/polls.php:26
+#: poll-creator/templates/admin/polls.php:35
 #: templates/admin/polls.php:26
 #: templates/admin/polls.php:35
 msgid "Dismiss this notice."
 msgstr ""
 
+#: poll-creator/templates/admin/polls.php:33
 #: templates/admin/polls.php:33
 msgid "Poll has been deleted successfully."
 msgstr ""
 
+#: poll-creator/templates/admin/polls.php:50
 #: templates/admin/polls.php:50
 msgid "Search by title"
 msgstr ""
 
 #. translators: %s: total votes
+#: poll-creator/templates/results/horizointal-bar-chart.php:55
 #: templates/results/horizointal-bar-chart.php:55
 msgid "Total votes %s"
 msgstr ""
 
-#: src/poll/edit.js:129
+#: templates/poll/poll.php:56
+msgid "Log in"
+msgstr ""
+
+#: poll-creator/src/poll/edit.js:129
+#: src/poll/edit.js:131
 msgid "General settings"
 msgstr ""
 
-#: src/poll/edit.js:135
+#: poll-creator/src/poll/edit.js:135
+#: src/poll/edit.js:137
 msgid "Close"
 msgstr ""
 
-#: src/poll/edit.js:136
+#: poll-creator/src/poll/edit.js:136
+#: src/poll/edit.js:138
 msgid "Close after"
 msgstr ""
 
-#: src/poll/edit.js:152
+#: poll-creator/src/poll/edit.js:152
+#: src/poll/edit.js:154
 msgid "When poll is closed"
 msgstr ""
 
-#: src/poll/edit.js:155
+#: poll-creator/src/poll/edit.js:155
+#: src/poll/edit.js:157
 msgid "Show poll result"
 msgstr ""
 
-#: src/poll/edit.js:156
+#: poll-creator/src/poll/edit.js:156
+#: src/poll/edit.js:158
 msgid "Hide poll"
 msgstr ""
 
-#: src/poll/edit.js:157
+#: poll-creator/src/poll/edit.js:157
+#: src/poll/edit.js:159
 msgid "Show poll close message"
 msgstr ""
 
-#: src/poll/edit.js:167
+#: poll-creator/src/poll/edit.js:167
+#: src/poll/edit.js:169
 msgid "Close message text"
 msgstr ""
 
-#: src/poll/edit.js:177
+#: poll-creator/src/poll/edit.js:177
+#: src/poll/edit.js:179
 msgid "Confiramtion message"
 msgstr ""
 
-#: src/poll/edit.js:179
+#: poll-creator/src/poll/edit.js:179
+#: src/poll/edit.js:181
 msgid "On submission"
 msgstr ""
 
-#: src/poll/edit.js:183
+#: poll-creator/src/poll/edit.js:183
+#: src/poll/edit.js:185
 msgid "View message"
 msgstr ""
 
-#: src/poll/edit.js:190
+#: poll-creator/src/poll/edit.js:190
+#: poll-creator/src/poll/edit.js:192
+#: poll-creator/src/poll/edit.js:201
+#: poll-creator/src/poll/edit.js:203
 #: src/poll/edit.js:192
-#: src/poll/edit.js:201
+#: src/poll/edit.js:194
 #: src/poll/edit.js:203
+#: src/poll/edit.js:205
 msgid "Thanks for voting!"
 msgstr ""
 
-#: src/poll/edit.js:191
+#: poll-creator/src/poll/edit.js:191
+#: src/poll/edit.js:193
 msgid "Message text"
 msgstr ""
 
-#: src/poll/edit.js:202
+#: poll-creator/src/poll/edit.js:202
+#: src/poll/edit.js:204
 msgid "View result message text"
 msgstr ""
 
-#: src/poll/edit.js:211
+#: poll-creator/src/poll/edit.js:211
+#: src/poll/edit.js:213
 msgid "Response settings"
 msgstr ""
 
-#: src/poll/edit.js:213
+#: poll-creator/src/poll/edit.js:213
+#: src/poll/edit.js:231
 msgid "Enable Anonymous Voting"
 msgstr ""
 
-#: src/poll/edit.js:214
+#: poll-creator/src/poll/edit.js:214
+#: src/poll/edit.js:232
 msgid "When enabled, no personal data (IP, location, user agent) will be collected. GDPR compliant."
 msgstr ""
 
-#: src/poll/edit.js:221
+#: poll-creator/src/poll/edit.js:221
+#: src/poll/edit.js:241
 msgid "Prevent duplicate votes"
 msgstr ""
 
-#: src/poll/edit.js:222
+#: poll-creator/src/poll/edit.js:222
+#: src/poll/edit.js:242
 msgid "Allowed one response per computer"
 msgstr ""
 
-#: src/poll/edit.js:225
+#: poll-creator/src/poll/edit.js:225
+#: src/poll/edit.js:247
 msgid "If checked, users can only vote once using browser storage. If unchecked, users can vote unlimited times (truly anonymous)."
 msgstr ""
 
-#: src/poll/edit.js:226
+#: poll-creator/src/poll/edit.js:226
+#: src/poll/edit.js:248
 msgid "If checked, only one response per computer will be allowed (tracked by IP address)."
 msgstr ""
 
-#: src/poll/edit.js:234
+#: poll-creator/src/poll/edit.js:234
+#: src/poll/edit.js:256
 msgid "Storage method for duplicate prevention"
 msgstr ""
 
-#: src/poll/edit.js:237
+#: poll-creator/src/poll/edit.js:237
+#: src/poll/edit.js:259
 msgid "Local Storage - Persistent (prevents revoting even after browser restart)"
 msgstr ""
 
-#: src/poll/edit.js:238
+#: poll-creator/src/poll/edit.js:238
+#: src/poll/edit.js:260
 msgid "Session Storage - Temporary (allows revoting after browser closes)"
 msgstr ""
 
-#: src/poll/edit.js:239
+#: poll-creator/src/poll/edit.js:239
+#: src/poll/edit.js:261
 msgid "Cookie - Persistent with expiration (prevents revoting for 30 days)"
 msgstr ""
 
-#: src/poll/edit.js:241
+#: poll-creator/src/poll/edit.js:241
+#: src/poll/edit.js:263
 msgid "Choose how to store the vote flag on user's browser."
 msgstr ""
 
-#: src/poll/edit.js:249
+#: poll-creator/src/poll/edit.js:249
+#: src/poll/edit.js:271
 msgid "Submit button colors"
 msgstr ""
 
-#: src/poll/edit.js:255
-#: src/poll/edit.js:332
+#: poll-creator/src/poll/edit.js:255
+#: poll-creator/src/poll/edit.js:332
+#: src/poll/edit.js:277
+#: src/poll/edit.js:354
 msgid "Background Color"
 msgstr ""
 
-#: src/poll/edit.js:260
-#: src/poll/edit.js:337
+#: poll-creator/src/poll/edit.js:260
+#: poll-creator/src/poll/edit.js:337
+#: src/poll/edit.js:282
+#: src/poll/edit.js:359
 msgid "Text Color"
 msgstr ""
 
-#: src/poll/edit.js:265
+#: poll-creator/src/poll/edit.js:265
+#: src/poll/edit.js:287
 msgid "Hover Background Color"
 msgstr ""
 
-#: src/poll/edit.js:270
+#: poll-creator/src/poll/edit.js:270
+#: src/poll/edit.js:292
 msgid "Hover Text Color"
 msgstr ""
 
-#: src/poll/edit.js:274
-#: src/poll/edit.js:275
+#: poll-creator/src/poll/edit.js:274
+#: poll-creator/src/poll/edit.js:275
+#: src/poll/edit.js:296
+#: src/poll/edit.js:297
 msgid "Button width"
 msgstr ""
 
-#: src/poll/edit.js:302
+#: poll-creator/src/poll/edit.js:302
+#: src/poll/edit.js:324
 msgid "Button alignment"
 msgstr ""
 
-#: src/poll/edit.js:326
+#: poll-creator/src/poll/edit.js:326
+#: src/poll/edit.js:348
 msgid "Poll closing banner"
 msgstr ""
 
-#: src/poll/edit.js:363
+#: poll-creator/src/poll/edit.js:363
+#: src/poll/edit.js:385
 msgid "Enter the poll question"
 msgstr ""
 
-#: src/poll/edit.js:371
+#: poll-creator/src/poll/edit.js:371
+#: src/poll/edit.js:393
 msgid "Add a description (optional)"
 msgstr ""
 
+#: poll-creator/src/poll/option.js:38
 #: src/poll/option.js:38
 msgid "Enter option"
 msgstr ""
 
+#: src/poll/edit.js:215
+msgid "Require login to vote"
+msgstr ""
+
+#: src/poll/edit.js:216
+msgid "When enabled, only logged-in users can vote. Duplicate prevention uses user account instead of IP or browser storage."
+msgstr ""
+
+#: src/poll/edit.js:223
+msgid "Login required message"
+msgstr ""
+
+#: src/poll/edit.js:239
+msgid "One vote per user"
+msgstr ""
+
+#: src/poll/edit.js:245
+msgid "If checked, each logged-in user can only vote once (tracked by user account)."
+msgstr ""
+
+#: poll-creator/src/poll/block.json
 #: src/poll/block.json
 msgctxt "block title"
 msgid "Poll"
 msgstr ""
 
+#: poll-creator/src/poll/block.json
 #: src/poll/block.json
 msgctxt "block description"
 msgid "Poll block for creating poll with posts"

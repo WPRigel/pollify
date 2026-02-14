@@ -301,18 +301,27 @@ abstract class Feedback {
 			return new WP_Error( 'poll-closed', wp_kses_post( $settings['closePollmessage'] ?? __( 'This poll is closed', 'poll-creator' ) ), [ 'status' => 400 ] );
 		}
 
+		$require_login = ! empty( $settings['requireLogin'] );
+
+		if ( $require_login && ! is_user_logged_in() ) {
+			return new WP_Error(
+				'login-required',
+				wp_kses_post( $settings['requireLoginMessage'] ?? __( 'Please log in to vote.', 'poll-creator' ) ),
+				[ 'status' => 403 ]
+			);
+		}
+
 		$voter = new Voter();
 
 		// Check if anonymous voting is enabled.
 		$is_anonymous = ! empty( $settings['anonymousVoting'] );
 
-		// For anonymous voting, duplicate check is handled client-side.
-		// For normal voting, check server-side if allowedPerComputerResponse is enabled.
-		if (
-			! $is_anonymous
-			&& ! empty( $settings['allowedPerComputerResponse'] )
-			&& $voter->is_already_voted( $this->get_client_id() )
-		) {
+		// When requireLogin is on, always check server-side by user_id (even if anonymous).
+		// When requireLogin is off, only check server-side if NOT anonymous.
+		$should_check_server_side = ! empty( $settings['allowedPerComputerResponse'] )
+			&& ( $require_login || ! $is_anonymous );
+
+		if ( $should_check_server_side && $voter->is_already_voted( $this->get_client_id() ) ) {
 			return new WP_Error( 'already-voted', __( 'You have already voted.', 'poll-creator' ), [ 'status' => 400 ] );
 		}
 

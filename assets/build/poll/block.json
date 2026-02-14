@@ -139,6 +139,14 @@
       "type": "string",
       "default": "localStorage"
     },
+    "requireLogin": {
+      "type": "boolean",
+      "default": false
+    },
+    "requireLoginMessage": {
+      "type": "string",
+      "default": "Please log in to vote."
+    },
     "style": {
       "type": "object",
       "default": {

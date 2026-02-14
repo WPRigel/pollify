@@ -73,6 +73,70 @@ const Poll = {
 		return sanitize( html, { USE_PROFILES: { html: true } } );
 	},
 
+	showLoginPopup: function( loginUrl, message ) {
+		document.querySelector( '.pollify-login-popup' )?.remove();
+
+		const overlay = document.createElement( 'div' );
+		overlay.className = 'pollify-login-popup';
+		Object.assign( overlay.style, {
+			position: 'fixed',
+			inset: '0',
+			background: 'rgba(0,0,0,0.5)',
+			display: 'flex',
+			alignItems: 'center',
+			justifyContent: 'center',
+			zIndex: '99999',
+		} );
+
+		const inner = document.createElement( 'div' );
+		inner.className = 'pollify-login-popup-inner';
+		Object.assign( inner.style, {
+			background: '#fff',
+			padding: '24px 28px',
+			borderRadius: '6px',
+			maxWidth: '360px',
+			width: '90%',
+			position: 'relative',
+			textAlign: 'center',
+		} );
+
+		const closeBtn = document.createElement( 'button' );
+		closeBtn.className = 'pollify-login-popup-close';
+		closeBtn.textContent = '\u00D7';
+		Object.assign( closeBtn.style, {
+			position: 'absolute',
+			top: '8px',
+			right: '12px',
+			background: 'none',
+			border: 'none',
+			fontSize: '20px',
+			cursor: 'pointer',
+			lineHeight: '1',
+		} );
+
+		const p = document.createElement( 'p' );
+		p.style.margin = '0';
+		p.textContent = message || 'Please log in to vote';
+		p.append( ' ' );
+
+		const link = document.createElement( 'a' );
+		link.href = loginUrl;
+		link.textContent = 'Login';
+		p.appendChild( link );
+
+		inner.appendChild( closeBtn );
+		inner.appendChild( p );
+		overlay.appendChild( inner );
+
+		overlay.addEventListener( 'click', ( e ) => {
+			if ( e.target === overlay || e.target.classList.contains( 'pollify-login-popup-close' ) ) {
+				overlay.remove();
+			}
+		} );
+
+		document.body.appendChild( overlay );
+	},
+
 	startLoading: function( element ) {
 		const formWrapper = element.closest( '.pollify-poll-form' );
 		const html = `<div class="loader-wrapper"><div class="loader"></div></div>`;
@@ -146,9 +210,18 @@ const Poll = {
 		const anonymousVoting = form.getAttribute( 'data-anonymous-voting' ) === '1';
 		const allowDuplicatePrevention = form.getAttribute( 'data-allow-duplicate-prevention' ) === '1';
 		const votingMethod = form.getAttribute( 'data-voting-method' ) || 'localStorage';
+		const requireLogin = form.getAttribute( 'data-require-login' ) === '1';
+		const loginUrl = form.getAttribute( 'data-login-url' );
 
+		// If requireLogin is on and user is not logged in (loginUrl set), show popup.
+		if ( requireLogin && loginUrl ) {
+			Poll.showLoginPopup( loginUrl, form.getAttribute( 'data-login-message' ) );
+			return;
+		}
+
+		// If requireLogin is on, skip client-side duplicate check (server handles it via user_id).
 		// If anonymous voting AND duplicate prevention are enabled, check if user has already voted.
-		if ( anonymousVoting && allowDuplicatePrevention && Poll.hasVoted( pollId, votingMethod ) ) {
+		if ( ! requireLogin && anonymousVoting && allowDuplicatePrevention && Poll.hasVoted( pollId, votingMethod ) ) {
 			Poll.addError( event.target, __( 'You have already voted.', 'poll-creator' ) );
 			return;
 		}
@@ -179,7 +252,8 @@ const Poll = {
 			Poll.removeLoading( event.target );
 
 			// If anonymous voting AND duplicate prevention are enabled, mark user as voted.
-			if ( anonymousVoting && allowDuplicatePrevention ) {
+			// Skip when requireLogin is on (server handles duplicate check via user_id).
+			if ( ! requireLogin && anonymousVoting && allowDuplicatePrevention ) {
 				Poll.markAsVoted( pollId, votingMethod );
 			}
 

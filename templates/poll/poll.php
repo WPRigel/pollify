@@ -29,6 +29,41 @@ if ( ! empty( $attributes['pollClientId'] ) ) {
 	}
 }
 
+$require_login        = ! empty( $attributes['requireLogin'] );
+$require_login_action = $attributes['requireLoginAction'] ?? 'hide';
+$user_not_logged_in   = $require_login && ! is_user_logged_in();
+$custom_login_url     = ! empty( $attributes['requireLoginUrl'] ) ? $attributes['requireLoginUrl'] : '';
+$login_url            = $custom_login_url
+	? add_query_arg( 'redirect_to', urlencode( get_permalink() ), $custom_login_url )
+	: wp_login_url( get_permalink() );
+
+if ( $user_not_logged_in && 'popup' !== $require_login_action ) {
+	?>
+	<div
+	<?php
+	echo wp_kses(
+		get_block_wrapper_attributes(),
+		array(
+			'class' => array(),
+			'style' => array(),
+		)
+	);
+	?>
+	>
+		<div class='pollify-poll-form'>
+			<h4 class="poll-title rich-text"><?php echo wp_kses_post( $attributes['title'] ); ?></h4>
+
+			<?php if ( ! empty( $attributes['description'] ) ) : ?>
+				<p class="poll-description rich-text"><?php echo esc_html( $attributes['description'] ); ?></p>
+			<?php endif; ?>
+
+			<p class="pollify-login-required-message"><?php echo wp_kses_post( $attributes['requireLoginMessage'] ?? __( 'Please log in to vote', 'poll-creator' ) ); ?> <a href="<?php echo esc_url( $login_url ); ?>"><?php esc_html_e( 'Login', 'poll-creator' ); ?></a></p>
+		</div>
+	</div>
+	<?php
+	return;
+}
+
 $styles = '';
 
 if ( ! empty( $attributes['submitButtonBgColor'] ) ) {
@@ -78,9 +113,14 @@ $is_schedule_with_show_close_banner = ( 'schedule' === $attributes['status'] && 
 $voter            = new \wpRigel\Pollify\Model\Voter();
 $results          = \wpRigel\Pollify\Votes::get_instance()->get_results( $attributes['pollClientId'] );
 $is_anonymous     = ! empty( $attributes['anonymousVoting'] );
-// For anonymous voting, skip server-side check (handled client-side).
-// For normal voting, check if user already voted when allowedPerComputerResponse is enabled.
-$is_already_voted = ( ! $is_anonymous && ! empty( $attributes['allowedPerComputerResponse'] ) && $voter->is_already_voted( $attributes['pollClientId'] ) );
+
+// When requireLogin is on, always check server-side by user_id (even if anonymous).
+// When requireLogin is off, only check server-side if NOT anonymous.
+if ( $require_login && ! empty( $attributes['allowedPerComputerResponse'] ) ) {
+	$is_already_voted = $voter->is_already_voted( $attributes['pollClientId'] );
+} else {
+	$is_already_voted = ( ! $is_anonymous && ! empty( $attributes['allowedPerComputerResponse'] ) && $voter->is_already_voted( $attributes['pollClientId'] ) );
+}
 ?>
 <div
 <?php
@@ -115,7 +155,12 @@ echo wp_kses(
 			<form action="post" class="poll-form"
 				data-anonymous-voting="<?php echo ! empty( $attributes['anonymousVoting'] ) ? '1' : '0'; ?>"
 				data-allow-duplicate-prevention="<?php echo ! empty( $attributes['allowedPerComputerResponse'] ) ? '1' : '0'; ?>"
-				data-voting-method="<?php echo esc_attr( $attributes['anonymousVotingMethod'] ?? 'localStorage' ); ?>">
+				data-voting-method="<?php echo esc_attr( $attributes['anonymousVotingMethod'] ?? 'localStorage' ); ?>"
+				data-require-login="<?php echo $require_login ? '1' : '0'; ?>"
+				<?php if ( $user_not_logged_in ) : ?>
+				data-login-url="<?php echo esc_attr( $login_url ); ?>"
+				data-login-message="<?php echo esc_attr( $attributes['requireLoginMessage'] ?? '' ); ?>"
+				<?php endif; ?>>
 				<?php
 					pollify_load_template(
 						'poll/options.php',

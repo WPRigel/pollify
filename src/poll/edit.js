@@ -5,6 +5,7 @@ import {
 	Button,
 	ButtonGroup,
 	SelectControl,
+	TextControl,
 	TextareaControl,
 	CheckboxControl,
 	TimePicker,
@@ -84,6 +85,10 @@ const Edit = ( props ) => {
 		allowedPerComputerResponse,
 		anonymousVoting,
 		anonymousVotingMethod,
+		requireLogin,
+		requireLoginMessage,
+		requireLoginAction,
+		requireLoginUrl,
 	} = attributes;
 
 	const handlePollStatusChange = ( status ) => {
@@ -210,6 +215,44 @@ const Edit = ( props ) => {
 				</PanelBody>
 				<PanelBody title={ __( 'Response settings', 'poll-creator' ) } className="pollify-response-settings-sidebar-wrap">
 					<CheckboxControl
+						label={ __( 'Require login to vote', 'poll-creator' ) }
+						help={ __( 'When enabled, only logged-in users can vote. Duplicate prevention uses user account instead of IP or browser storage.', 'poll-creator' ) }
+						checked={ requireLogin }
+						onChange={ ( requireLogin ) => setAttributes( { requireLogin } ) }
+					/>
+
+					{ requireLogin && (
+						<TextareaControl
+							label={ __( 'Login required message', 'poll-creator' ) }
+							value={ requireLoginMessage || __( 'Please log in to vote.', 'poll-creator' ) }
+							placeholder={ __( 'Please log in to vote.', 'poll-creator' ) }
+							onChange={ ( requireLoginMessage ) => setAttributes( { requireLoginMessage } ) }
+						/>
+					) }
+
+					{ requireLogin && (
+						<TextControl
+							label={ __( 'Custom login URL', 'poll-creator' ) }
+							help={ __( 'Leave empty to use the default WordPress login page. Useful for third-party login plugins.', 'poll-creator' ) }
+							value={ requireLoginUrl || '' }
+							placeholder="https://"
+							onChange={ ( requireLoginUrl ) => setAttributes( { requireLoginUrl } ) }
+						/>
+					) }
+
+					{ requireLogin && (
+						<SelectControl
+							label={ __( 'When not logged in, show:', 'poll-creator' ) }
+							value={ requireLoginAction || 'hide' }
+							options={ [
+								{ label: __( 'Login message (hide the poll)', 'poll-creator' ), value: 'hide' },
+								{ label: __( 'Poll with results + login popup on vote', 'poll-creator' ), value: 'popup' },
+							] }
+							onChange={ ( requireLoginAction ) => setAttributes( { requireLoginAction } ) }
+						/>
+					) }
+
+					<CheckboxControl
 						label={ __( 'Enable Anonymous Voting', 'poll-creator' ) }
 						help={ __( 'When enabled, no personal data (IP, location, user agent) will be collected. GDPR compliant.', 'poll-creator' ) }
 						checked={ anonymousVoting }
@@ -217,19 +260,23 @@ const Edit = ( props ) => {
 					/>
 
 					<CheckboxControl
-						label={ anonymousVoting
-							? __( 'Prevent duplicate votes', 'poll-creator' )
-							: __( 'Allowed one response per computer', 'poll-creator' )
+						label={ requireLogin
+							? __( 'One vote per user', 'poll-creator' )
+							: anonymousVoting
+								? __( 'Prevent duplicate votes', 'poll-creator' )
+								: __( 'Allowed one response per computer', 'poll-creator' )
 						}
-						help={ anonymousVoting
-							? __( 'If checked, users can only vote once using browser storage. If unchecked, users can vote unlimited times (truly anonymous).', 'poll-creator' )
-							: __( 'If checked, only one response per computer will be allowed (tracked by IP address).', 'poll-creator' )
+						help={ requireLogin
+							? __( 'If checked, each logged-in user can only vote once (tracked by user account).', 'poll-creator' )
+							: anonymousVoting
+								? __( 'If checked, users can only vote once using browser storage. If unchecked, users can vote unlimited times (truly anonymous).', 'poll-creator' )
+								: __( 'If checked, only one response per computer will be allowed (tracked by IP address).', 'poll-creator' )
 						}
 						checked={ allowedPerComputerResponse }
 						onChange={ ( allowedPerComputerResponse ) => setAttributes( { allowedPerComputerResponse } ) }
 					/>
 
-					{ anonymousVoting && allowedPerComputerResponse && (
+					{ anonymousVoting && allowedPerComputerResponse && ! requireLogin && (
 						<SelectControl
 							label={ __( 'Storage method for duplicate prevention', 'poll-creator' ) }
 							value={ anonymousVotingMethod }
