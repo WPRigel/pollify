@@ -1,16 +1,14 @@
 import { __ } from '@wordpress/i18n';
 import { RichText } from '@wordpress/block-editor';
 
-const Option = (
-	{
-		index,
-		option,
-		onChange,
-		onNewOption,
-		onDelete,
-		attributes,
-	}
-) => {
+const Option = ( {
+	index,
+	option,
+	onChange,
+	onNewOption,
+	onDelete,
+	attributes,
+} ) => {
 	const { optionType } = attributes;
 
 	const handleChange = ( value ) => {
@@ -29,8 +27,16 @@ const Option = (
 	return (
 		<div className="option">
 			<div className="option-selector">
-				{ optionType === 'multi-check' && <input type="checkbox" name="poll-option[]" className="checkbox" /> }
-				{ optionType === 'radio' && <input type="radio" name="poll-option" className="radio" /> }
+				{ optionType === 'multi-check' && (
+					<input
+						type="checkbox"
+						name="poll-option[]"
+						className="checkbox"
+					/>
+				) }
+				{ optionType === 'radio' && (
+					<input type="radio" name="poll-option" className="radio" />
+				) }
 			</div>
 			<RichText
 				tagName="label"

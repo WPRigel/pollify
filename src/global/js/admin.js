@@ -5,12 +5,11 @@ import '../css/admin.scss';
 
 /* global google, jQuery */
 
-( function( $ ) {
+( function ( $ ) {
 	'use strict';
 
 	// Admin object.
 	const PollifyAdmin = {
-
 		/**
 		 * Start the engine.
 		 *
@@ -29,7 +28,9 @@ import '../css/admin.scss';
 		 */
 		ready() {
 			// If there are screen options we have to move them.
-			$( '#screen-meta-links, #screen-meta' ).prependTo( '#wp-pollify-header-screen' ).show();
+			$( '#screen-meta-links, #screen-meta' )
+				.prependTo( '#wp-pollify-header-screen' )
+				.show();
 		},
 
 		/**
@@ -70,4 +71,4 @@ import '../css/admin.scss';
 	};
 
 	PollifyAdmin.init();
-}( jQuery ) );
+} )( jQuery );

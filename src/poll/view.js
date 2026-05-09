@@ -4,13 +4,12 @@
  * @package
  */
 
-/* global localStorage, sessionStorage, pollify */
+/* global pollify */
 import { __ } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
 import { sanitize } from 'dompurify';
 
 const Poll = {
-
 	init() {
 		const pollWrappers = document.querySelectorAll( '.pollify-poll-form' );
 
@@ -37,7 +36,12 @@ const Poll = {
 			case 'sessionStorage':
 				return sessionStorage.getItem( key ) !== null;
 			case 'cookie':
-				return document.cookie.split( '; ' ).find( ( row ) => row.startsWith( `${ key }=` ) ) !== undefined;
+				return (
+					document.cookie
+						.split( '; ' )
+						.find( ( row ) => row.startsWith( `${ key }=` ) ) !==
+					undefined
+				);
 			default:
 				return false;
 		}
@@ -64,7 +68,9 @@ const Poll = {
 				// Set cookie with 30 days expiration
 				const expirationDays = 30;
 				const date = new Date();
-				date.setTime( date.getTime() + ( expirationDays * 24 * 60 * 60 * 1000 ) );
+				date.setTime(
+					date.getTime() + expirationDays * 24 * 60 * 60 * 1000
+				);
 				const expires = `expires=${ date.toUTCString() }`;
 				document.cookie = `${ key }=${ value }; ${ expires }; path=/; SameSite=Strict`;
 				break;
@@ -131,7 +137,10 @@ const Poll = {
 		overlay.appendChild( inner );
 
 		overlay.addEventListener( 'click', ( e ) => {
-			if ( e.target === overlay || e.target.classList.contains( 'pollify-login-popup-close' ) ) {
+			if (
+				e.target === overlay ||
+				e.target.classList.contains( 'pollify-login-popup-close' )
+			) {
 				overlay.remove();
 			}
 		} );
@@ -147,7 +156,10 @@ const Poll = {
 		formWrapper.style.opacity = '0.5';
 
 		// Insert the loading html into the form.
-		formWrapper.insertAdjacentHTML( 'afterbegin', this.sanitizeHTML( html ) );
+		formWrapper.insertAdjacentHTML(
+			'afterbegin',
+			this.sanitizeHTML( html )
+		);
 	},
 
 	removeLoading( element ) {
@@ -171,12 +183,17 @@ const Poll = {
 		formWrapper.querySelector( '.errors' )?.remove();
 
 		// Insert the errors html into the form.
-		formWrapper.insertAdjacentHTML( 'afterbegin', this.sanitizeHTML( html ) );
+		formWrapper.insertAdjacentHTML(
+			'afterbegin',
+			this.sanitizeHTML( html )
+		);
 
 		// Add event listener to close the error message.
-		formWrapper.querySelector( '.errors .close' ).addEventListener( 'click', () => {
-			formWrapper.querySelector( '.errors' ).remove();
-		} );
+		formWrapper
+			.querySelector( '.errors .close' )
+			.addEventListener( 'click', () => {
+				formWrapper.querySelector( '.errors' ).remove();
+			} );
 	},
 
 	addResonseMessage( element, message ) {
@@ -187,7 +204,10 @@ const Poll = {
 		mainWrapper.querySelector( '.submit-button-wrapper' )?.remove();
 
 		// Insert the response html into the form.
-		mainWrapper.insertAdjacentHTML( 'beforeend', this.sanitizeHTML( html ) );
+		mainWrapper.insertAdjacentHTML(
+			'beforeend',
+			this.sanitizeHTML( html )
+		);
 	},
 
 	/**
@@ -209,22 +229,36 @@ const Poll = {
 
 		// Check if anonymous voting and duplicate prevention are enabled.
 		const form = event.target;
-		const anonymousVoting = form.getAttribute( 'data-anonymous-voting' ) === '1';
-		const allowDuplicatePrevention = form.getAttribute( 'data-allow-duplicate-prevention' ) === '1';
-		const votingMethod = form.getAttribute( 'data-voting-method' ) || 'localStorage';
+		const anonymousVoting =
+			form.getAttribute( 'data-anonymous-voting' ) === '1';
+		const allowDuplicatePrevention =
+			form.getAttribute( 'data-allow-duplicate-prevention' ) === '1';
+		const votingMethod =
+			form.getAttribute( 'data-voting-method' ) || 'localStorage';
 		const requireLogin = form.getAttribute( 'data-require-login' ) === '1';
 		const loginUrl = form.getAttribute( 'data-login-url' );
 
 		// If requireLogin is on and user is not logged in (loginUrl set), show popup.
 		if ( requireLogin && loginUrl ) {
-			Poll.showLoginPopup( loginUrl, form.getAttribute( 'data-login-message' ) );
+			Poll.showLoginPopup(
+				loginUrl,
+				form.getAttribute( 'data-login-message' )
+			);
 			return;
 		}
 
 		// If requireLogin is on, skip client-side duplicate check (server handles it via user_id).
 		// If anonymous voting AND duplicate prevention are enabled, check if user has already voted.
-		if ( ! requireLogin && anonymousVoting && allowDuplicatePrevention && Poll.hasVoted( pollId, votingMethod ) ) {
-			Poll.addError( event.target, __( 'You have already voted.', 'poll-creator' ) );
+		if (
+			! requireLogin &&
+			anonymousVoting &&
+			allowDuplicatePrevention &&
+			Poll.hasVoted( pollId, votingMethod )
+		) {
+			Poll.addError(
+				event.target,
+				__( 'You have already voted.', 'poll-creator' )
+			);
 			return;
 		}
 
@@ -248,31 +282,42 @@ const Poll = {
 				options: pollOptions,
 				nonce: pollify.nonce,
 			},
-		} ).then( ( response ) => {
-			const element = event.target;
+		} )
+			.then( ( response ) => {
+				const element = event.target;
 
-			Poll.removeLoading( event.target );
+				Poll.removeLoading( event.target );
 
-			// If anonymous voting AND duplicate prevention are enabled, mark user as voted.
-			// Skip when requireLogin is on (server handles duplicate check via user_id).
-			if ( ! requireLogin && anonymousVoting && allowDuplicatePrevention ) {
-				Poll.markAsVoted( pollId, votingMethod );
-			}
+				// If anonymous voting AND duplicate prevention are enabled, mark user as voted.
+				// Skip when requireLogin is on (server handles duplicate check via user_id).
+				if (
+					! requireLogin &&
+					anonymousVoting &&
+					allowDuplicatePrevention
+				) {
+					Poll.markAsVoted( pollId, votingMethod );
+				}
 
-			// Check the the resultTemplate is define and not empty.
-			if ( response.resultTemplate ) {
-				const wrapper = element.closest( 'form.poll-form' );
-				wrapper.innerHTML = Poll.sanitizeHTML( response.resultTemplate );
-			} else {
-				Poll.addResonseMessage( element, response.settings.confirmationMessage );
-			}
-		} ).catch( ( error ) => {
-			// Remove the loading html from the content.
-			Poll.removeLoading( event.target );
+				// Check the the resultTemplate is define and not empty.
+				if ( response.resultTemplate ) {
+					const wrapper = element.closest( 'form.poll-form' );
+					wrapper.innerHTML = Poll.sanitizeHTML(
+						response.resultTemplate
+					);
+				} else {
+					Poll.addResonseMessage(
+						element,
+						response.settings.confirmationMessage
+					);
+				}
+			} )
+			.catch( ( error ) => {
+				// Remove the loading html from the content.
+				Poll.removeLoading( event.target );
 
-			// Add error message to the content.
-			Poll.addError( event.target, error.message );
-		} );
+				// Add error message to the content.
+				Poll.addError( event.target, error.message );
+			} );
 	},
 };
 
