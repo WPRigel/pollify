@@ -68,3 +68,7 @@ Thumbs.db
 *.sqlite
 *.zip
 /poll-creator
+
+# Test cache #
+##############
+.phpunit.result.cache
