@@ -3,10 +3,9 @@ import '../css/admin.scss';
  * Run the script when dom is ready.
  */
 
-/* global wpforms_admin, jconfirm, wpCookies, Choices, List, wpf, google */
+/* global google, jQuery */
 
-;( function( $ ) {
-
+( function( $ ) {
 	'use strict';
 
 	// Admin object.
@@ -17,7 +16,7 @@ import '../css/admin.scss';
 		 *
 		 * @since 1.3.9
 		 */
-		init: function() {
+		init() {
 			// Document ready.
 			$( PollifyAdmin.ready );
 
@@ -28,8 +27,7 @@ import '../css/admin.scss';
 		/**
 		 * Document ready.
 		 */
-		ready: function() {
-
+		ready() {
 			// If there are screen options we have to move them.
 			$( '#screen-meta-links, #screen-meta' ).prependTo( '#wp-pollify-header-screen' ).show();
 		},
@@ -38,20 +36,19 @@ import '../css/admin.scss';
 		 * Draw the regions map.
 		 *
 		 * @since 1.3.9
-		 * @return void
 		 */
-		drawRegionsMap: function() {
-			var geoChartMap = document.getElementById( 'geo-chart-map' );
-			var locationVotes = JSON.parse( geoChartMap.dataset.locations );
+		drawRegionsMap() {
+			const geoChartMap = document.getElementById( 'geo-chart-map' );
+			const locationVotes = JSON.parse( geoChartMap.dataset.locations );
 
-			var data = google.visualization.arrayToDataTable( locationVotes );
+			const data = google.visualization.arrayToDataTable( locationVotes );
 
-			var options = {
-				colorAxis: {colors: ['#91cdff', '#2271b1']},
-				magnifyingGlass: {enable: true, zoomFactor: 15},
+			const options = {
+				colorAxis: { colors: [ '#91cdff', '#2271b1' ] },
+				magnifyingGlass: { enable: true, zoomFactor: 15 },
 			};
 
-			var chart = new google.visualization.GeoChart(geoChartMap);
+			const chart = new google.visualization.GeoChart( geoChartMap );
 
 			chart.draw( data, options );
 		},
@@ -61,17 +58,16 @@ import '../css/admin.scss';
 		 *
 		 * @since 1.3.9
 		 */
-		loadGoogleCharts: function() {
+		loadGoogleCharts() {
 			if ( document.getElementById( 'geo-chart-map' ) ) {
-				google.charts.load('current', {
-					'packages':['geochart'],
-				});
+				google.charts.load( 'current', {
+					packages: [ 'geochart' ],
+				} );
 
-				google.charts.setOnLoadCallback(PollifyAdmin.drawRegionsMap);
+				google.charts.setOnLoadCallback( PollifyAdmin.drawRegionsMap );
 			}
 		},
 	};
 
 	PollifyAdmin.init();
-
-} )( jQuery );
+}( jQuery ) );

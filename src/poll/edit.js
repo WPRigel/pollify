@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import { __ } from '@wordpress/i18n';
-import { useEffect } from "@wordpress/element";
+import { useEffect } from '@wordpress/element';
 import {
 	Button,
 	ButtonGroup,
@@ -11,15 +11,15 @@ import {
 	TimePicker,
 	ToolbarGroup,
 	ToolbarButton,
-	PanelBody
-} from "@wordpress/components";
+	PanelBody,
+} from '@wordpress/components';
 import {
 	RichText,
 	useBlockProps,
 	BlockControls,
 	InspectorControls,
 	PanelColorSettings,
-}  from '@wordpress/block-editor';
+} from '@wordpress/block-editor';
 import OptionsWrapper from './options-wrapper';
 
 import './style.scss';
@@ -30,7 +30,7 @@ import './style.scss';
  * @param {*} pollStatus
  * @param {*} closedAfterDateTimeUTC
  * @param {*} currentDateTime
- * @returns
+ * @return {boolean} Whether the poll is closed.
  */
 const isPollClosed = (
 	pollStatus,
@@ -54,6 +54,7 @@ const isPollClosed = (
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
  *
+ * @param {Object} props Block props.
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
  *
  * @return {WPElement} Element to render.
@@ -91,20 +92,17 @@ const Edit = ( props ) => {
 		requireLoginUrl,
 	} = attributes;
 
-	const handlePollStatusChange = ( status ) => {
+	const handlePollStatusChange = ( newStatus ) => {
 		setAttributes( {
-			endDate:
-				status === 'schedule'
-					? new Date(
-							new Date().getTime() + 24 * 60 * 60 * 1000
-					  ).toISOString()
-					: null,
-			status,
+			endDate: newStatus === 'schedule'
+				? new Date( new Date().getTime() + ( 24 * 60 * 60 * 1000 ) ).toISOString()
+				: null,
+			status: newStatus,
 		} );
 	};
 
-	const handleEndDateChange = ( endDate ) => {
-		const dateTime = new Date( endDate );
+	const handleEndDateChange = ( newEndDate ) => {
+		const dateTime = new Date( newEndDate );
 		setAttributes( { endDate: dateTime.toISOString() } );
 	};
 
@@ -113,6 +111,7 @@ const Edit = ( props ) => {
 		if ( ! pollClientId ) {
 			setAttributes( { pollClientId: clientId } );
 		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [] );
 
 	const style = {
@@ -127,6 +126,19 @@ const Edit = ( props ) => {
 	const isClosed = isPollClosed( status, endDate );
 
 	const blockProps = useBlockProps( { className: 'wp-block-pollify-editor-wrapper', style } );
+
+	let checkboxLabel;
+	let checkboxHelp;
+	if ( requireLogin ) {
+		checkboxLabel = __( 'One vote per user', 'poll-creator' );
+		checkboxHelp = __( 'If checked, each logged-in user can only vote once (tracked by user account).', 'poll-creator' );
+	} else if ( anonymousVoting ) {
+		checkboxLabel = __( 'Prevent duplicate votes', 'poll-creator' );
+		checkboxHelp = __( 'If checked, users can only vote once using browser storage. If unchecked, users can vote unlimited times (truly anonymous).', 'poll-creator' );
+	} else {
+		checkboxLabel = __( 'Allowed one response per computer', 'poll-creator' );
+		checkboxHelp = __( 'If checked, only one response per computer will be allowed (tracked by IP address).', 'poll-creator' );
+	}
 
 	return (
 		<div { ...blockProps }>
@@ -145,11 +157,11 @@ const Edit = ( props ) => {
 
 					{ ( status === 'draft' || status === 'schedule' ) && (
 						<>
-							{ ( status === 'schedule' )  && (
+							{ ( status === 'schedule' ) && (
 								<TimePicker
 									currentTime={ endDate }
 									onChange={ handleEndDateChange }
-									is12Hour={true}
+									is12Hour={ true }
 								/>
 							) }
 
@@ -161,7 +173,7 @@ const Edit = ( props ) => {
 									{ label: __( 'Hide poll', 'poll-creator' ), value: 'hide-poll' },
 									{ label: __( 'Show poll close message', 'poll-creator' ), value: 'show-message' },
 								] }
-								onChange={ ( closePollState ) => setAttributes( { closePollState } ) }
+								onChange={ ( val ) => setAttributes( { closePollState: val } ) }
 							/>
 						</>
 					) }
@@ -174,7 +186,7 @@ const Edit = ( props ) => {
 								'This poll is closed',
 								'poll-creator'
 							) }
-							onChange={ ( closePollmessage ) => setAttributes( { closePollmessage } ) }
+							onChange={ ( val ) => setAttributes( { closePollmessage: val } ) }
 						/>
 					) }
 
@@ -187,7 +199,7 @@ const Edit = ( props ) => {
 							{ label: __( 'View results', 'poll-creator' ), value: 'view-result' },
 							{ label: __( 'View message', 'poll-creator' ), value: 'view-message' },
 						] }
-						onChange={ ( confirmationMessageType ) => setAttributes( { confirmationMessageType } ) }
+						onChange={ ( val ) => setAttributes( { confirmationMessageType: val } ) }
 					/>
 
 					{ confirmationMessageType === 'view-message' && (
@@ -198,7 +210,7 @@ const Edit = ( props ) => {
 								'Thanks for voting!',
 								'poll-creator'
 							) }
-							onChange={ ( confirmationMessage ) => setAttributes( { confirmationMessage } ) }
+							onChange={ ( val ) => setAttributes( { confirmationMessage: val } ) }
 						/>
 					) }
 					{ confirmationMessageType === 'view-result' && (
@@ -209,7 +221,7 @@ const Edit = ( props ) => {
 								'Thanks for voting!',
 								'poll-creator'
 							) }
-							onChange={ ( viewResultconfirmationMessage ) => setAttributes( { viewResultconfirmationMessage } ) }
+							onChange={ ( val ) => setAttributes( { viewResultconfirmationMessage: val } ) }
 						/>
 					) }
 				</PanelBody>
@@ -218,7 +230,7 @@ const Edit = ( props ) => {
 						label={ __( 'Require login to vote', 'poll-creator' ) }
 						help={ __( 'When enabled, only logged-in users can vote. Duplicate prevention uses user account instead of IP or browser storage.', 'poll-creator' ) }
 						checked={ requireLogin }
-						onChange={ ( requireLogin ) => setAttributes( { requireLogin } ) }
+						onChange={ ( val ) => setAttributes( { requireLogin: val } ) }
 					/>
 
 					{ requireLogin && (
@@ -226,7 +238,7 @@ const Edit = ( props ) => {
 							label={ __( 'Login required message', 'poll-creator' ) }
 							value={ requireLoginMessage || __( 'Please log in to vote.', 'poll-creator' ) }
 							placeholder={ __( 'Please log in to vote.', 'poll-creator' ) }
-							onChange={ ( requireLoginMessage ) => setAttributes( { requireLoginMessage } ) }
+							onChange={ ( val ) => setAttributes( { requireLoginMessage: val } ) }
 						/>
 					) }
 
@@ -236,7 +248,7 @@ const Edit = ( props ) => {
 							help={ __( 'Leave empty to use the default WordPress login page. Useful for third-party login plugins.', 'poll-creator' ) }
 							value={ requireLoginUrl || '' }
 							placeholder="https://"
-							onChange={ ( requireLoginUrl ) => setAttributes( { requireLoginUrl } ) }
+							onChange={ ( val ) => setAttributes( { requireLoginUrl: val } ) }
 						/>
 					) }
 
@@ -248,7 +260,7 @@ const Edit = ( props ) => {
 								{ label: __( 'Login message (hide the poll)', 'poll-creator' ), value: 'hide' },
 								{ label: __( 'Poll with results + login popup on vote', 'poll-creator' ), value: 'popup' },
 							] }
-							onChange={ ( requireLoginAction ) => setAttributes( { requireLoginAction } ) }
+							onChange={ ( val ) => setAttributes( { requireLoginAction: val } ) }
 						/>
 					) }
 
@@ -256,24 +268,14 @@ const Edit = ( props ) => {
 						label={ __( 'Enable Anonymous Voting', 'poll-creator' ) }
 						help={ __( 'When enabled, no personal data (IP, location, user agent) will be collected. GDPR compliant.', 'poll-creator' ) }
 						checked={ anonymousVoting }
-						onChange={ ( anonymousVoting ) => setAttributes( { anonymousVoting } ) }
+						onChange={ ( val ) => setAttributes( { anonymousVoting: val } ) }
 					/>
 
 					<CheckboxControl
-						label={ requireLogin
-							? __( 'One vote per user', 'poll-creator' )
-							: anonymousVoting
-								? __( 'Prevent duplicate votes', 'poll-creator' )
-								: __( 'Allowed one response per computer', 'poll-creator' )
-						}
-						help={ requireLogin
-							? __( 'If checked, each logged-in user can only vote once (tracked by user account).', 'poll-creator' )
-							: anonymousVoting
-								? __( 'If checked, users can only vote once using browser storage. If unchecked, users can vote unlimited times (truly anonymous).', 'poll-creator' )
-								: __( 'If checked, only one response per computer will be allowed (tracked by IP address).', 'poll-creator' )
-						}
+						label={ checkboxLabel }
+						help={ checkboxHelp }
 						checked={ allowedPerComputerResponse }
-						onChange={ ( allowedPerComputerResponse ) => setAttributes( { allowedPerComputerResponse } ) }
+						onChange={ ( val ) => setAttributes( { allowedPerComputerResponse: val } ) }
 					/>
 
 					{ anonymousVoting && allowedPerComputerResponse && ! requireLogin && (
@@ -286,7 +288,7 @@ const Edit = ( props ) => {
 								{ label: __( 'Cookie - Persistent with expiration (prevents revoting for 30 days)', 'poll-creator' ), value: 'cookie' },
 							] }
 							help={ __( 'Choose how to store the vote flag on user\'s browser.', 'poll-creator' ) }
-							onChange={ ( anonymousVotingMethod ) => setAttributes( { anonymousVotingMethod } ) }
+							onChange={ ( val ) => setAttributes( { anonymousVotingMethod: val } ) }
 						/>
 					) }
 				</PanelBody>
@@ -298,22 +300,22 @@ const Edit = ( props ) => {
 					colorSettings={ [
 						{
 							value: submitButtonBgColor,
-							onChange: ( submitButtonBgColor ) => setAttributes( { submitButtonBgColor } ),
+							onChange: ( val ) => setAttributes( { submitButtonBgColor: val } ),
 							label: __( 'Background Color', 'poll-creator' ),
 						},
 						{
 							value: submitButtonTextColor,
-							onChange: ( submitButtonTextColor ) => setAttributes( { submitButtonTextColor } ),
+							onChange: ( val ) => setAttributes( { submitButtonTextColor: val } ),
 							label: __( 'Text Color', 'poll-creator' ),
 						},
 						{
 							value: submitButtonHoverBgColor,
-							onChange: ( submitButtonHoverBgColor ) => setAttributes( { submitButtonHoverBgColor } ),
+							onChange: ( val ) => setAttributes( { submitButtonHoverBgColor: val } ),
 							label: __( 'Hover Background Color', 'poll-creator' ),
 						},
 						{
 							value: submitButtonHoverTextColor,
-							onChange: ( submitButtonHoverTextColor ) => setAttributes( { submitButtonHoverTextColor } ),
+							onChange: ( val ) => setAttributes( { submitButtonHoverTextColor: val } ),
 							label: __( 'Hover Text Color', 'poll-creator' ),
 						},
 					] }
@@ -375,12 +377,12 @@ const Edit = ( props ) => {
 					colorSettings={ [
 						{
 							value: closingBannerBgColor,
-							onChange: ( closingBannerBgColor ) => setAttributes( { closingBannerBgColor } ),
+							onChange: ( val ) => setAttributes( { closingBannerBgColor: val } ),
 							label: __( 'Background Color', 'poll-creator' ),
 						},
 						{
 							value: closingBannerTextColor,
-							onChange: ( closingBannerTextColor ) => setAttributes( { closingBannerTextColor } ),
+							onChange: ( val ) => setAttributes( { closingBannerTextColor: val } ),
 							label: __( 'Text Color', 'poll-creator' ),
 						},
 					] }
@@ -389,35 +391,35 @@ const Edit = ( props ) => {
 			<BlockControls>
 				<ToolbarGroup>
 					<ToolbarButton
-						icon='yes'
+						icon="yes"
 						label="Multi check"
 						onClick={ () => setAttributes( { optionType: 'multi-check' } ) }
 						isActive={ optionType === 'multi-check' }
 					/>
 					<ToolbarButton
-						icon='marker'
+						icon="marker"
 						label="Radio button"
 						onClick={ () => setAttributes( { optionType: 'radio' } ) }
 						isActive={ optionType === 'radio' }
 					/>
 				</ToolbarGroup>
 			</BlockControls>
-			<div className='pollify-poll-form'>
+			<div className="pollify-poll-form">
 				<RichText
-					tagName='h4'
-					value={title}
-					onChange={ ( title ) => setAttributes( { title } ) }
+					tagName="h4"
+					value={ title }
+					onChange={ ( val ) => setAttributes( { title: val } ) }
 					placeholder={ __( 'Enter the poll question', 'poll-creator' ) }
-					allowedFormats={  [ 'core/bold', 'core/link', 'core/italic' ] }
-					className='poll-title'
+					allowedFormats={ [ 'core/bold', 'core/link', 'core/italic' ] }
+					className="poll-title"
 				/>
 				<RichText
-					tagName='p'
-					value={description}
-					onChange={ ( description ) => setAttributes( { description } ) }
+					tagName="p"
+					value={ description }
+					onChange={ ( val ) => setAttributes( { description: val } ) }
 					placeholder={ __( 'Add a description (optional)', 'poll-creator' ) }
-					allowedFormats={  [ 'core/bold', 'core/link', 'core/italic' ] }
-					className='poll-description'
+					allowedFormats={ [ 'core/bold', 'core/link', 'core/italic' ] }
+					className="poll-description"
 				/>
 				<OptionsWrapper
 					attributes={ attributes }
@@ -425,7 +427,7 @@ const Edit = ( props ) => {
 				/>
 
 				{ isClosed &&
-					<div className='closing-banner'>
+					<div className="closing-banner">
 						<p>{ closePollmessage }</p>
 					</div>
 				}
@@ -433,13 +435,13 @@ const Edit = ( props ) => {
 				{ ! isClosed &&
 					<div className={ classnames( 'wp-block-button poll-block-button', {
 						[ `align-${ submitButtonAlign }` ]: submitButtonAlign,
-						} ) }>
+					} ) }>
 						<div className={ classnames( 'submit-button-wrapper', {
-						[ `has-custom-width wp-block-button-width-${ submitButtonWidth }` ]: submitButtonWidth,
+							[ `has-custom-width wp-block-button-width-${ submitButtonWidth }` ]: submitButtonWidth,
 						} ) }>
 							<RichText
 								className="wp-block-button__link submit-button"
-								onChange={ ( submitButtonLabel ) => setAttributes( { submitButtonLabel } ) }
+								onChange={ ( val ) => setAttributes( { submitButtonLabel: val } ) }
 								value={ submitButtonLabel }
 								allowedFormats={ [] }
 								multiline={ false }
@@ -451,6 +453,6 @@ const Edit = ( props ) => {
 			</div>
 		</div>
 	);
-}
+};
 
 export default Edit;

@@ -1,15 +1,17 @@
 /**
  * Poll frontend handler.
  *
- * @package wpRigel\Poll
+ * @package
  */
+
+/* global localStorage, sessionStorage, pollify */
 import { __ } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
 import { sanitize } from 'dompurify';
 
 const Poll = {
 
-	init: function() {
+	init() {
 		const pollWrappers = document.querySelectorAll( '.pollify-poll-form' );
 
 		// Loop through each form and attach submit event listeners.
@@ -26,7 +28,7 @@ const Poll = {
 	 * @param {string} method The storage method (localStorage, sessionStorage, cookie).
 	 * @return {boolean} True if already voted, false otherwise.
 	 */
-	hasVoted: function( pollId, method ) {
+	hasVoted( pollId, method ) {
 		const key = `pollify_voted_${ pollId }`;
 
 		switch ( method ) {
@@ -47,7 +49,7 @@ const Poll = {
 	 * @param {string} pollId The poll ID.
 	 * @param {string} method The storage method (localStorage, sessionStorage, cookie).
 	 */
-	markAsVoted: function( pollId, method ) {
+	markAsVoted( pollId, method ) {
 		const key = `pollify_voted_${ pollId }`;
 		const value = Date.now().toString();
 
@@ -69,11 +71,11 @@ const Poll = {
 		}
 	},
 
-	sanitizeHTML: function( html ) {
+	sanitizeHTML( html ) {
 		return sanitize( html, { USE_PROFILES: { html: true } } );
 	},
 
-	showLoginPopup: function( loginUrl, message ) {
+	showLoginPopup( loginUrl, message ) {
 		document.querySelector( '.pollify-login-popup' )?.remove();
 
 		const overlay = document.createElement( 'div' );
@@ -137,7 +139,7 @@ const Poll = {
 		document.body.appendChild( overlay );
 	},
 
-	startLoading: function( element ) {
+	startLoading( element ) {
 		const formWrapper = element.closest( '.pollify-poll-form' );
 		const html = `<div class="loader-wrapper"><div class="loader"></div></div>`;
 
@@ -148,7 +150,7 @@ const Poll = {
 		formWrapper.insertAdjacentHTML( 'afterbegin', this.sanitizeHTML( html ) );
 	},
 
-	removeLoading: function ( element ) {
+	removeLoading( element ) {
 		const formWrapper = element.closest( '.pollify-poll-form' );
 
 		// Remove the loading html from the form.
@@ -158,7 +160,7 @@ const Poll = {
 		formWrapper.style.opacity = '1';
 	},
 
-	addError: function ( element, error ) {
+	addError( element, error ) {
 		const formWrapper = element.closest( '.pollify-poll-form' );
 		const html = `<div class="errors">
 			<div class="message">${ error }</div>
@@ -177,7 +179,7 @@ const Poll = {
 		} );
 	},
 
-	addResonseMessage: function ( element, message ) {
+	addResonseMessage( element, message ) {
 		const mainWrapper = element.closest( '.pollify-poll-form' );
 		const html = `<div class="response-message">${ message }</div>`;
 
@@ -193,7 +195,7 @@ const Poll = {
 	 *
 	 * @param {Object} event The event object.
 	 */
-	submit: function ( event ) {
+	submit( event ) {
 		// Handle form submission using formData.
 		event.preventDefault();
 
@@ -244,8 +246,8 @@ const Poll = {
 			method: 'POST',
 			data: {
 				options: pollOptions,
-				nonce: pollify.nonce
-			}
+				nonce: pollify.nonce,
+			},
 		} ).then( ( response ) => {
 			const element = event.target;
 
@@ -264,7 +266,6 @@ const Poll = {
 			} else {
 				Poll.addResonseMessage( element, response.settings.confirmationMessage );
 			}
-
 		} ).catch( ( error ) => {
 			// Remove the loading html from the content.
 			Poll.removeLoading( event.target );
@@ -272,7 +273,7 @@ const Poll = {
 			// Add error message to the content.
 			Poll.addError( event.target, error.message );
 		} );
-	}
+	},
 };
 
 document.addEventListener( 'DOMContentLoaded', () => {
