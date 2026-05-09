@@ -21,7 +21,8 @@
 		"build:custom": "wp-scripts build src/global/js/admin.js --output-path=assets/build",
 		"test:unit": "wp-scripts test-unit-js",
 		"makepot": "rm -rf languages/poll-creator.pot && wp i18n make-pot . languages/poll-creator.pot --exclude=vendor,node_modules,build,assets/build --ignore-domain",
-		"prepare": "lefthook install"
+		"prepare": "lefthook install",
+		"test:php": "composer run test"
 	},
 	"files": [
 		"assets",
