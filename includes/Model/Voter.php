@@ -97,11 +97,11 @@ class Voter {
 		$ip = '';
 
 		// Check if HTTP_CLIENT_IP is set and valid.
-		if ( isset( $_SERVER['HTTP_CLIENT_IP'] ) && filter_var( $_SERVER['HTTP_CLIENT_IP'], FILTER_VALIDATE_IP ) ) {
-			$ip = sanitize_text_field( $_SERVER['HTTP_CLIENT_IP'] );
+		if ( isset( $_SERVER['HTTP_CLIENT_IP'] ) && filter_var( wp_unslash( $_SERVER['HTTP_CLIENT_IP'] ), FILTER_VALIDATE_IP ) ) {
+			$ip = sanitize_text_field( wp_unslash( $_SERVER['HTTP_CLIENT_IP'] ) );
 		} elseif ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) { // Check if HTTP_X_FORWARDED_FOR is set.
 			// Extract first valid IP from the list.
-			$forwarded_ips = explode( ',', $_SERVER['HTTP_X_FORWARDED_FOR'] );
+			$forwarded_ips = explode( ',', wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] ) );
 
 			foreach ( $forwarded_ips as $forwarded_ip ) {
 				$forwarded_ip = trim( $forwarded_ip ); // Remove spaces.
@@ -111,8 +111,8 @@ class Voter {
 					break; // Use the first valid IP.
 				}
 			}
-		} elseif ( isset( $_SERVER['REMOTE_ADDR'] ) && filter_var( $_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP ) ) { // Fallback to REMOTE_ADDR.
-			$ip = sanitize_text_field( $_SERVER['REMOTE_ADDR'] );
+		} elseif ( isset( $_SERVER['REMOTE_ADDR'] ) && filter_var( wp_unslash( $_SERVER['REMOTE_ADDR'] ), FILTER_VALIDATE_IP ) ) { // Fallback to REMOTE_ADDR.
+			$ip = sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) );
 		}
 
 		// If the IP is from localhost/private range, return as is.

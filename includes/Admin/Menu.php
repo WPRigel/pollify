@@ -302,7 +302,7 @@ class Menu {
 			return;
 		}
 
-		if ( 'reset_results' === $action && wp_verify_nonce( $nonce, 'pollify_reset_results' ) ) {
+		if ( 'reset_results' === $action && current_user_can( 'edit_posts' ) && wp_verify_nonce( $nonce, 'pollify_reset_results' ) ) {
 			$client_id = pollify_filter_input( INPUT_GET, 'poll_id', POLLIFY_FILTER_SANITIZE_STRING );
 
 			if ( ! empty( $client_id ) ) {
@@ -312,7 +312,7 @@ class Menu {
 			}
 		}
 
-		if ( 'trash_poll' === $action && wp_verify_nonce( $nonce, 'pollify_trash_poll' ) ) {
+		if ( 'trash_poll' === $action && current_user_can( 'edit_posts' ) && wp_verify_nonce( $nonce, 'pollify_trash_poll' ) ) {
 			$client_id    = pollify_filter_input( INPUT_GET, 'poll_id', POLLIFY_FILTER_SANITIZE_STRING );
 			$reference_id = pollify_filter_input( INPUT_GET, 'reference_id', FILTER_VALIDATE_INT );
 
@@ -349,7 +349,7 @@ class Menu {
 			}
 		}
 
-		if ( 'delete_poll' === $action && wp_verify_nonce( $nonce, 'pollify_delete_poll' ) ) {
+		if ( 'delete_poll' === $action && current_user_can( 'edit_posts' ) && wp_verify_nonce( $nonce, 'pollify_delete_poll' ) ) {
 			$client_id    = pollify_filter_input( INPUT_GET, 'poll_id', POLLIFY_FILTER_SANITIZE_STRING );
 			$reference_id = pollify_filter_input( INPUT_GET, 'reference_id', FILTER_VALIDATE_INT );
 

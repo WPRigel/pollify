@@ -77,7 +77,7 @@ class FeedbackManager {
 
 		// If search is set then add where condition for search.
 		if ( ! empty( $args['search'] ) ) {
-			$where .= $wpdb->prepare( ' AND poll.title LIKE %s', '%' . $args['search'] . '%' );
+			$where .= $wpdb->prepare( ' AND poll.title LIKE %s', '%' . $wpdb->esc_like( $args['search'] ) . '%' );
 		}
 
 		// Set the pagination data.
@@ -443,7 +443,8 @@ class FeedbackManager {
 		} else {
 			$unique_voters = $wpdb->get_var(
 				$wpdb->prepare(
-					'SELECT COUNT(DISTINCT CASE WHEN user_id > 0 THEN user_id ELSE user_ip END) FROM ' . $wpdb->prefix . 'pollify_vote WHERE client_id = %s',
+					'SELECT COUNT(DISTINCT CASE WHEN user_id > 0 THEN user_id ELSE user_ip END) FROM %i WHERE client_id = %s',
+					$wpdb->prefix . 'pollify_vote',
 					$client_id
 				)
 			);
