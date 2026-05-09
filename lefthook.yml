@@ -1,0 +1,19 @@
+pre-commit:
+  commands:
+    lint-js:
+      glob: "src/**/*.js"
+      run: npm run lint:js
+    lint-css:
+      glob: "src/**/*.scss"
+      run: npm run lint:css
+    lint-php:
+      glob:
+        - "*.php"
+        - "includes/**/*.php"
+        - "templates/**/*.php"
+      run: npm run lint:php
+
+pre-push:
+  commands:
+    build:
+      run: npm run build
