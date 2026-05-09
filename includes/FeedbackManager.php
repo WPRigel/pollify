@@ -318,7 +318,7 @@ class FeedbackManager {
 			wp_cache_flush_group( 'pollify_poll_cache' );
 		}
 
-		return $this->get( $args['id'] );
+		return $this->get( $args['client_id'] );
 	}
 
 	/**

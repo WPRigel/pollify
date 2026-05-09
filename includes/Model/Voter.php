@@ -142,13 +142,14 @@ class Voter {
 			$ip = '';
 		}
 
-		$url  = 'http://ipinfo.io/' . $ip . '/json';
-		$data = wp_remote_get( $url );
+		$url      = 'http://ipinfo.io/' . $ip . '/json';
+		$data     = wp_remote_get( $url );
+		$response = [];
 
 		if ( ! is_wp_error( $data ) ) {
 			// Get the body of the response.
 			$body     = wp_remote_retrieve_body( $data );
-			$response = json_decode( $body, true );
+			$response = json_decode( $body, true ) ?? [];
 		}
 
 		return $response['country'] ?? '';
@@ -160,7 +161,7 @@ class Voter {
 	 * @return string
 	 */
 	public function get_user_agent(): string {
-		return sanitize_text_field( $_SERVER['HTTP_USER_AGENT'] ) ?? '';
+		return sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ?? '' ) );
 	}
 
 	/**
@@ -201,16 +202,19 @@ class Voter {
 			return true;
 		}
 
-		$votes = Votes::get_instance()->get_votes(
-			[
-				'per_page'  => 1,
-				'client_id' => $client_id,
-				'ip'        => $this->get_user_ip(),
-			]
-		);
+		// For logged-in users, also check by IP to catch votes cast before login.
+		if ( $this->get_user_id() > 0 ) {
+			$votes = Votes::get_instance()->get_votes(
+				[
+					'per_page'  => 1,
+					'client_id' => $client_id,
+					'ip'        => $this->get_user_ip(),
+				]
+			);
 
-		if ( ! empty( $votes ) ) {
-			return true;
+			if ( ! empty( $votes ) ) {
+				return true;
+			}
 		}
 
 		return false;
