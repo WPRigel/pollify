@@ -2,7 +2,7 @@ nbproject
 node_modules
 secret.json
 log.txt
-package-lock.json
+
 plugin-deploy.sh
 yarn.lock
 
