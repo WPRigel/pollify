@@ -2,7 +2,7 @@ nbproject
 node_modules
 secret.json
 log.txt
-package-lock.json
+
 plugin-deploy.sh
 yarn.lock
 
@@ -15,6 +15,8 @@ yarn.lock
 /node_modules
 /bower_components
 /vendor
+/build
+/assets/build
 
 # Misc #
 ###################
@@ -66,3 +68,7 @@ Thumbs.db
 *.sqlite
 *.zip
 /poll-creator
+
+# Test cache #
+##############
+.phpunit.result.cache

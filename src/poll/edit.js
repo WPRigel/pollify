@@ -57,7 +57,7 @@ const isPollClosed = (
  * @param {Object} props Block props.
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
  *
- * @return {WPElement} Element to render.
+ * @return {Element} Element to render.
  */
 const Edit = ( props ) => {
 	const { clientId, attributes, setAttributes } = props;
@@ -94,9 +94,12 @@ const Edit = ( props ) => {
 
 	const handlePollStatusChange = ( newStatus ) => {
 		setAttributes( {
-			endDate: newStatus === 'schedule'
-				? new Date( new Date().getTime() + ( 24 * 60 * 60 * 1000 ) ).toISOString()
-				: null,
+			endDate:
+				newStatus === 'schedule'
+					? new Date(
+							new Date().getTime() + 24 * 60 * 60 * 1000
+					  ).toISOString()
+					: null,
 			status: newStatus,
 		} );
 	};
@@ -111,7 +114,7 @@ const Edit = ( props ) => {
 		if ( ! pollClientId ) {
 			setAttributes( { pollClientId: clientId } );
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [] );
 
 	const style = {
@@ -125,39 +128,66 @@ const Edit = ( props ) => {
 
 	const isClosed = isPollClosed( status, endDate );
 
-	const blockProps = useBlockProps( { className: 'wp-block-pollify-editor-wrapper', style } );
+	const blockProps = useBlockProps( {
+		className: 'wp-block-pollify-editor-wrapper',
+		style,
+	} );
 
 	let checkboxLabel;
 	let checkboxHelp;
 	if ( requireLogin ) {
 		checkboxLabel = __( 'One vote per user', 'poll-creator' );
-		checkboxHelp = __( 'If checked, each logged-in user can only vote once (tracked by user account).', 'poll-creator' );
+		checkboxHelp = __(
+			'If checked, each logged-in user can only vote once (tracked by user account).',
+			'poll-creator'
+		);
 	} else if ( anonymousVoting ) {
 		checkboxLabel = __( 'Prevent duplicate votes', 'poll-creator' );
-		checkboxHelp = __( 'If checked, users can only vote once using browser storage. If unchecked, users can vote unlimited times (truly anonymous).', 'poll-creator' );
+		checkboxHelp = __(
+			'If checked, users can only vote once using browser storage. If unchecked, users can vote unlimited times (truly anonymous).',
+			'poll-creator'
+		);
 	} else {
-		checkboxLabel = __( 'Allowed one response per computer', 'poll-creator' );
-		checkboxHelp = __( 'If checked, only one response per computer will be allowed (tracked by IP address).', 'poll-creator' );
+		checkboxLabel = __(
+			'Allowed one response per computer',
+			'poll-creator'
+		);
+		checkboxHelp = __(
+			'If checked, only one response per computer will be allowed (tracked by IP address).',
+			'poll-creator'
+		);
 	}
 
 	return (
 		<div { ...blockProps }>
 			<InspectorControls group="settings">
-				<PanelBody title={ __( 'General settings', 'poll-creator' ) } className="pollify-general-settings-sidebar-wrap">
+				<PanelBody
+					title={ __( 'General settings', 'poll-creator' ) }
+					className="pollify-general-settings-sidebar-wrap"
+				>
 					<SelectControl
 						label={ __( 'Status', 'poll-creator' ) }
 						value={ status }
 						options={ [
-							{ label: __( 'Open', 'poll-creator' ), value: 'publish' },
-							{ label: __( 'Close', 'poll-creator' ), value: 'draft' },
-							{ label: __( 'Close after', 'poll-creator' ), value: 'schedule' },
+							{
+								label: __( 'Open', 'poll-creator' ),
+								value: 'publish',
+							},
+							{
+								label: __( 'Close', 'poll-creator' ),
+								value: 'draft',
+							},
+							{
+								label: __( 'Close after', 'poll-creator' ),
+								value: 'schedule',
+							},
 						] }
 						onChange={ handlePollStatusChange }
 					/>
 
 					{ ( status === 'draft' || status === 'schedule' ) && (
 						<>
-							{ ( status === 'schedule' ) && (
+							{ status === 'schedule' && (
 								<TimePicker
 									currentTime={ endDate }
 									onChange={ handleEndDateChange }
@@ -166,131 +196,265 @@ const Edit = ( props ) => {
 							) }
 
 							<SelectControl
-								label={ __( 'When poll is closed', 'poll-creator' ) }
+								label={ __(
+									'When poll is closed',
+									'poll-creator'
+								) }
 								value={ closePollState }
 								options={ [
-									{ label: __( 'Show poll result', 'poll-creator' ), value: 'show-result' },
-									{ label: __( 'Hide poll', 'poll-creator' ), value: 'hide-poll' },
-									{ label: __( 'Show poll close message', 'poll-creator' ), value: 'show-message' },
+									{
+										label: __(
+											'Show poll result',
+											'poll-creator'
+										),
+										value: 'show-result',
+									},
+									{
+										label: __(
+											'Hide poll',
+											'poll-creator'
+										),
+										value: 'hide-poll',
+									},
+									{
+										label: __(
+											'Show poll close message',
+											'poll-creator'
+										),
+										value: 'show-message',
+									},
 								] }
-								onChange={ ( val ) => setAttributes( { closePollState: val } ) }
+								onChange={ ( val ) =>
+									setAttributes( { closePollState: val } )
+								}
 							/>
 						</>
 					) }
 
 					{ closePollState === 'show-message' && (
 						<TextareaControl
-							value={ closePollmessage || __( 'This poll is closed', 'poll-creator' ) }
+							value={
+								closePollmessage ||
+								__( 'This poll is closed', 'poll-creator' )
+							}
 							label={ __( 'Close message text', 'poll-creator' ) }
 							placeholder={ __(
 								'This poll is closed',
 								'poll-creator'
 							) }
-							onChange={ ( val ) => setAttributes( { closePollmessage: val } ) }
+							onChange={ ( val ) =>
+								setAttributes( { closePollmessage: val } )
+							}
 						/>
 					) }
-
 				</PanelBody>
-				<PanelBody title={ __( 'Confiramtion message', 'poll-creator' ) } className="pollify-confirmation-settings-sidebar-wrap">
+				<PanelBody
+					title={ __( 'Confiramtion message', 'poll-creator' ) }
+					className="pollify-confirmation-settings-sidebar-wrap"
+				>
 					<SelectControl
 						label={ __( 'On submission', 'poll-creator' ) }
 						value={ confirmationMessageType }
 						options={ [
-							{ label: __( 'View results', 'poll-creator' ), value: 'view-result' },
-							{ label: __( 'View message', 'poll-creator' ), value: 'view-message' },
+							{
+								label: __( 'View results', 'poll-creator' ),
+								value: 'view-result',
+							},
+							{
+								label: __( 'View message', 'poll-creator' ),
+								value: 'view-message',
+							},
 						] }
-						onChange={ ( val ) => setAttributes( { confirmationMessageType: val } ) }
+						onChange={ ( val ) =>
+							setAttributes( { confirmationMessageType: val } )
+						}
 					/>
 
 					{ confirmationMessageType === 'view-message' && (
 						<TextareaControl
-							value={ confirmationMessage || __( 'Thanks for voting!', 'poll-creator' ) }
+							value={
+								confirmationMessage ||
+								__( 'Thanks for voting!', 'poll-creator' )
+							}
 							label={ __( 'Message text', 'crowdsignal-forms' ) }
 							placeholder={ __(
 								'Thanks for voting!',
 								'poll-creator'
 							) }
-							onChange={ ( val ) => setAttributes( { confirmationMessage: val } ) }
+							onChange={ ( val ) =>
+								setAttributes( { confirmationMessage: val } )
+							}
 						/>
 					) }
 					{ confirmationMessageType === 'view-result' && (
 						<TextareaControl
-							value={ viewResultconfirmationMessage || __( 'Thanks for voting!', 'poll-creator' ) }
-							label={ __( 'View result message text', 'crowdsignal-forms' ) }
+							value={
+								viewResultconfirmationMessage ||
+								__( 'Thanks for voting!', 'poll-creator' )
+							}
+							label={ __(
+								'View result message text',
+								'crowdsignal-forms'
+							) }
 							placeholder={ __(
 								'Thanks for voting!',
 								'poll-creator'
 							) }
-							onChange={ ( val ) => setAttributes( { viewResultconfirmationMessage: val } ) }
+							onChange={ ( val ) =>
+								setAttributes( {
+									viewResultconfirmationMessage: val,
+								} )
+							}
 						/>
 					) }
 				</PanelBody>
-				<PanelBody title={ __( 'Response settings', 'poll-creator' ) } className="pollify-response-settings-sidebar-wrap">
+				<PanelBody
+					title={ __( 'Response settings', 'poll-creator' ) }
+					className="pollify-response-settings-sidebar-wrap"
+				>
 					<CheckboxControl
 						label={ __( 'Require login to vote', 'poll-creator' ) }
-						help={ __( 'When enabled, only logged-in users can vote. Duplicate prevention uses user account instead of IP or browser storage.', 'poll-creator' ) }
+						help={ __(
+							'When enabled, only logged-in users can vote. Duplicate prevention uses user account instead of IP or browser storage.',
+							'poll-creator'
+						) }
 						checked={ requireLogin }
-						onChange={ ( val ) => setAttributes( { requireLogin: val } ) }
+						onChange={ ( val ) =>
+							setAttributes( { requireLogin: val } )
+						}
 					/>
 
 					{ requireLogin && (
 						<TextareaControl
-							label={ __( 'Login required message', 'poll-creator' ) }
-							value={ requireLoginMessage || __( 'Please log in to vote.', 'poll-creator' ) }
-							placeholder={ __( 'Please log in to vote.', 'poll-creator' ) }
-							onChange={ ( val ) => setAttributes( { requireLoginMessage: val } ) }
+							label={ __(
+								'Login required message',
+								'poll-creator'
+							) }
+							value={
+								requireLoginMessage ||
+								__( 'Please log in to vote.', 'poll-creator' )
+							}
+							placeholder={ __(
+								'Please log in to vote.',
+								'poll-creator'
+							) }
+							onChange={ ( val ) =>
+								setAttributes( { requireLoginMessage: val } )
+							}
 						/>
 					) }
 
 					{ requireLogin && (
 						<TextControl
 							label={ __( 'Custom login URL', 'poll-creator' ) }
-							help={ __( 'Leave empty to use the default WordPress login page. Useful for third-party login plugins.', 'poll-creator' ) }
+							help={ __(
+								'Leave empty to use the default WordPress login page. Useful for third-party login plugins.',
+								'poll-creator'
+							) }
 							value={ requireLoginUrl || '' }
 							placeholder="https://"
-							onChange={ ( val ) => setAttributes( { requireLoginUrl: val } ) }
+							onChange={ ( val ) =>
+								setAttributes( { requireLoginUrl: val } )
+							}
 						/>
 					) }
 
 					{ requireLogin && (
 						<SelectControl
-							label={ __( 'When not logged in, show:', 'poll-creator' ) }
+							label={ __(
+								'When not logged in, show:',
+								'poll-creator'
+							) }
 							value={ requireLoginAction || 'hide' }
 							options={ [
-								{ label: __( 'Login message (hide the poll)', 'poll-creator' ), value: 'hide' },
-								{ label: __( 'Poll with results + login popup on vote', 'poll-creator' ), value: 'popup' },
+								{
+									label: __(
+										'Login message (hide the poll)',
+										'poll-creator'
+									),
+									value: 'hide',
+								},
+								{
+									label: __(
+										'Poll with results + login popup on vote',
+										'poll-creator'
+									),
+									value: 'popup',
+								},
 							] }
-							onChange={ ( val ) => setAttributes( { requireLoginAction: val } ) }
+							onChange={ ( val ) =>
+								setAttributes( { requireLoginAction: val } )
+							}
 						/>
 					) }
 
 					<CheckboxControl
-						label={ __( 'Enable Anonymous Voting', 'poll-creator' ) }
-						help={ __( 'When enabled, no personal data (IP, location, user agent) will be collected. GDPR compliant.', 'poll-creator' ) }
+						label={ __(
+							'Enable Anonymous Voting',
+							'poll-creator'
+						) }
+						help={ __(
+							'When enabled, no personal data (IP, location, user agent) will be collected. GDPR compliant.',
+							'poll-creator'
+						) }
 						checked={ anonymousVoting }
-						onChange={ ( val ) => setAttributes( { anonymousVoting: val } ) }
+						onChange={ ( val ) =>
+							setAttributes( { anonymousVoting: val } )
+						}
 					/>
 
 					<CheckboxControl
 						label={ checkboxLabel }
 						help={ checkboxHelp }
 						checked={ allowedPerComputerResponse }
-						onChange={ ( val ) => setAttributes( { allowedPerComputerResponse: val } ) }
+						onChange={ ( val ) =>
+							setAttributes( { allowedPerComputerResponse: val } )
+						}
 					/>
 
-					{ anonymousVoting && allowedPerComputerResponse && ! requireLogin && (
-						<SelectControl
-							label={ __( 'Storage method for duplicate prevention', 'poll-creator' ) }
-							value={ anonymousVotingMethod }
-							options={ [
-								{ label: __( 'Local Storage - Persistent (prevents revoting even after browser restart)', 'poll-creator' ), value: 'localStorage' },
-								{ label: __( 'Session Storage - Temporary (allows revoting after browser closes)', 'poll-creator' ), value: 'sessionStorage' },
-								{ label: __( 'Cookie - Persistent with expiration (prevents revoting for 30 days)', 'poll-creator' ), value: 'cookie' },
-							] }
-							help={ __( 'Choose how to store the vote flag on user\'s browser.', 'poll-creator' ) }
-							onChange={ ( val ) => setAttributes( { anonymousVotingMethod: val } ) }
-						/>
-					) }
+					{ anonymousVoting &&
+						allowedPerComputerResponse &&
+						! requireLogin && (
+							<SelectControl
+								label={ __(
+									'Storage method for duplicate prevention',
+									'poll-creator'
+								) }
+								value={ anonymousVotingMethod }
+								options={ [
+									{
+										label: __(
+											'Local Storage - Persistent (prevents revoting even after browser restart)',
+											'poll-creator'
+										),
+										value: 'localStorage',
+									},
+									{
+										label: __(
+											'Session Storage - Temporary (allows revoting after browser closes)',
+											'poll-creator'
+										),
+										value: 'sessionStorage',
+									},
+									{
+										label: __(
+											'Cookie - Persistent with expiration (prevents revoting for 30 days)',
+											'poll-creator'
+										),
+										value: 'cookie',
+									},
+								] }
+								help={ __(
+									"Choose how to store the vote flag on user's browser.",
+									'poll-creator'
+								) }
+								onChange={ ( val ) =>
+									setAttributes( {
+										anonymousVotingMethod: val,
+									} )
+								}
+							/>
+						) }
 				</PanelBody>
 			</InspectorControls>
 			<InspectorControls group="styles">
@@ -300,22 +464,33 @@ const Edit = ( props ) => {
 					colorSettings={ [
 						{
 							value: submitButtonBgColor,
-							onChange: ( val ) => setAttributes( { submitButtonBgColor: val } ),
+							onChange: ( val ) =>
+								setAttributes( { submitButtonBgColor: val } ),
 							label: __( 'Background Color', 'poll-creator' ),
 						},
 						{
 							value: submitButtonTextColor,
-							onChange: ( val ) => setAttributes( { submitButtonTextColor: val } ),
+							onChange: ( val ) =>
+								setAttributes( { submitButtonTextColor: val } ),
 							label: __( 'Text Color', 'poll-creator' ),
 						},
 						{
 							value: submitButtonHoverBgColor,
-							onChange: ( val ) => setAttributes( { submitButtonHoverBgColor: val } ),
-							label: __( 'Hover Background Color', 'poll-creator' ),
+							onChange: ( val ) =>
+								setAttributes( {
+									submitButtonHoverBgColor: val,
+								} ),
+							label: __(
+								'Hover Background Color',
+								'poll-creator'
+							),
 						},
 						{
 							value: submitButtonHoverTextColor,
-							onChange: ( val ) => setAttributes( { submitButtonHoverTextColor: val } ),
+							onChange: ( val ) =>
+								setAttributes( {
+									submitButtonHoverTextColor: val,
+								} ),
 							label: __( 'Hover Text Color', 'poll-creator' ),
 						},
 					] }
@@ -335,10 +510,15 @@ const Edit = ( props ) => {
 									}
 									onClick={ () => {
 										// Check if we are toggling the width off
-										const buttonWidth = submitButtonWidth === widthValue ? undefined : widthValue;
+										const buttonWidth =
+											submitButtonWidth === widthValue
+												? undefined
+												: widthValue;
 
 										// Update attributes.
-										setAttributes( { submitButtonWidth: buttonWidth } );
+										setAttributes( {
+											submitButtonWidth: buttonWidth,
+										} );
 									} }
 								>
 									{ widthValue }%
@@ -346,27 +526,34 @@ const Edit = ( props ) => {
 							);
 						} ) }
 
-						{ ( submitButtonWidth && 100 !== submitButtonWidth ) && (
+						{ submitButtonWidth && 100 !== submitButtonWidth && (
 							<>
-								<h2>{ __( 'Button alignment', 'poll-creator' ) }</h2>
+								<h2>
+									{ __( 'Button alignment', 'poll-creator' ) }
+								</h2>
 
-								{ [ 'left', 'center', 'right' ].map( ( alignValue ) => (
-									<Button
-										key={ alignValue }
-										size="medium"
-										variant={
-											alignValue === submitButtonAlign
-												? 'primary'
-												: undefined
-										}
-										onClick={ () => {
-											// Update attributes.
-											setAttributes( { submitButtonAlign: alignValue } );
-										} }
-									>
-										{ alignValue }
-									</Button>
-								) ) }
+								{ [ 'left', 'center', 'right' ].map(
+									( alignValue ) => (
+										<Button
+											key={ alignValue }
+											size="medium"
+											variant={
+												alignValue === submitButtonAlign
+													? 'primary'
+													: undefined
+											}
+											onClick={ () => {
+												// Update attributes.
+												setAttributes( {
+													submitButtonAlign:
+														alignValue,
+												} );
+											} }
+										>
+											{ alignValue }
+										</Button>
+									)
+								) }
 							</>
 						) }
 					</ButtonGroup>
@@ -377,12 +564,16 @@ const Edit = ( props ) => {
 					colorSettings={ [
 						{
 							value: closingBannerBgColor,
-							onChange: ( val ) => setAttributes( { closingBannerBgColor: val } ),
+							onChange: ( val ) =>
+								setAttributes( { closingBannerBgColor: val } ),
 							label: __( 'Background Color', 'poll-creator' ),
 						},
 						{
 							value: closingBannerTextColor,
-							onChange: ( val ) => setAttributes( { closingBannerTextColor: val } ),
+							onChange: ( val ) =>
+								setAttributes( {
+									closingBannerTextColor: val,
+								} ),
 							label: __( 'Text Color', 'poll-creator' ),
 						},
 					] }
@@ -393,13 +584,17 @@ const Edit = ( props ) => {
 					<ToolbarButton
 						icon="yes"
 						label="Multi check"
-						onClick={ () => setAttributes( { optionType: 'multi-check' } ) }
+						onClick={ () =>
+							setAttributes( { optionType: 'multi-check' } )
+						}
 						isActive={ optionType === 'multi-check' }
 					/>
 					<ToolbarButton
 						icon="marker"
 						label="Radio button"
-						onClick={ () => setAttributes( { optionType: 'radio' } ) }
+						onClick={ () =>
+							setAttributes( { optionType: 'radio' } )
+						}
 						isActive={ optionType === 'radio' }
 					/>
 				</ToolbarGroup>
@@ -409,16 +604,32 @@ const Edit = ( props ) => {
 					tagName="h4"
 					value={ title }
 					onChange={ ( val ) => setAttributes( { title: val } ) }
-					placeholder={ __( 'Enter the poll question', 'poll-creator' ) }
-					allowedFormats={ [ 'core/bold', 'core/link', 'core/italic' ] }
+					placeholder={ __(
+						'Enter the poll question',
+						'poll-creator'
+					) }
+					allowedFormats={ [
+						'core/bold',
+						'core/link',
+						'core/italic',
+					] }
 					className="poll-title"
 				/>
 				<RichText
 					tagName="p"
 					value={ description }
-					onChange={ ( val ) => setAttributes( { description: val } ) }
-					placeholder={ __( 'Add a description (optional)', 'poll-creator' ) }
-					allowedFormats={ [ 'core/bold', 'core/link', 'core/italic' ] }
+					onChange={ ( val ) =>
+						setAttributes( { description: val } )
+					}
+					placeholder={ __(
+						'Add a description (optional)',
+						'poll-creator'
+					) }
+					allowedFormats={ [
+						'core/bold',
+						'core/link',
+						'core/italic',
+					] }
 					className="poll-description"
 				/>
 				<OptionsWrapper
@@ -426,22 +637,33 @@ const Edit = ( props ) => {
 					setAttributes={ setAttributes }
 				/>
 
-				{ isClosed &&
+				{ isClosed && (
 					<div className="closing-banner">
 						<p>{ closePollmessage }</p>
 					</div>
-				}
+				) }
 
-				{ ! isClosed &&
-					<div className={ classnames( 'wp-block-button poll-block-button', {
-						[ `align-${ submitButtonAlign }` ]: submitButtonAlign,
-					} ) }>
-						<div className={ classnames( 'submit-button-wrapper', {
-							[ `has-custom-width wp-block-button-width-${ submitButtonWidth }` ]: submitButtonWidth,
-						} ) }>
+				{ ! isClosed && (
+					<div
+						className={ classnames(
+							'wp-block-button poll-block-button',
+							{
+								[ `align-${ submitButtonAlign }` ]:
+									submitButtonAlign,
+							}
+						) }
+					>
+						<div
+							className={ classnames( 'submit-button-wrapper', {
+								[ `has-custom-width wp-block-button-width-${ submitButtonWidth }` ]:
+									submitButtonWidth,
+							} ) }
+						>
 							<RichText
 								className="wp-block-button__link submit-button"
-								onChange={ ( val ) => setAttributes( { submitButtonLabel: val } ) }
+								onChange={ ( val ) =>
+									setAttributes( { submitButtonLabel: val } )
+								}
 								value={ submitButtonLabel }
 								allowedFormats={ [] }
 								multiline={ false }
@@ -449,7 +671,7 @@ const Edit = ( props ) => {
 							/>
 						</div>
 					</div>
-				}
+				) }
 			</div>
 		</div>
 	);

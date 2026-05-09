@@ -26,7 +26,7 @@ class FeedbackTest extends AbstractTestCase {
 		return new class( $args ) extends Feedback {
 			public function vote( array $options = [], $request = [] ): void {} // phpcs:ignore
 
-			public function call_validate( array $options ): true|WP_Error {
+			public function call_validate( array $options ): bool|WP_Error {
 				return $this->validate_vote_request( $options );
 			}
 		};

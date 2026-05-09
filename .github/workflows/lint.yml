@@ -3,24 +3,8 @@ name: JS & CSS Lint
 on:
   push:
     branches: [master, develop]
-    paths:
-      - 'src/**'
-      - 'package.json'
-      - 'package-lock.json'
-      - '.eslintrc*'
-      - '.stylelintrc*'
-      - '.eslintignore'
-      - '.stylelintignore'
   pull_request:
     branches: [master, develop]
-    paths:
-      - 'src/**'
-      - 'package.json'
-      - 'package-lock.json'
-      - '.eslintrc*'
-      - '.stylelintrc*'
-      - '.eslintignore'
-      - '.stylelintignore'
 
 jobs:
   lint:
