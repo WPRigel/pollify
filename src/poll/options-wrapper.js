@@ -1,32 +1,34 @@
-import { useRef, useEffect } from "@wordpress/element";
+import { useRef, useEffect } from '@wordpress/element';
 import Option from './option.js';
 import { nanoid } from 'nanoid';
 
 const setCaretPosition = ( el ) => {
-	 // Focus on the div
-	 el.focus();
+	// Focus on the div
+	el.focus();
 
-	 // Create a range
-	 const range = document.createRange();
+	// Create a range
+	const range = document.createRange();
 
-	 // Select the content of the div
-	 range.selectNodeContents(el);
+	// Select the content of the div
+	range.selectNodeContents( el );
 
-	 // Collapse the range to the end
-	 range.collapse(false);
+	// Collapse the range to the end
+	range.collapse( false );
 
-	 // Clear existing selections
-	 const sel = window.getSelection();
-	 sel.removeAllRanges();
+	// Clear existing selections
+	const sel = el.ownerDocument.defaultView.getSelection();
+	sel.removeAllRanges();
 
-	 // Add the new range
-	 sel.addRange(range);
-}
+	// Add the new range
+	sel.addRange( range );
+};
 
 const shiftAnswerFocus = ( wrapper, index ) => {
 	// Set the cursor at the end of the text.
 	const element = wrapper.querySelectorAll( '[role=textbox]' )[ index ];
-	element && setCaretPosition( element );
+	if ( element ) {
+		setCaretPosition( element );
+	}
 };
 
 const OptionsWrapper = ( { attributes, setAttributes } ) => {
@@ -47,8 +49,8 @@ const OptionsWrapper = ( { attributes, setAttributes } ) => {
 				],
 			} );
 		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [] );
-
 
 	const handleChangeOption = ( index, value ) => {
 		// Update the options array.
@@ -74,7 +76,7 @@ const OptionsWrapper = ( { attributes, setAttributes } ) => {
 				],
 			} );
 		}
-	}
+	};
 
 	const handleNewOption = ( insertAt ) => {
 		// Insert a new option object in the options array.
@@ -93,7 +95,7 @@ const OptionsWrapper = ( { attributes, setAttributes } ) => {
 
 			shiftAnswerFocus( optionsWrapperRef.current, Math.min( insertAt, options.length ) );
 		}
-	}
+	};
 
 	const handleOnDelete = ( index ) => {
 		shiftAnswerFocus( optionsWrapperRef.current, Math.max( index - 1, 0 ) );
@@ -105,14 +107,14 @@ const OptionsWrapper = ( { attributes, setAttributes } ) => {
 				} ),
 			} );
 		}
-	}
+	};
 
 	return (
-		<div className='poll-options-wrapper' ref={optionsWrapperRef}>
+		<div className="poll-options-wrapper" ref={ optionsWrapperRef }>
 			{
 				options.length && options.map( ( option, index ) => {
 					return <Option
-					    attributes={ attributes }
+						attributes={ attributes }
 						key={ index }
 						parentRef={ optionsWrapperRef }
 						index={ index }
@@ -120,11 +122,11 @@ const OptionsWrapper = ( { attributes, setAttributes } ) => {
 						onChange={ handleChangeOption }
 						onNewOption={ handleNewOption }
 						onDelete={ handleOnDelete }
-					/>
-				})
+					/>;
+				} )
 			}
 		</div>
 	);
-}
+};
 
 export default OptionsWrapper;

@@ -16,8 +16,8 @@
         }
     },
     "scripts": {
-        "cs": "@php ./vendor/bin/phpcs . --ignore=tests",
-        "cs:fix": "@php ./vendor/bin/phpcbf . --ignore=tests"
+        "cs": "@php ./vendor/bin/phpcs",
+        "cs:fix": "@php ./vendor/bin/phpcbf"
     },
     "config": {
         "allow-plugins": {
