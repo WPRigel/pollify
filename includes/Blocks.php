@@ -115,6 +115,13 @@ class Blocks {
 			return;
 		}
 
+		// Read block.json once before the loop — same file for every poll on this post.
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		$json             = file_get_contents( plugin()->path . '/build/poll/block.json' );
+		$json_data        = json_decode( $json, true );
+		$block_attributes = $json_data['attributes'] ?? [];
+		$skipped_field    = [ 'pollId', 'pollClientId', 'options', 'title', 'description', 'style' ];
+
 		// Get all attributes and update the poll.
 		foreach ( $polls as $poll ) {
 			$poll_client_id = $poll['attrs']['pollClientId'] ?? '';
@@ -125,7 +132,6 @@ class Blocks {
 
 			$data              = $poll['attrs'] ?? [];
 			$data['client_id'] = $poll_client_id;
-			$skipped_field     = [ 'pollId', 'pollClientId', 'options', 'title', 'description', 'style' ];
 
 			unset(
 				$poll['attrs']['pollId'],
@@ -135,15 +141,6 @@ class Blocks {
 				$poll['attrs']['description'],
 				$poll['attrs']['style']
 			);
-
-			/**
-			 * We use file_get_contents here because we need to get the block.json file from the build folder.
-			 * This is a safe operation because we are not fetching any external content.
-			 */
-			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-			$json             = file_get_contents( plugin()->path . '/build/poll/block.json' );
-			$json_data        = json_decode( $json, true );
-			$block_attributes = $json_data['attributes'] ?? [];
 
 			// Loop through all block attributes and check if it's not set then set it to default value.
 			foreach ( $block_attributes as $key => $value ) {

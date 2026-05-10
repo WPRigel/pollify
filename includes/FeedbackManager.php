@@ -151,7 +151,7 @@ class FeedbackManager {
 			$polls = array_filter(
 				array_map(
 					function ( $poll ) {
-						$feedback = FeedbackFactory::get_instance( $poll )->get();
+						$feedback = ( new FeedbackFactory( $poll ) )->get();
 						return ! is_wp_error( $feedback ) ? $feedback : null;
 					},
 					$polls
@@ -363,7 +363,7 @@ class FeedbackManager {
 			wp_cache_set( $cache_key, $poll, 'pollify_poll_cache', 15 * MINUTE_IN_SECONDS );
 		}
 
-		return FeedbackFactory::get_instance( $poll )->get();
+		return ( new FeedbackFactory( $poll ) )->get();
 	}
 
 	/**

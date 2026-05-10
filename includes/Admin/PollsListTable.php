@@ -258,7 +258,7 @@ class PollsListTable extends \WP_List_Table {
 				$reference = sprintf( '<strong>%1$s</strong> %2$s', $title, $this->row_actions( $actions ) );
 			}
 		} else {
-			$reference = $item->get_reference();
+			$reference = esc_html( $item->get_reference() );
 		}
 
 		return $reference;
@@ -288,17 +288,17 @@ class PollsListTable extends \WP_List_Table {
 
 			// Check if the poll ended.
 			if ( strtotime( $settins['endDate'] ) < time() ) {
-				return sprintf( '<span tooltip="%s" flow="right" class="pollify-status status-%s">%s <span class="dashicons dashicons-info"></span></span>', $ended_text, 'draft', __( 'Closed', 'poll-creator' ) );
+				return sprintf( '<span tooltip="%s" flow="right" class="pollify-status status-draft">%s <span class="dashicons dashicons-info"></span></span>', esc_attr( $ended_text ), esc_html__( 'Closed', 'poll-creator' ) );
 			}
 
 			/* translators: %s: poll end date */
 			$end_date_text = sprintf( __( 'Will be ended on %s', 'poll-creator' ), $end_date );
 
-			return sprintf( '<span tooltip="%s" flow="right" class="pollify-status status-%s">%s <span class="dashicons dashicons-info"></span></span>', $end_date_text, $item->get_status(), $statuses[ $item->get_status() ] );
+			return sprintf( '<span tooltip="%s" flow="right" class="pollify-status status-%s">%s <span class="dashicons dashicons-info"></span></span>', esc_attr( $end_date_text ), esc_attr( $item->get_status() ), esc_html( $statuses[ $item->get_status() ] ?? '' ) );
 		}
 
 		// Wrap the status with span tag so later I can style it.
-		return sprintf( '<span class="pollify-status status-%s">%s</span>', $item->get_status(), $statuses[ $item->get_status() ] );
+		return sprintf( '<span class="pollify-status status-%s">%s</span>', esc_attr( $item->get_status() ), esc_html( $statuses[ $item->get_status() ] ?? '' ) );
 	}
 
 	/**

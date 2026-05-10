@@ -232,6 +232,12 @@ $updated_message = pollify_filter_input( INPUT_GET, 'updated', POLLIFY_FILTER_SA
 					<div class="meta-card-content recent-votes">
 						<?php
 						$recent_votes = $poll->get_votes();
+						// Prime WP user cache with one query instead of one per row.
+						$_user_ids = array_filter( array_unique( array_column( $recent_votes, 'user_id' ) ) );
+						if ( ! empty( $_user_ids ) ) {
+							get_users( [ 'include' => $_user_ids ] );
+						}
+						unset( $_user_ids );
 						?>
 						<?php if ( ! empty( $recent_votes ) ) : ?>
 						<ul class="vote-list">

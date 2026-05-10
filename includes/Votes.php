@@ -172,7 +172,7 @@ class Votes {
 
 		// Check if location is available or not.
 		if ( ! empty( $args['user_id'] ) ) {
-			$where .= $wpdb->prepare( ' AND v.user_id = %d', sanitize_text_field( $args['user_id'] ) );
+			$where .= $wpdb->prepare( ' AND v.user_id = %d', $args['user_id'] );
 		}
 
 		// Check if location is available or not.
