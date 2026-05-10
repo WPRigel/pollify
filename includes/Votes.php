@@ -172,7 +172,7 @@ class Votes {
 
 		// Check if location is available or not.
 		if ( ! empty( $args['user_id'] ) ) {
-			$where .= $wpdb->prepare( ' AND v.user_id = %d', sanitize_text_field( $args['user_id'] ) );
+			$where .= $wpdb->prepare( ' AND v.user_id = %d', $args['user_id'] );
 		}
 
 		// Check if location is available or not.
@@ -280,6 +280,11 @@ class Votes {
 		$where      = apply_filters( 'pollify_results_where_sql', $where, $feedback );
 		$join_sql   = apply_filters( 'pollify_results_join_sql', $join_sql, $feedback );
 		$select_var = apply_filters( 'pollify_results_select_var', $select_var, $feedback );
+
+		// Strip characters that enable SQL injection from developer-provided SQL fragments.
+		// These are trusted extension hooks, but strip the most dangerous injection vectors.
+		$select_var = preg_replace( "/['\";]|--|\/\*/", '', $select_var );
+		$join_sql   = preg_replace( "/['\";]|--|\/\*/", '', $join_sql );
 
 		// Implement caching.
 		$cache_key = 'pollify_results_' . $feedback->get_client_id();

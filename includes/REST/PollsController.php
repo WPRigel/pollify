@@ -220,7 +220,7 @@ class PollsController extends WP_REST_Controller {
 			return $poll;
 		}
 
-		return rest_ensure_response( $this->prepare_item_for_response( $poll, $request ) );
+		return rest_ensure_response( $this->prepare_item_for_response( $poll->get_data(), $request ) );
 	}
 
 	/**

@@ -142,7 +142,7 @@ abstract class Feedback {
 	}
 
 	/**
-	 * Get poll updated at.
+	 * Get all poll data.
 	 *
 	 * @return array
 	 */

@@ -151,7 +151,7 @@ class FeedbackManager {
 			$polls = array_filter(
 				array_map(
 					function ( $poll ) {
-						$feedback = FeedbackFactory::get_instance( $poll )->get();
+						$feedback = ( new FeedbackFactory( $poll ) )->get();
 						return ! is_wp_error( $feedback ) ? $feedback : null;
 					},
 					$polls
@@ -270,7 +270,7 @@ class FeedbackManager {
 				[ '%s' ]
 			);
 
-			if ( ! $updated ) {
+			if ( false === $updated ) {
 				return new WP_Error( 'update-failed', __( 'Poll not updated successfully', 'poll-creator' ), [ 'status' => 422 ] );
 			}
 
@@ -363,7 +363,7 @@ class FeedbackManager {
 			wp_cache_set( $cache_key, $poll, 'pollify_poll_cache', 15 * MINUTE_IN_SECONDS );
 		}
 
-		return FeedbackFactory::get_instance( $poll )->get();
+		return ( new FeedbackFactory( $poll ) )->get();
 	}
 
 	/**
@@ -492,7 +492,7 @@ class FeedbackManager {
 			[ '%d' ]
 		);
 
-		if ( ! $deleted ) {
+		if ( false === $deleted ) {
 			return new WP_Error( 'deletion-failed', __( 'Poll not deleted successfully', 'poll-creator' ), [ 'status' => 422 ] );
 		}
 
@@ -503,7 +503,7 @@ class FeedbackManager {
 			[ '%s' ]
 		);
 
-		if ( ! $deleted ) {
+		if ( false === $deleted ) {
 			return new WP_Error( 'deletion-failed', __( 'Poll not deleted successfully', 'poll-creator' ), [ 'status' => 422 ] );
 		}
 

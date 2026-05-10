@@ -262,6 +262,7 @@ class Menu {
 				\wpRigel\Pollify\Votes::get_instance()->reset_results( $client_id );
 
 				wp_safe_redirect( admin_url( 'admin.php?page=pollify&updated=1' ) );
+				exit;
 			}
 		}
 
@@ -299,6 +300,7 @@ class Menu {
 				\wpRigel\Pollify\FeedbackManager::get_instance()->trash( $client_id );
 
 				wp_safe_redirect( admin_url( 'admin.php?page=pollify&trashed=1' ) );
+				exit;
 			}
 		}
 
@@ -337,6 +339,7 @@ class Menu {
 				}
 
 				wp_safe_redirect( admin_url( 'admin.php?page=pollify&deleted=1' ) );
+				exit;
 			}
 		}
 
