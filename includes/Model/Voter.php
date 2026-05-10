@@ -96,22 +96,24 @@ class Voter {
 	public function get_user_ip(): string {
 		$ip = '';
 
-		// Check if HTTP_CLIENT_IP is set and valid.
-		if ( isset( $_SERVER['HTTP_CLIENT_IP'] ) && filter_var( wp_unslash( $_SERVER['HTTP_CLIENT_IP'] ), FILTER_VALIDATE_IP ) ) {
-			$ip = sanitize_text_field( wp_unslash( $_SERVER['HTTP_CLIENT_IP'] ) );
-		} elseif ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) { // Check if HTTP_X_FORWARDED_FOR is set.
-			// Extract first valid IP from the list.
-			$forwarded_ips = explode( ',', wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] ) );
+		if ( apply_filters( 'pollify_trust_proxy_headers', false ) ) {
+			if ( isset( $_SERVER['HTTP_CLIENT_IP'] ) && filter_var( wp_unslash( $_SERVER['HTTP_CLIENT_IP'] ), FILTER_VALIDATE_IP ) ) {
+				$ip = sanitize_text_field( wp_unslash( $_SERVER['HTTP_CLIENT_IP'] ) );
+			} elseif ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
+				$forwarded_ips = explode( ',', wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] ) );
 
-			foreach ( $forwarded_ips as $forwarded_ip ) {
-				$forwarded_ip = trim( $forwarded_ip ); // Remove spaces.
+				foreach ( $forwarded_ips as $forwarded_ip ) {
+					$forwarded_ip = trim( $forwarded_ip );
 
-				if ( filter_var( $forwarded_ip, FILTER_VALIDATE_IP ) ) {
-					$ip = sanitize_text_field( $forwarded_ip );
-					break; // Use the first valid IP.
+					if ( filter_var( $forwarded_ip, FILTER_VALIDATE_IP ) ) {
+						$ip = sanitize_text_field( $forwarded_ip );
+						break;
+					}
 				}
 			}
-		} elseif ( isset( $_SERVER['REMOTE_ADDR'] ) && filter_var( wp_unslash( $_SERVER['REMOTE_ADDR'] ), FILTER_VALIDATE_IP ) ) { // Fallback to REMOTE_ADDR.
+		}
+
+		if ( empty( $ip ) && isset( $_SERVER['REMOTE_ADDR'] ) && filter_var( wp_unslash( $_SERVER['REMOTE_ADDR'] ), FILTER_VALIDATE_IP ) ) {
 			$ip = sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) );
 		}
 
@@ -148,7 +150,7 @@ class Voter {
 			return $cache[ $ip ];
 		}
 
-		$url      = 'http://ipinfo.io/' . $ip . '/json';
+		$url      = 'https://ipinfo.io/' . $ip . '/json';
 		$data     = wp_remote_get( $url, [ 'timeout' => 3 ] );
 		$response = [];
 

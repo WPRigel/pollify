@@ -134,19 +134,80 @@ class PollsListTable extends \WP_List_Table {
 		// Different actions for trash vs normal polls.
 		if ( 'trash' === $item->get_status() ) {
 			$actions = array(
-				'view'               => sprintf( '<a href="?page=%s&action=%s&poll_id=%s">' . __( 'View results', 'poll-creator' ) . '</a>', $page, 'view_results', $item->get_client_id() ),
-				'delete_permanently' => sprintf( '<a class="submitdelete pollify-delete-permanently" data-poll-id="%s" href="#">' . __( 'Delete Permanently', 'poll-creator' ) . '</a>', $item->get_client_id() ),
+				'view'               => sprintf(
+					'<a href="%s">' . __( 'View results', 'poll-creator' ) . '</a>',
+					esc_url(
+						add_query_arg(
+							[
+								'page'    => $page,
+								'action'  => 'view_results',
+								'poll_id' => $item->get_client_id(),
+							]
+						)
+					)
+				),
+				'delete_permanently' => sprintf( '<a class="submitdelete pollify-delete-permanently" data-poll-id="%s" href="#">' . __( 'Delete Permanently', 'poll-creator' ) . '</a>', esc_attr( $item->get_client_id() ) ),
 			);
 		} else {
 			$actions = array(
-				'view'  => sprintf( '<a href="?page=%s&action=%s&poll_id=%s">' . __( 'View results', 'poll-creator' ) . '</a>', $page, 'view_results', $item->get_client_id() ),
-				'reset' => sprintf( '<a class="submitdelete" onclick="return confirm(\'%s\')" href="?page=%s&action=%s&poll_id=%s&_nonce=%s">' . __( 'Reset Results', 'poll-creator' ) . '</a>', $confirm_text, $page, 'reset_results', $item->get_client_id(), $nonce ),
-				'trash' => sprintf( '<a class="submitdelete" onclick="return confirm(\'%s\')" href="?page=%s&action=%s&poll_id=%s&reference_id=%s&_nonce=%s">' . __( 'Trash', 'poll-creator' ) . '</a>', $confirm_trash_text, $page, 'trash_poll', $item->get_client_id(), $item->get_reference(), $trash_nonce ),
+				'view'  => sprintf(
+					'<a href="%s">' . __( 'View results', 'poll-creator' ) . '</a>',
+					esc_url(
+						add_query_arg(
+							[
+								'page'    => $page,
+								'action'  => 'view_results',
+								'poll_id' => $item->get_client_id(),
+							]
+						)
+					)
+				),
+				'reset' => sprintf(
+					'<a class="submitdelete" onclick="return confirm(\'%s\')" href="%s">' . __( 'Reset Results', 'poll-creator' ) . '</a>',
+					esc_js( $confirm_text ),
+					esc_url(
+						add_query_arg(
+							[
+								'page'    => $page,
+								'action'  => 'reset_results',
+								'poll_id' => $item->get_client_id(),
+								'_nonce'  => $nonce,
+							]
+						)
+					)
+				),
+				'trash' => sprintf(
+					'<a class="submitdelete" onclick="return confirm(\'%s\')" href="%s">' . __( 'Trash', 'poll-creator' ) . '</a>',
+					esc_js( $confirm_trash_text ),
+					esc_url(
+						add_query_arg(
+							[
+								'page'         => $page,
+								'action'       => 'trash_poll',
+								'poll_id'      => $item->get_client_id(),
+								'reference_id' => $item->get_reference(),
+								'_nonce'       => $trash_nonce,
+							]
+						)
+					)
+				),
 			);
 		}
 
 		// Wrap the title with view result link.
-		$title = sprintf( '<a href="?page=%s&action=%s&poll_id=%s">%s</a>', $page, 'view_results', $item->get_client_id(), $item->get_title() );
+		$title = sprintf(
+			'<a href="%s">%s</a>',
+			esc_url(
+				add_query_arg(
+					[
+						'page'    => $page,
+						'action'  => 'view_results',
+						'poll_id' => $item->get_client_id(),
+					]
+				)
+			),
+			esc_html( $item->get_title() )
+		);
 
 		return sprintf( '<strong>%1$s</strong> %2$s', $title, $this->row_actions( $actions ) );
 	}

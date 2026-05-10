@@ -270,7 +270,7 @@ class FeedbackManager {
 				[ '%s' ]
 			);
 
-			if ( ! $updated ) {
+			if ( false === $updated ) {
 				return new WP_Error( 'update-failed', __( 'Poll not updated successfully', 'poll-creator' ), [ 'status' => 422 ] );
 			}
 
