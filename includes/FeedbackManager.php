@@ -492,7 +492,7 @@ class FeedbackManager {
 			[ '%d' ]
 		);
 
-		if ( ! $deleted ) {
+		if ( false === $deleted ) {
 			return new WP_Error( 'deletion-failed', __( 'Poll not deleted successfully', 'poll-creator' ), [ 'status' => 422 ] );
 		}
 
@@ -503,7 +503,7 @@ class FeedbackManager {
 			[ '%s' ]
 		);
 
-		if ( ! $deleted ) {
+		if ( false === $deleted ) {
 			return new WP_Error( 'deletion-failed', __( 'Poll not deleted successfully', 'poll-creator' ), [ 'status' => 422 ] );
 		}
 

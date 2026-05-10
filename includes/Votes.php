@@ -281,6 +281,11 @@ class Votes {
 		$join_sql   = apply_filters( 'pollify_results_join_sql', $join_sql, $feedback );
 		$select_var = apply_filters( 'pollify_results_select_var', $select_var, $feedback );
 
+		// Strip characters that enable SQL injection from developer-provided SQL fragments.
+		// These are trusted extension hooks, but strip the most dangerous injection vectors.
+		$select_var = preg_replace( "/['\";]|--|\/\*/", '', $select_var );
+		$join_sql   = preg_replace( "/['\";]|--|\/\*/", '', $join_sql );
+
 		// Implement caching.
 		$cache_key = 'pollify_results_' . $feedback->get_client_id();
 		$results   = wp_cache_get( $cache_key, 'pollify_vote_cache' );
