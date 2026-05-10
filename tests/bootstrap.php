@@ -37,3 +37,25 @@ if ( ! class_exists( 'WP_Error' ) ) {
 		}
 	}
 }
+
+// Pure utility stubs — deterministic, never mocked per-test via Brain\Monkey.
+// WP_Error must be defined above before is_wp_error() references it.
+if ( ! function_exists( 'wp_unslash' ) ) {
+	function wp_unslash( $value ) {
+		return is_array( $value )
+			? array_map( 'wp_unslash', $value )
+			: stripslashes( (string) $value );
+	}
+}
+
+if ( ! function_exists( 'wp_json_encode' ) ) {
+	function wp_json_encode( $data, $options = 0, $depth = 512 ) {
+		return json_encode( $data, $options, $depth );
+	}
+}
+
+if ( ! function_exists( 'is_wp_error' ) ) {
+	function is_wp_error( $thing ) {
+		return $thing instanceof WP_Error;
+	}
+}

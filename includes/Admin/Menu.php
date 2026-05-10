@@ -57,10 +57,13 @@ class Menu {
 	 * @return bool
 	 */
 	public function if_pollify_admin_page() {
-		// Check if the page is pollify menu or not.
 		global $pollify_menu;
 
 		$screen = get_current_screen();
+
+		if ( ! is_object( $screen ) ) {
+			return false;
+		}
 
 		return $screen->id === $pollify_menu;
 	}
@@ -142,56 +145,6 @@ class Menu {
 				'confirmMsg' => __( 'This poll will be permanently deleted and cannot be recovered.', 'poll-creator' ),
 			)
 		);
-
-		// Add inline script for permanent delete handling.
-		$inline_script = "
-		(function($) {
-			$(document).ready(function() {
-				$('.pollify-delete-permanently').on('click', function(e) {
-					e.preventDefault();
-					var pollId = $(this).data('poll-id');
-					var row = $(this).closest('tr');
-
-					// Fetch poll stats first
-					$.ajax({
-						url: pollifyAdmin.restUrl + pollId + '/stats',
-						method: 'GET',
-						beforeSend: function(xhr) {
-							xhr.setRequestHeader('X-WP-Nonce', pollifyAdmin.nonce);
-						},
-						success: function(stats) {
-							var message = pollifyAdmin.confirmMsg + '\\n\\n';
-							message += 'Total Votes: ' + stats.total_votes + '\\n';
-							message += 'Unique Voters: ' + (stats.unique_voters !== null ? stats.unique_voters : 'N/A (Anonymous Poll)');
-
-							if (confirm(message)) {
-								// Delete permanently
-								$.ajax({
-									url: pollifyAdmin.restUrl + pollId + '/permanent-delete',
-									method: 'DELETE',
-									beforeSend: function(xhr) {
-										xhr.setRequestHeader('X-WP-Nonce', pollifyAdmin.nonce);
-									},
-									success: function(response) {
-										row.fadeOut(300, function() {
-											$(this).remove();
-										});
-									},
-									error: function(xhr) {
-										alert('Error deleting poll: ' + (xhr.responseJSON?.message || 'Unknown error'));
-									}
-								});
-							}
-						},
-						error: function(xhr) {
-							alert('Error fetching poll stats: ' + (xhr.responseJSON?.message || 'Unknown error'));
-						}
-					});
-				});
-			});
-		})(jQuery);
-		";
-		wp_add_inline_script( 'pollify-admin', $inline_script );
 
 		$action = pollify_filter_input( INPUT_GET, 'action', POLLIFY_FILTER_SANITIZE_STRING );
 
@@ -302,7 +255,7 @@ class Menu {
 			return;
 		}
 
-		if ( 'reset_results' === $action && wp_verify_nonce( $nonce, 'pollify_reset_results' ) ) {
+		if ( 'reset_results' === $action && current_user_can( 'edit_posts' ) && wp_verify_nonce( $nonce, 'pollify_reset_results' ) ) {
 			$client_id = pollify_filter_input( INPUT_GET, 'poll_id', POLLIFY_FILTER_SANITIZE_STRING );
 
 			if ( ! empty( $client_id ) ) {
@@ -312,7 +265,7 @@ class Menu {
 			}
 		}
 
-		if ( 'trash_poll' === $action && wp_verify_nonce( $nonce, 'pollify_trash_poll' ) ) {
+		if ( 'trash_poll' === $action && current_user_can( 'edit_posts' ) && wp_verify_nonce( $nonce, 'pollify_trash_poll' ) ) {
 			$client_id    = pollify_filter_input( INPUT_GET, 'poll_id', POLLIFY_FILTER_SANITIZE_STRING );
 			$reference_id = pollify_filter_input( INPUT_GET, 'reference_id', FILTER_VALIDATE_INT );
 
@@ -349,7 +302,7 @@ class Menu {
 			}
 		}
 
-		if ( 'delete_poll' === $action && wp_verify_nonce( $nonce, 'pollify_delete_poll' ) ) {
+		if ( 'delete_poll' === $action && current_user_can( 'edit_posts' ) && wp_verify_nonce( $nonce, 'pollify_delete_poll' ) ) {
 			$client_id    = pollify_filter_input( INPUT_GET, 'poll_id', POLLIFY_FILTER_SANITIZE_STRING );
 			$reference_id = pollify_filter_input( INPUT_GET, 'reference_id', FILTER_VALIDATE_INT );
 
