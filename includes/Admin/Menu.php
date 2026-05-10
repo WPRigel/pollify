@@ -57,10 +57,13 @@ class Menu {
 	 * @return bool
 	 */
 	public function if_pollify_admin_page() {
-		// Check if the page is pollify menu or not.
 		global $pollify_menu;
 
 		$screen = get_current_screen();
+
+		if ( ! is_object( $screen ) ) {
+			return false;
+		}
 
 		return $screen->id === $pollify_menu;
 	}

@@ -28,21 +28,16 @@ if ( ! function_exists( 'pollify_load_template' ) ) {
 
 		// Checking if file exist or not.
 		if ( file_exists( $template_path ) ) {
-			// extract args.
-			if ( ! empty( $args ) ) {
-				/**
-				 * This is used becuase of no alternative way to extract variables
-				 * for loading the templates.
-				 */
+			// Isolate extract() in a closure so it cannot pollute the caller's scope.
+			( static function ( string $path, array $args, bool $once ): void {
 				// phpcs:ignore WordPress.PHP.DontExtract.extract_extract
-				extract( $args );
-			}
-
-			if ( $load_once ) {
-				require_once $template_path;
-			} else {
-				require $template_path;
-			}
+				extract( $args, EXTR_SKIP );
+				if ( $once ) {
+					require_once $path;
+				} else {
+					require $path;
+				}
+			} )( $template_path, $args, $load_once );
 		}
 	}
 }

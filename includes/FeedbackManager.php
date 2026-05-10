@@ -544,18 +544,17 @@ class FeedbackManager {
 
 		// Delete those options if has any in a single query.
 		if ( count( $deleted_options ) ) {
+			$placeholders = implode( ', ', array_fill( 0, count( $deleted_options ), '%s' ) );
+
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
 			$wpdb->query(
-				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-				str_replace(
-					'\\',
-					'',
-					$wpdb->prepare(
-						'DELETE FROM %i WHERE option_id IN (%s)',
-						$wpdb->prefix . 'pollify_poll_options',
-						implode( "','", $deleted_options )
-					)
+				$wpdb->prepare(
+					"DELETE FROM %i WHERE option_id IN ($placeholders)",
+					$wpdb->prefix . 'pollify_poll_options',
+					...$deleted_options
 				)
 			);
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
 		}
 
 		// Filter those array from $options where id key is not set or id is 0 or null.

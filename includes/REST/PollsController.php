@@ -71,12 +71,12 @@ class PollsController extends WP_REST_Controller {
 
 		register_rest_route(
 			$this->namespace,
-			'/' . $this->action . '/(?P<id>[\d]+)/',
+			'/' . $this->action . '/(?P<client_id>[a-zA-Z0-9_-]+)/',
 			[
 				'args' => [
-					'id' => [
-						'description' => __( 'Unique identifier for the object.', 'poll-creator' ),
-						'type'        => 'integer',
+					'client_id' => [
+						'description' => __( 'Client ID (UUID) for the poll.', 'poll-creator' ),
+						'type'        => 'string',
 					],
 				],
 				[
@@ -101,7 +101,6 @@ class PollsController extends WP_REST_Controller {
 						return current_user_can( 'edit_posts' );
 					},
 				],
-
 			]
 		);
 
@@ -195,10 +194,7 @@ class PollsController extends WP_REST_Controller {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function get_item( $request ) {
-		// Get rest parameters.
-		$params = $request->get_params();
-
-		$poll = FeedbackManager::get_instance()->get( $params['id'] );
+		$poll = FeedbackManager::get_instance()->get( $request->get_param( 'client_id' ) );
 
 		if ( is_wp_error( $poll ) ) {
 			return $poll;
@@ -235,10 +231,7 @@ class PollsController extends WP_REST_Controller {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function delete_item( $request ) {
-		// Get rest parameters.
-		$params = $request->get_params();
-
-		$poll = FeedbackManager::get_instance()->delete( $params['id'] );
+		$poll = FeedbackManager::get_instance()->delete( $request->get_param( 'client_id' ) );
 
 		if ( is_wp_error( $poll ) ) {
 			return $poll;
@@ -327,7 +320,7 @@ class PollsController extends WP_REST_Controller {
 	protected function prepare_links( $data ) {
 		$links = [
 			'self'       => [
-				'href' => rest_url( sprintf( '/%s/%s/%d', $this->namespace, $this->action, $data['id'] ) ),
+				'href' => rest_url( sprintf( '/%s/%s/%s', $this->namespace, $this->action, $data['client_id'] ) ),
 			],
 			'collection' => [
 				'href' => rest_url( sprintf( '/%s/%s', $this->namespace, $this->action ) ),
