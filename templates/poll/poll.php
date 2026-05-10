@@ -168,7 +168,7 @@ echo wp_kses(
 				?>
 
 				<div class="wp-block-button poll-block-button align-<?php echo esc_attr( $attributes['submitButtonAlign'] ); ?>">
-					<div class="submit-button-wrapper has-custom-width wp-block-button-width-<?php echo esc_attr( $attributes['submitButtonWidth'] ); ?>"">
+					<div class="submit-button-wrapper has-custom-width wp-block-button-width-<?php echo esc_attr( $attributes['submitButtonWidth'] ); ?>">
 						<input type="hidden" name="poll-client-id" value="<?php echo esc_attr( $attributes['pollClientId'] ); ?>">
 						<input type="submit" class="wp-block-button__link submit-button" value="<?php echo esc_html( $attributes['submitButtonLabel'] ); ?>" />
 					</div>

@@ -118,8 +118,6 @@ class Installer {
 	 * @return void
 	 */
 	public function create_tables(): void {
-		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-
 		$this->create_poll_table();
 		$this->create_poll_option_table();
 		$this->create_poll_vote_table();

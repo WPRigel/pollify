@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace wpRigel\Pollify;
 
-use wpRigel\Pollify\Model\Poll;
 use wpRigel\Pollify\FeedbackManager;
 use wpRigel\Pollify\Traits\Singleton;
 
@@ -92,8 +91,8 @@ class Blocks {
 	/**
 	 * Save polls.
 	 *
-	 * @param int     $post_id Post ID.
-	 * @param WP_Post $post    Post object.
+	 * @param int      $post_id Post ID.
+	 * @param \WP_Post $post    Post object.
 	 *
 	 * @return void
 	 */
@@ -160,8 +159,8 @@ class Blocks {
 	/**
 	 * Delete unused blocks.
 	 *
-	 * @param int     $post_id Post ID.
-	 * @param WP_Post $post    Post object.
+	 * @param int      $post_id Post ID.
+	 * @param \WP_Post $post    Post object.
 	 *
 	 * @return void
 	 */
@@ -232,7 +231,7 @@ class Blocks {
 	 */
 	public function localize_script() {
 		wp_localize_script(
-			'wp-api-fetch',
+			'pollify-poll-view-script',
 			'pollify',
 			array(
 				'nonce' => wp_create_nonce( 'pollify-vote' ),
