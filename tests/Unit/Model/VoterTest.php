@@ -84,15 +84,32 @@ class VoterTest extends AbstractTestCase {
 		$this->assertSame( '127.0.0.1', $voter->get_user_ip() );
 	}
 
-	public function test_get_user_ip_prefers_http_client_ip(): void {
-		$_SERVER['HTTP_CLIENT_IP'] = '203.0.113.10';
-		$_SERVER['REMOTE_ADDR']    = '10.0.0.1';
+	public function test_get_user_ip_ignores_http_client_ip_by_default(): void {
+		$_SERVER['HTTP_CLIENT_IP']  = '203.0.113.10';
+		$_SERVER['REMOTE_ADDR']     = '203.0.113.5';
 		$_SERVER['HTTP_USER_AGENT'] = 'PHPUnit';
 		unset( $_SERVER['HTTP_X_FORWARDED_FOR'] );
 
 		Functions\when( 'is_user_logged_in' )->justReturn( false );
 		Functions\when( 'get_current_user_id' )->justReturn( 0 );
 		Functions\when( 'sanitize_text_field' )->returnArg();
+
+		$voter = new Voter();
+		$this->assertSame( '203.0.113.5', $voter->get_user_ip() );
+
+		unset( $_SERVER['HTTP_CLIENT_IP'] );
+	}
+
+	public function test_get_user_ip_uses_http_client_ip_when_proxy_trusted(): void {
+		$_SERVER['HTTP_CLIENT_IP']  = '203.0.113.10';
+		$_SERVER['REMOTE_ADDR']     = '203.0.113.5';
+		$_SERVER['HTTP_USER_AGENT'] = 'PHPUnit';
+		unset( $_SERVER['HTTP_X_FORWARDED_FOR'] );
+
+		Functions\when( 'is_user_logged_in' )->justReturn( false );
+		Functions\when( 'get_current_user_id' )->justReturn( 0 );
+		Functions\when( 'sanitize_text_field' )->returnArg();
+		Functions\when( 'apply_filters' )->justReturn( true );
 
 		$voter = new Voter();
 		$this->assertSame( '203.0.113.10', $voter->get_user_ip() );
