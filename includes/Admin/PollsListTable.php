@@ -298,13 +298,35 @@ class PollsListTable extends \WP_List_Table {
 	 */
 	protected function get_views() {
 		$current_status = pollify_filter_input( INPUT_GET, 'status', POLLIFY_FILTER_SANITIZE_STRING );
+		$current_type   = pollify_filter_input( INPUT_POST, 'type', POLLIFY_FILTER_SANITIZE_STRING );
 
-		// Get counts for each status.
+		// Get counts for each status, filtered to the same type as the list.
 		global $wpdb;
-		$counts = $wpdb->get_results(
-			"SELECT status, COUNT(*) as count FROM {$wpdb->prefix}pollify_poll GROUP BY status",
-			ARRAY_A
-		);
+
+		if ( ! empty( $current_type ) && 'all' !== $current_type ) {
+			$counts = $wpdb->get_results(
+				$wpdb->prepare(
+					'SELECT status, COUNT(*) as count FROM %i WHERE type = %s GROUP BY status',
+					$wpdb->prefix . 'pollify_poll',
+					$current_type
+				),
+				ARRAY_A
+			);
+		} else {
+			$registered_types = array_keys( apply_filters( 'pollify_map_feedback_classes', [ 'poll' => true ], null ) );
+			$placeholders     = implode( ', ', array_fill( 0, count( $registered_types ), '%s' ) );
+
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+			$counts = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT status, COUNT(*) as count FROM %i WHERE type IN ($placeholders) GROUP BY status",
+					$wpdb->prefix . 'pollify_poll',
+					...$registered_types
+				),
+				ARRAY_A
+			);
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+		}
 
 		$status_counts = [
 			'all'     => 0,
@@ -399,10 +421,10 @@ class PollsListTable extends \WP_List_Table {
 			'page'     => $this->get_pagenum(),
 		];
 
-		// Set type from extra nav filter.
+		// Set type from extra nav filter; default to registered types so count matches display.
 		$type = pollify_filter_input( INPUT_POST, 'type', POLLIFY_FILTER_SANITIZE_STRING );
 
-		if ( ! empty( $type ) ) {
+		if ( ! empty( $type ) && 'all' !== $type ) {
 			$args['type'] = $type;
 		}
 

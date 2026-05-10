@@ -142,8 +142,14 @@ class Voter {
 			$ip = '';
 		}
 
+		static $cache = [];
+
+		if ( isset( $cache[ $ip ] ) ) {
+			return $cache[ $ip ];
+		}
+
 		$url      = 'http://ipinfo.io/' . $ip . '/json';
-		$data     = wp_remote_get( $url );
+		$data     = wp_remote_get( $url, [ 'timeout' => 3 ] );
 		$response = [];
 
 		if ( ! is_wp_error( $data ) ) {
@@ -152,7 +158,9 @@ class Voter {
 			$response = json_decode( $body, true ) ?? [];
 		}
 
-		return $response['country'] ?? '';
+		$cache[ $ip ] = $response['country'] ?? '';
+
+		return $cache[ $ip ];
 	}
 
 	/**

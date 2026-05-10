@@ -1,9 +1,11 @@
 import '../css/admin.scss';
+import apiFetch from '@wordpress/api-fetch';
+
 /**
  * Run the script when dom is ready.
  */
 
-/* global google, jQuery */
+/* global google, jQuery, pollifyAdmin */
 
 ( function ( $ ) {
 	'use strict';
@@ -21,6 +23,9 @@ import '../css/admin.scss';
 
 			// Load the Google Charts API.
 			PollifyAdmin.loadGoogleCharts();
+
+			// Wire up permanent delete buttons.
+			PollifyAdmin.permanentDelete();
 		},
 
 		/**
@@ -67,6 +72,57 @@ import '../css/admin.scss';
 
 				google.charts.setOnLoadCallback( PollifyAdmin.drawRegionsMap );
 			}
+		},
+
+		/**
+		 * Handle permanent poll deletion with stats confirmation.
+		 */
+		permanentDelete() {
+			$( document ).on(
+				'click',
+				'.pollify-delete-permanently',
+				async function ( e ) {
+					e.preventDefault();
+
+					const pollId = $( this ).data( 'poll-id' );
+
+					try {
+						const stats = await apiFetch( {
+							url: `${ pollifyAdmin.restUrl }${ pollId }/stats`,
+							method: 'GET',
+						} );
+
+						let message = pollifyAdmin.confirmMsg + '\n\n';
+						message += `Total Votes: ${ stats.total_votes }\n`;
+						message +=
+							`Unique Voters: ` +
+							( stats.unique_voters !== null
+								? stats.unique_voters
+								: 'N/A (Anonymous Poll)' );
+
+						// eslint-disable-next-line no-alert
+						if ( ! window.confirm( message ) ) {
+							return;
+						}
+
+						const row = $( this ).closest( 'tr' );
+
+						await apiFetch( {
+							url: `${ pollifyAdmin.restUrl }${ pollId }/permanent-delete`,
+							method: 'DELETE',
+						} );
+
+						row.fadeOut( 300, function () {
+							$( this ).remove();
+						} );
+					} catch ( error ) {
+						// eslint-disable-next-line no-alert
+						window.alert(
+							'Error: ' + ( error.message || 'Unknown error' )
+						);
+					}
+				}
+			);
 		},
 	};
 

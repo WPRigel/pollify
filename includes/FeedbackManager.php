@@ -73,6 +73,13 @@ class FeedbackManager {
 		// If type is set then add where condition for type.
 		if ( ! empty( $args['type'] ) && 'all' !== $args['type'] ) {
 			$where .= $wpdb->prepare( ' AND type = %s', $args['type'] );
+		} elseif ( empty( $args['type'] ) ) {
+			// No type filter: restrict to registered types so count matches displayed rows.
+			$registered_types = array_keys( apply_filters( 'pollify_map_feedback_classes', [ 'poll' => true ], null ) );
+			$placeholders     = implode( ', ', array_fill( 0, count( $registered_types ), '%s' ) );
+
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+			$where .= $wpdb->prepare( " AND type IN ($placeholders)", ...$registered_types );
 		}
 
 		// If search is set then add where condition for search.
@@ -90,6 +97,10 @@ class FeedbackManager {
 
 		// Join with wp_pollify_vote table and get the total count of votes related to client id.
 		$join = $wpdb->prepare( 'LEFT JOIN %i AS vote ON vote.client_id = poll.client_id', $wpdb->prefix . 'pollify_vote' );
+
+		// Apply WHERE/JOIN filters before both count and list queries so they stay consistent.
+		$where = apply_filters( 'pollify_all_polls_where_sql', $where, $args );
+		$join  = apply_filters( 'pollify_all_polls_join_sql', $join, $args );
 
 		// If we pass count parament true in args then just count the polls and return the count.
 		if ( ! empty( $args['count'] ) && $args['count'] ) {
@@ -111,18 +122,6 @@ class FeedbackManager {
 
 			return intval( $count );
 		}
-
-		$where = apply_filters(
-			'pollify_all_polls_where_sql',
-			$where,
-			$args
-		);
-
-		$join = apply_filters(
-			'pollify_all_polls_join_sql',
-			$join,
-			$args
-		);
 
 		$select = apply_filters(
 			'pollify_all_polls_select_sql',

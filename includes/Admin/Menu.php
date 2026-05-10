@@ -143,56 +143,6 @@ class Menu {
 			)
 		);
 
-		// Add inline script for permanent delete handling.
-		$inline_script = "
-		(function($) {
-			$(document).ready(function() {
-				$('.pollify-delete-permanently').on('click', function(e) {
-					e.preventDefault();
-					var pollId = $(this).data('poll-id');
-					var row = $(this).closest('tr');
-
-					// Fetch poll stats first
-					$.ajax({
-						url: pollifyAdmin.restUrl + pollId + '/stats',
-						method: 'GET',
-						beforeSend: function(xhr) {
-							xhr.setRequestHeader('X-WP-Nonce', pollifyAdmin.nonce);
-						},
-						success: function(stats) {
-							var message = pollifyAdmin.confirmMsg + '\\n\\n';
-							message += 'Total Votes: ' + stats.total_votes + '\\n';
-							message += 'Unique Voters: ' + (stats.unique_voters !== null ? stats.unique_voters : 'N/A (Anonymous Poll)');
-
-							if (confirm(message)) {
-								// Delete permanently
-								$.ajax({
-									url: pollifyAdmin.restUrl + pollId + '/permanent-delete',
-									method: 'DELETE',
-									beforeSend: function(xhr) {
-										xhr.setRequestHeader('X-WP-Nonce', pollifyAdmin.nonce);
-									},
-									success: function(response) {
-										row.fadeOut(300, function() {
-											$(this).remove();
-										});
-									},
-									error: function(xhr) {
-										alert('Error deleting poll: ' + (xhr.responseJSON?.message || 'Unknown error'));
-									}
-								});
-							}
-						},
-						error: function(xhr) {
-							alert('Error fetching poll stats: ' + (xhr.responseJSON?.message || 'Unknown error'));
-						}
-					});
-				});
-			});
-		})(jQuery);
-		";
-		wp_add_inline_script( 'pollify-admin', $inline_script );
-
 		$action = pollify_filter_input( INPUT_GET, 'action', POLLIFY_FILTER_SANITIZE_STRING );
 
 		if ( ! empty( $action ) ) {
