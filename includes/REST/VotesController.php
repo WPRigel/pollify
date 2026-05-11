@@ -80,6 +80,12 @@ class VotesController extends WP_REST_Controller {
 			return new WP_Error( 'invalid_nonce', __( 'Invalid nonce.', 'poll-creator' ), [ 'status' => 403 ] );
 		}
 
+		$rate_limit = $this->check_rate_limit();
+
+		if ( is_wp_error( $rate_limit ) ) {
+			return $rate_limit;
+		}
+
 		if ( empty( $args['client_id'] ) ) {
 			return new WP_Error( 'no-poll-id', __( 'Invalid poll', 'poll-creator' ), [ 'status' => 404 ] );
 		}
@@ -97,6 +103,34 @@ class VotesController extends WP_REST_Controller {
 		}
 
 		return rest_ensure_response( $data );
+	}
+
+	/**
+	 * Enforce per-IP rate limiting on vote submissions.
+	 *
+	 * Allows up to 10 attempts per IP per minute. Uses REMOTE_ADDR (the actual
+	 * connecting IP) so callers cannot bypass the limit via spoofed headers.
+	 *
+	 * @return bool|WP_Error True if allowed, WP_Error with 429 status if limited.
+	 */
+	private function check_rate_limit(): bool|WP_Error {
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$ip  = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : 'unknown';
+		$key = 'pollify_rl_' . hash( 'sha256', $ip . get_site_url() );
+
+		$attempts = (int) get_transient( $key );
+
+		if ( $attempts >= 30 ) {
+			return new WP_Error(
+				'rate_limited',
+				__( 'Too many requests. Please try again later.', 'poll-creator' ),
+				[ 'status' => 429 ]
+			);
+		}
+
+		set_transient( $key, $attempts + 1, MINUTE_IN_SECONDS );
+
+		return true;
 	}
 
 	/**

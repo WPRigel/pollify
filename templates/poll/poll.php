@@ -54,7 +54,7 @@ if ( $user_not_logged_in && 'popup' !== $require_login_action ) {
 			<h4 class="poll-title rich-text"><?php echo wp_kses_post( $attributes['title'] ); ?></h4>
 
 			<?php if ( ! empty( $attributes['description'] ) ) : ?>
-				<p class="poll-description rich-text"><?php echo esc_html( $attributes['description'] ); ?></p>
+				<p class="poll-description rich-text"><?php echo wp_kses_post( $attributes['description'] ); ?></p>
 			<?php endif; ?>
 
 			<p class="pollify-login-required-message"><?php echo wp_kses_post( $attributes['requireLoginMessage'] ?? __( 'Please log in to vote', 'poll-creator' ) ); ?> <a href="<?php echo esc_url( $login_url ); ?>"><?php esc_html_e( 'Login', 'poll-creator' ); ?></a></p>
@@ -67,31 +67,27 @@ if ( $user_not_logged_in && 'popup' !== $require_login_action ) {
 $styles = '';
 
 if ( ! empty( $attributes['submitButtonBgColor'] ) ) {
-	$styles .= '--pollify-submit-button-bg-color: ' . $attributes['submitButtonBgColor'] . ';';
-}
-
-if ( ! empty( $attributes['submitButtonBgColor'] ) ) {
-	$styles .= '--pollify-submit-button-bg-color: ' . $attributes['submitButtonBgColor'] . ';';
+	$styles .= '--pollify-submit-button-bg-color: ' . sanitize_text_field( $attributes['submitButtonBgColor'] ) . ';';
 }
 
 if ( ! empty( $attributes['submitButtonTextColor'] ) ) {
-	$styles .= '--pollify-submit-button-text-color: ' . $attributes['submitButtonTextColor'] . ';';
+	$styles .= '--pollify-submit-button-text-color: ' . sanitize_text_field( $attributes['submitButtonTextColor'] ) . ';';
 }
 
 if ( ! empty( $attributes['submitButtonHoverTextColor'] ) ) {
-	$styles .= '--pollify-submit-button-hover-text-color: ' . $attributes['submitButtonHoverTextColor'] . ';';
+	$styles .= '--pollify-submit-button-hover-text-color: ' . sanitize_text_field( $attributes['submitButtonHoverTextColor'] ) . ';';
 }
 
 if ( ! empty( $attributes['submitButtonHoverBgColor'] ) ) {
-	$styles .= '--pollify-submit-button-hover-bg-color: ' . $attributes['submitButtonHoverBgColor'] . ';';
+	$styles .= '--pollify-submit-button-hover-bg-color: ' . sanitize_text_field( $attributes['submitButtonHoverBgColor'] ) . ';';
 }
 
 if ( ! empty( $attributes['closingBannerBgColor'] ) ) {
-	$styles .= '--pollify-closing-banner-bg-color: ' . $attributes['closingBannerBgColor'] . ';';
+	$styles .= '--pollify-closing-banner-bg-color: ' . sanitize_text_field( $attributes['closingBannerBgColor'] ) . ';';
 }
 
 if ( ! empty( $attributes['closingBannerTextColor'] ) ) {
-	$styles .= '--pollify-closing-banner-text-color: ' . $attributes['closingBannerTextColor'] . ';';
+	$styles .= '--pollify-closing-banner-text-color: ' . sanitize_text_field( $attributes['closingBannerTextColor'] ) . ';';
 }
 
 // Check if the poll status is draft and close poll status is `hide-poll` then return.
@@ -137,7 +133,7 @@ echo wp_kses(
 		<h4 class="poll-title rich-text"><?php echo wp_kses_post( $attributes['title'] ); ?></h4>
 
 		<?php if ( ! empty( $attributes['description'] ) ) : ?>
-			<p class="poll-description rich-text"><?php echo esc_html( $attributes['description'] ); ?></p>
+			<p class="poll-description rich-text"><?php echo wp_kses_post( $attributes['description'] ); ?></p>
 		<?php endif; ?>
 
 		<?php if ( $is_draft_with_show_results || $is_schedule_with_show_results ) : ?>
@@ -172,7 +168,7 @@ echo wp_kses(
 				?>
 
 				<div class="wp-block-button poll-block-button align-<?php echo esc_attr( $attributes['submitButtonAlign'] ); ?>">
-					<div class="submit-button-wrapper has-custom-width wp-block-button-width-<?php echo esc_attr( $attributes['submitButtonWidth'] ); ?>"">
+					<div class="submit-button-wrapper has-custom-width wp-block-button-width-<?php echo esc_attr( $attributes['submitButtonWidth'] ); ?>">
 						<input type="hidden" name="poll-client-id" value="<?php echo esc_attr( $attributes['pollClientId'] ); ?>">
 						<input type="submit" class="wp-block-button__link submit-button" value="<?php echo esc_html( $attributes['submitButtonLabel'] ); ?>" />
 					</div>

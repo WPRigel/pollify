@@ -12,7 +12,6 @@ namespace wpRigel\Pollify;
 
 use WP_Error;
 use wpRigel\Pollify\Model\Poll;
-use wpRigel\Pollify\Traits\Singleton;
 
 /**
  * Class FeedbackFactory.
@@ -20,7 +19,6 @@ use wpRigel\Pollify\Traits\Singleton;
  * @package wpRigel\Pollify
  */
 class FeedbackFactory {
-	use Singleton;
 
 	/**
 	 * Feedback object.

@@ -2,21 +2,21 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Pollify 1.0.12\n"
+"Project-Id-Version: Pollify 1.0.13\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/poll-creator\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-09T12:19:11+00:00\n"
+"POT-Creation-Date: 2026-05-11T10:22:33+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.9.0\n"
 
 #. Plugin Name of the plugin
-#: includes/Admin/Menu.php:103
-#: includes/Admin/Menu.php:104
-#: includes/Blocks.php:65
+#: includes/Admin/Menu.php:106
+#: includes/Admin/Menu.php:107
+#: includes/Blocks.php:64
 msgid "Pollify"
 msgstr ""
 
@@ -52,7 +52,7 @@ msgid "Location"
 msgstr ""
 
 #: includes/Admin/IPsListTable.php:80
-#: includes/helpers/functions.php:391
+#: includes/helpers/functions.php:386
 #: templates/admin/overview.php:128
 msgid "Votes"
 msgstr ""
@@ -63,14 +63,14 @@ msgstr ""
 #: includes/Admin/IPsListTable.php:141
 #: includes/Admin/VotesListTable.php:196
 #: includes/Admin/VotesListTable.php:211
-#: includes/helpers/functions.php:496
-#: templates/admin/overview.php:264
+#: includes/helpers/functions.php:491
+#: templates/admin/overview.php:270
 msgid "N/A"
 msgstr ""
 
 #: includes/Admin/IPsListTable.php:122
 #: includes/Admin/VotesListTable.php:211
-#: includes/helpers/functions.php:496
+#: includes/helpers/functions.php:491
 msgid "No IP collected (anonymous voting enabled)"
 msgstr ""
 
@@ -86,41 +86,41 @@ msgid "All countries"
 msgstr ""
 
 #: includes/Admin/IPsListTable.php:169
-#: includes/Admin/PollsListTable.php:373
+#: includes/Admin/PollsListTable.php:465
 #: includes/Admin/VotesListTable.php:261
 msgid "Filter"
 msgstr ""
 
-#: includes/Admin/Menu.php:86
+#: includes/Admin/Menu.php:89
 msgid "Contact us"
 msgstr ""
 
-#: includes/Admin/Menu.php:88
-#: includes/Plugin.php:114
+#: includes/Admin/Menu.php:91
+#: includes/Plugin.php:118
 msgid "Documentation"
 msgstr ""
 
-#: includes/Admin/Menu.php:142
+#: includes/Admin/Menu.php:145
 msgid "This poll will be permanently deleted and cannot be recovered."
 msgstr ""
 
-#: includes/Admin/Menu.php:283
+#: includes/Admin/Menu.php:236
 msgid "Polls per page"
 msgstr ""
 
-#: includes/Admin/Menu.php:378
+#: includes/Admin/Menu.php:333
 msgid "Failed to update the post content."
 msgstr ""
 
-#: includes/Admin/Menu.php:418
+#: includes/Admin/Menu.php:374
 msgid "IP address removed successfully."
 msgstr ""
 
-#: includes/Admin/Menu.php:420
+#: includes/Admin/Menu.php:376
 msgid "Failed to remove IP address."
 msgstr ""
 
-#: includes/Admin/Menu.php:449
+#: includes/Admin/Menu.php:405
 msgid "Vote deleted successfully."
 msgstr ""
 
@@ -137,7 +137,7 @@ msgid "Source"
 msgstr ""
 
 #: includes/Admin/PollsListTable.php:52
-#: src/poll/edit.js:148
+#: src/poll/edit.js:169
 msgid "Status"
 msgstr ""
 
@@ -149,80 +149,80 @@ msgstr ""
 msgid "Created at"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:128
+#: includes/Admin/PollsListTable.php:137
 msgid "Are you sure you want to reset the results? If you do reset, the results are not achievable again."
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:129
+#: includes/Admin/PollsListTable.php:138
 msgid "Are you sure you want to move this poll to trash? It will also removed the poll block from the editor and you will not be able to roll it back anymore."
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:137
-#: includes/Admin/PollsListTable.php:142
-#: src/poll/edit.js:199
+#: includes/Admin/PollsListTable.php:147
+#: includes/Admin/PollsListTable.php:163
+#: src/poll/edit.js:260
 msgid "View results"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:138
+#: includes/Admin/PollsListTable.php:158
 msgid "Delete Permanently"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:143
+#: includes/Admin/PollsListTable.php:175
 msgid "Reset Results"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:144
-#: includes/Admin/PollsListTable.php:218
-#: includes/Admin/PollsListTable.php:337
+#: includes/Admin/PollsListTable.php:189
+#: includes/Admin/PollsListTable.php:288
+#: includes/Admin/PollsListTable.php:429
 msgid "Trash"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:191
+#: includes/Admin/PollsListTable.php:261
 msgid "Edit"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:192
+#: includes/Admin/PollsListTable.php:262
 msgid "View frontend"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:215
-#: includes/Admin/PollsListTable.php:335
-#: src/poll/edit.js:151
+#: includes/Admin/PollsListTable.php:285
+#: includes/Admin/PollsListTable.php:427
+#: src/poll/edit.js:173
 msgid "Open"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:216
-#: includes/Admin/PollsListTable.php:230
-#: includes/Admin/PollsListTable.php:336
+#: includes/Admin/PollsListTable.php:286
+#: includes/Admin/PollsListTable.php:300
+#: includes/Admin/PollsListTable.php:428
 msgid "Closed"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:217
+#: includes/Admin/PollsListTable.php:287
 msgid "Schedule"
 msgstr ""
 
 #. translators: %s: poll end date
-#: includes/Admin/PollsListTable.php:226
+#: includes/Admin/PollsListTable.php:296
 msgid "Ended at %s"
 msgstr ""
 
 #. translators: %s: poll end date
-#: includes/Admin/PollsListTable.php:234
+#: includes/Admin/PollsListTable.php:304
 msgid "Will be ended on %s"
 msgstr ""
 
 #. translators: %s: votes count
-#: includes/Admin/PollsListTable.php:274
+#: includes/Admin/PollsListTable.php:344
 #: templates/admin/overview.php:79
 #: templates/results/horizointal-bar-chart.php:31
 msgid "%s votes"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:334
+#: includes/Admin/PollsListTable.php:426
 msgid "All"
 msgstr ""
 
-#: includes/Admin/PollsListTable.php:358
+#: includes/Admin/PollsListTable.php:450
 msgid "All types"
 msgstr ""
 
@@ -252,7 +252,7 @@ msgid "Vote date"
 msgstr ""
 
 #: includes/Admin/VotesListTable.php:137
-#: templates/admin/overview.php:252
+#: templates/admin/overview.php:258
 msgid "Guest"
 msgstr ""
 
@@ -268,46 +268,46 @@ msgstr ""
 msgid "All answers"
 msgstr ""
 
-#: includes/Blocks.php:219
+#: includes/Blocks.php:215
 msgid "Inline list"
 msgstr ""
 
-#: includes/FeedbackFactory.php:57
+#: includes/FeedbackFactory.php:55
 msgid "Invalid feedback."
 msgstr ""
 
-#: includes/FeedbackFactory.php:72
-#: includes/FeedbackFactory.php:87
+#: includes/FeedbackFactory.php:70
+#: includes/FeedbackFactory.php:85
 msgid "Invalid feedback type."
 msgstr ""
 
 #. translators: %s: Field name
-#: includes/FeedbackManager.php:204
+#: includes/FeedbackManager.php:203
 msgid "Error: %s cannot be left empty. Please fill the required information"
 msgstr ""
 
-#: includes/FeedbackManager.php:229
-#: includes/FeedbackManager.php:232
+#: includes/FeedbackManager.php:228
+#: includes/FeedbackManager.php:231
 msgid "Options must contain type and option value"
 msgstr ""
 
-#: includes/FeedbackManager.php:238
+#: includes/FeedbackManager.php:237
 msgid "Client id is not valid"
 msgstr ""
 
-#: includes/FeedbackManager.php:275
+#: includes/FeedbackManager.php:274
 msgid "Poll not updated successfully"
 msgstr ""
 
-#: includes/FeedbackManager.php:303
+#: includes/FeedbackManager.php:302
 msgid "Poll not created successfully"
 msgstr ""
 
-#: includes/FeedbackManager.php:350
+#: includes/FeedbackManager.php:349
 msgid "Poll not found"
 msgstr ""
 
-#: includes/FeedbackManager.php:400
+#: includes/FeedbackManager.php:399
 msgid "Poll not moved to trash"
 msgstr ""
 
@@ -320,19 +320,19 @@ msgstr ""
 msgid "Poll ID cannot be empty"
 msgstr ""
 
-#: includes/helpers/functions.php:378
+#: includes/helpers/functions.php:373
 msgid "Overview"
 msgstr ""
 
-#: includes/helpers/functions.php:405
+#: includes/helpers/functions.php:400
 msgid "IP Details"
 msgstr ""
 
-#: includes/helpers/functions.php:531
+#: includes/helpers/functions.php:526
 msgid "Remove"
 msgstr ""
 
-#: includes/helpers/functions.php:535
+#: includes/helpers/functions.php:530
 msgid "Are you sure you want to remove all votes from this IP? This operation cannot be undone. Just make sure before proceed"
 msgstr ""
 
@@ -341,79 +341,82 @@ msgid "Options are empty."
 msgstr ""
 
 #: includes/Model/Feedback.php:301
-#: templates/poll/poll.php:205
-#: src/poll/edit.js:183
-#: src/poll/edit.js:185
+#: templates/poll/poll.php:201
+#: src/poll/edit.js:238
+#: src/poll/edit.js:241
 msgid "This poll is closed"
 msgstr ""
 
 #: includes/Model/Feedback.php:309
-#: src/poll/edit.js:239
-#: src/poll/edit.js:240
+#: src/poll/edit.js:335
+#: src/poll/edit.js:337
 msgid "Please log in to vote."
 msgstr ""
 
 #: includes/Model/Feedback.php:325
-#: src/poll/view.js:227
+#: src/poll/view.js:260
 msgid "You have already voted."
 msgstr ""
 
-#: includes/Plugin.php:113
+#: includes/Plugin.php:117
 msgid "Get started"
 msgstr ""
 
 #: includes/REST/PollsController.php:78
-#: includes/REST/PollsController.php:354
-#: includes/REST/VotesController.php:116
-msgid "Unique identifier for the object."
+msgid "Client ID (UUID) for the poll."
 msgstr ""
 
-#: includes/REST/PollsController.php:114
-#: includes/REST/PollsController.php:134
+#: includes/REST/PollsController.php:113
+#: includes/REST/PollsController.php:133
 msgid "Client ID for the poll."
 msgstr ""
 
-#: includes/REST/PollsController.php:250
+#: includes/REST/PollsController.php:243
 msgid "Poll deleted successfully"
 msgstr ""
 
-#: includes/REST/PollsController.php:296
+#: includes/REST/PollsController.php:289
 msgid "Poll permanently deleted"
 msgstr ""
 
-#: includes/REST/PollsController.php:311
+#: includes/REST/PollsController.php:304
 msgid "Invalid resource id."
 msgstr ""
 
-#: includes/REST/PollsController.php:360
+#: includes/REST/PollsController.php:347
+#: includes/REST/VotesController.php:150
+msgid "Unique identifier for the object."
+msgstr ""
+
+#: includes/REST/PollsController.php:353
 msgid "Poll title"
 msgstr ""
 
-#: includes/REST/PollsController.php:367
+#: includes/REST/PollsController.php:360
 msgid "Poll description"
 msgstr ""
 
-#: includes/REST/PollsController.php:373
+#: includes/REST/PollsController.php:366
 msgid "The poll type. It can be normal poll, quize or NPS"
 msgstr ""
 
-#: includes/REST/PollsController.php:380
+#: includes/REST/PollsController.php:373
 msgid "Poll status"
 msgstr ""
 
-#: includes/REST/PollsController.php:388
+#: includes/REST/PollsController.php:381
 msgid "From where the poll was created"
 msgstr ""
 
-#: includes/REST/PollsController.php:394
+#: includes/REST/PollsController.php:387
 msgid "Poll options"
 msgstr ""
 
-#: includes/REST/PollsController.php:399
+#: includes/REST/PollsController.php:392
 msgid "The date the withdraw request has beed created in the site's timezone."
 msgstr ""
 
-#: includes/REST/PollsController.php:405
+#: includes/REST/PollsController.php:398
 msgid "The date the withdraw request has beed updated in the site's timezone."
 msgstr ""
 
@@ -425,16 +428,20 @@ msgstr ""
 msgid "Invalid nonce."
 msgstr ""
 
-#: includes/REST/VotesController.php:84
 #: includes/REST/VotesController.php:90
+#: includes/REST/VotesController.php:96
 msgid "Invalid poll"
 msgstr ""
 
-#: includes/REST/VotesController.php:123
+#: includes/REST/VotesController.php:126
+msgid "Too many requests. Please try again later."
+msgstr ""
+
+#: includes/REST/VotesController.php:157
 msgid "Option IDs"
 msgstr ""
 
-#: includes/REST/VotesController.php:128
+#: includes/REST/VotesController.php:162
 msgid "Return with result or not"
 msgstr ""
 
@@ -454,11 +461,11 @@ msgstr ""
 msgid "Sorry vote not accepted."
 msgstr ""
 
-#: includes/Votes.php:516
+#: includes/Votes.php:521
 msgid "Client ID or User IP is empty."
 msgstr ""
 
-#: includes/Votes.php:551
+#: includes/Votes.php:556
 msgid "Invalid vote ID."
 msgstr ""
 
@@ -524,20 +531,20 @@ msgstr ""
 msgid "Recent votes"
 msgstr ""
 
-#: templates/admin/overview.php:264
+#: templates/admin/overview.php:270
 msgid "No IP address collected (anonymous voting enabled)"
 msgstr ""
 
-#: templates/admin/overview.php:294
+#: templates/admin/overview.php:300
 msgid "See all votes"
 msgstr ""
 
-#: templates/admin/overview.php:298
+#: templates/admin/overview.php:304
 msgid "No recent votes found for this poll"
 msgstr ""
 
-#: templates/admin/overview.php:314
-#: templates/admin/overview.php:331
+#: templates/admin/overview.php:320
+#: templates/admin/overview.php:337
 msgid "Search by IP"
 msgstr ""
 
@@ -575,197 +582,197 @@ msgstr ""
 msgid "Total votes %s"
 msgstr ""
 
-#: src/poll/edit.js:133
+#: src/poll/edit.js:139
 msgid "One vote per user"
 msgstr ""
 
-#: src/poll/edit.js:134
+#: src/poll/edit.js:140
 msgid "If checked, each logged-in user can only vote once (tracked by user account)."
 msgstr ""
 
-#: src/poll/edit.js:136
+#: src/poll/edit.js:145
 msgid "Prevent duplicate votes"
 msgstr ""
 
-#: src/poll/edit.js:137
+#: src/poll/edit.js:146
 msgid "If checked, users can only vote once using browser storage. If unchecked, users can vote unlimited times (truly anonymous)."
 msgstr ""
 
-#: src/poll/edit.js:139
+#: src/poll/edit.js:151
 msgid "Allowed one response per computer"
 msgstr ""
 
-#: src/poll/edit.js:140
+#: src/poll/edit.js:155
 msgid "If checked, only one response per computer will be allowed (tracked by IP address)."
 msgstr ""
 
-#: src/poll/edit.js:146
+#: src/poll/edit.js:165
 msgid "General settings"
 msgstr ""
 
-#: src/poll/edit.js:152
+#: src/poll/edit.js:177
 msgid "Close"
 msgstr ""
 
-#: src/poll/edit.js:153
+#: src/poll/edit.js:181
 msgid "Close after"
 msgstr ""
 
-#: src/poll/edit.js:169
+#: src/poll/edit.js:199
 msgid "When poll is closed"
 msgstr ""
 
-#: src/poll/edit.js:172
+#: src/poll/edit.js:206
 msgid "Show poll result"
 msgstr ""
 
-#: src/poll/edit.js:173
+#: src/poll/edit.js:213
 msgid "Hide poll"
 msgstr ""
 
-#: src/poll/edit.js:174
+#: src/poll/edit.js:220
 msgid "Show poll close message"
 msgstr ""
 
-#: src/poll/edit.js:184
+#: src/poll/edit.js:240
 msgid "Close message text"
 msgstr ""
 
-#: src/poll/edit.js:194
+#: src/poll/edit.js:252
 msgid "Confiramtion message"
 msgstr ""
 
-#: src/poll/edit.js:196
+#: src/poll/edit.js:256
 msgid "On submission"
 msgstr ""
 
-#: src/poll/edit.js:200
+#: src/poll/edit.js:264
 msgid "View message"
 msgstr ""
 
-#: src/poll/edit.js:207
-#: src/poll/edit.js:209
-#: src/poll/edit.js:218
-#: src/poll/edit.js:220
+#: src/poll/edit.js:277
+#: src/poll/edit.js:280
+#: src/poll/edit.js:293
+#: src/poll/edit.js:299
 msgid "Thanks for voting!"
 msgstr ""
 
-#: src/poll/edit.js:208
+#: src/poll/edit.js:279
 msgid "Message text"
 msgstr ""
 
-#: src/poll/edit.js:219
+#: src/poll/edit.js:295
 msgid "View result message text"
 msgstr ""
 
-#: src/poll/edit.js:228
+#: src/poll/edit.js:312
 msgid "Response settings"
 msgstr ""
 
-#: src/poll/edit.js:230
+#: src/poll/edit.js:316
 msgid "Require login to vote"
 msgstr ""
 
-#: src/poll/edit.js:231
+#: src/poll/edit.js:317
 msgid "When enabled, only logged-in users can vote. Duplicate prevention uses user account instead of IP or browser storage."
 msgstr ""
 
-#: src/poll/edit.js:238
+#: src/poll/edit.js:329
 msgid "Login required message"
 msgstr ""
 
-#: src/poll/edit.js:247
+#: src/poll/edit.js:349
 msgid "Custom login URL"
 msgstr ""
 
-#: src/poll/edit.js:248
+#: src/poll/edit.js:350
 msgid "Leave empty to use the default WordPress login page. Useful for third-party login plugins."
 msgstr ""
 
-#: src/poll/edit.js:257
+#: src/poll/edit.js:364
 msgid "When not logged in, show:"
 msgstr ""
 
-#: src/poll/edit.js:260
+#: src/poll/edit.js:371
 msgid "Login message (hide the poll)"
 msgstr ""
 
-#: src/poll/edit.js:261
+#: src/poll/edit.js:378
 msgid "Poll with results + login popup on vote"
 msgstr ""
 
-#: src/poll/edit.js:268
+#: src/poll/edit.js:392
 msgid "Enable Anonymous Voting"
 msgstr ""
 
-#: src/poll/edit.js:269
+#: src/poll/edit.js:396
 msgid "When enabled, no personal data (IP, location, user agent) will be collected. GDPR compliant."
 msgstr ""
 
-#: src/poll/edit.js:283
+#: src/poll/edit.js:419
 msgid "Storage method for duplicate prevention"
 msgstr ""
 
-#: src/poll/edit.js:286
+#: src/poll/edit.js:426
 msgid "Local Storage - Persistent (prevents revoting even after browser restart)"
 msgstr ""
 
-#: src/poll/edit.js:287
+#: src/poll/edit.js:433
 msgid "Session Storage - Temporary (allows revoting after browser closes)"
 msgstr ""
 
-#: src/poll/edit.js:288
+#: src/poll/edit.js:440
 msgid "Cookie - Persistent with expiration (prevents revoting for 30 days)"
 msgstr ""
 
-#: src/poll/edit.js:290
+#: src/poll/edit.js:447
 msgid "Choose how to store the vote flag on user's browser."
 msgstr ""
 
-#: src/poll/edit.js:298
+#: src/poll/edit.js:462
 msgid "Submit button colors"
 msgstr ""
 
-#: src/poll/edit.js:304
-#: src/poll/edit.js:381
+#: src/poll/edit.js:469
+#: src/poll/edit.js:569
 msgid "Background Color"
 msgstr ""
 
-#: src/poll/edit.js:309
-#: src/poll/edit.js:386
+#: src/poll/edit.js:475
+#: src/poll/edit.js:577
 msgid "Text Color"
 msgstr ""
 
-#: src/poll/edit.js:314
+#: src/poll/edit.js:483
 msgid "Hover Background Color"
 msgstr ""
 
-#: src/poll/edit.js:319
+#: src/poll/edit.js:494
 msgid "Hover Text Color"
 msgstr ""
 
-#: src/poll/edit.js:323
-#: src/poll/edit.js:324
+#: src/poll/edit.js:498
+#: src/poll/edit.js:499
 msgid "Button width"
 msgstr ""
 
-#: src/poll/edit.js:351
+#: src/poll/edit.js:532
 msgid "Button alignment"
 msgstr ""
 
-#: src/poll/edit.js:375
+#: src/poll/edit.js:562
 msgid "Poll closing banner"
 msgstr ""
 
-#: src/poll/edit.js:412
+#: src/poll/edit.js:607
 msgid "Enter the poll question"
 msgstr ""
 
-#: src/poll/edit.js:420
+#: src/poll/edit.js:624
 msgid "Add a description (optional)"
 msgstr ""
 
-#: src/poll/option.js:38
+#: src/poll/option.js:44
 msgid "Enter option"
 msgstr ""
 

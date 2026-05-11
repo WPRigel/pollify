@@ -317,6 +317,12 @@ class VotesListTable extends \WP_List_Table {
 		// Get the table data depending on args.
 		$this->table_data = $this->get_table_data( $args );
 
+		// Prime WP user cache for all rows in one query instead of one per row.
+		$user_ids = array_filter( array_unique( array_column( $this->table_data, 'user_id' ) ) );
+		if ( ! empty( $user_ids ) ) {
+			get_users( [ 'include' => $user_ids ] );
+		}
+
 		// Get total counts depending on args.
 		$args['count'] = true;
 		$total_items   = intval( $this->get_table_data( $args ) );

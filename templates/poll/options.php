@@ -18,10 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$attributes   = ! empty( $attributes ) ? $attributes : [];
-$poll_options = [];
-
-
+$attributes = ! empty( $attributes ) ? $attributes : [];
 // Filter poll options from attribute which value is empty.
 $poll_options = array_filter(
 	$attributes['options'],

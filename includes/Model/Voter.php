@@ -96,23 +96,30 @@ class Voter {
 	public function get_user_ip(): string {
 		$ip = '';
 
-		// Check if HTTP_CLIENT_IP is set and valid.
-		if ( isset( $_SERVER['HTTP_CLIENT_IP'] ) && filter_var( $_SERVER['HTTP_CLIENT_IP'], FILTER_VALIDATE_IP ) ) {
-			$ip = sanitize_text_field( $_SERVER['HTTP_CLIENT_IP'] );
-		} elseif ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) { // Check if HTTP_X_FORWARDED_FOR is set.
-			// Extract first valid IP from the list.
-			$forwarded_ips = explode( ',', $_SERVER['HTTP_X_FORWARDED_FOR'] );
+		// Cloudflare: CF-Connecting-IP is injected by Cloudflare on every proxied request
+		// and stripped from end-user requests, so its presence reliably indicates CF.
+		if ( isset( $_SERVER['HTTP_CF_CONNECTING_IP'] ) && filter_var( wp_unslash( $_SERVER['HTTP_CF_CONNECTING_IP'] ), FILTER_VALIDATE_IP ) ) {
+			$ip = sanitize_text_field( wp_unslash( $_SERVER['HTTP_CF_CONNECTING_IP'] ) );
+		} elseif ( apply_filters( 'pollify_trust_proxy_headers', false ) ) {
+			// Other trusted reverse proxies (opt-in via filter).
+			if ( isset( $_SERVER['HTTP_CLIENT_IP'] ) && filter_var( wp_unslash( $_SERVER['HTTP_CLIENT_IP'] ), FILTER_VALIDATE_IP ) ) {
+				$ip = sanitize_text_field( wp_unslash( $_SERVER['HTTP_CLIENT_IP'] ) );
+			} elseif ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
+				$forwarded_ips = explode( ',', wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] ) );
 
-			foreach ( $forwarded_ips as $forwarded_ip ) {
-				$forwarded_ip = trim( $forwarded_ip ); // Remove spaces.
+				foreach ( $forwarded_ips as $forwarded_ip ) {
+					$forwarded_ip = trim( $forwarded_ip );
 
-				if ( filter_var( $forwarded_ip, FILTER_VALIDATE_IP ) ) {
-					$ip = sanitize_text_field( $forwarded_ip );
-					break; // Use the first valid IP.
+					if ( filter_var( $forwarded_ip, FILTER_VALIDATE_IP ) ) {
+						$ip = sanitize_text_field( $forwarded_ip );
+						break;
+					}
 				}
 			}
-		} elseif ( isset( $_SERVER['REMOTE_ADDR'] ) && filter_var( $_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP ) ) { // Fallback to REMOTE_ADDR.
-			$ip = sanitize_text_field( $_SERVER['REMOTE_ADDR'] );
+		}
+
+		if ( empty( $ip ) && isset( $_SERVER['REMOTE_ADDR'] ) && filter_var( wp_unslash( $_SERVER['REMOTE_ADDR'] ), FILTER_VALIDATE_IP ) ) {
+			$ip = sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) );
 		}
 
 		// If the IP is from localhost/private range, return as is.
@@ -142,16 +149,25 @@ class Voter {
 			$ip = '';
 		}
 
-		$url  = 'http://ipinfo.io/' . $ip . '/json';
-		$data = wp_remote_get( $url );
+		static $cache = [];
+
+		if ( isset( $cache[ $ip ] ) ) {
+			return $cache[ $ip ];
+		}
+
+		$url      = 'https://ipinfo.io/' . $ip . '/json';
+		$data     = wp_remote_get( $url, [ 'timeout' => 3 ] );
+		$response = [];
 
 		if ( ! is_wp_error( $data ) ) {
 			// Get the body of the response.
 			$body     = wp_remote_retrieve_body( $data );
-			$response = json_decode( $body, true );
+			$response = json_decode( $body, true ) ?? [];
 		}
 
-		return $response['country'] ?? '';
+		$cache[ $ip ] = $response['country'] ?? '';
+
+		return $cache[ $ip ];
 	}
 
 	/**
@@ -160,7 +176,7 @@ class Voter {
 	 * @return string
 	 */
 	public function get_user_agent(): string {
-		return sanitize_text_field( $_SERVER['HTTP_USER_AGENT'] ) ?? '';
+		return sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ?? '' ) );
 	}
 
 	/**
@@ -201,16 +217,19 @@ class Voter {
 			return true;
 		}
 
-		$votes = Votes::get_instance()->get_votes(
-			[
-				'per_page'  => 1,
-				'client_id' => $client_id,
-				'ip'        => $this->get_user_ip(),
-			]
-		);
+		// For logged-in users, also check by IP to catch votes cast before login.
+		if ( $this->get_user_id() > 0 ) {
+			$votes = Votes::get_instance()->get_votes(
+				[
+					'per_page'  => 1,
+					'client_id' => $client_id,
+					'ip'        => $this->get_user_ip(),
+				]
+			);
 
-		if ( ! empty( $votes ) ) {
-			return true;
+			if ( ! empty( $votes ) ) {
+				return true;
+			}
 		}
 
 		return false;

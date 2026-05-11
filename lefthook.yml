@@ -13,7 +13,3 @@ pre-commit:
         - "templates/**/*.php"
       run: npm run lint:php
 
-pre-push:
-  commands:
-    build:
-      run: npm run build

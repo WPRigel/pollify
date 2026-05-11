@@ -50,6 +50,10 @@ class Plugin {
 		$this->url        = plugin_dir_url( trailingslashit( dirname( __DIR__, 1 ) ) . 'pollify.php' );
 		$this->assets_dir = trailingslashit( $this->path ) . 'assets/';
 
+		if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
+			Installer::get_instance()->maybe_upgrade();
+		}
+
 		$this->load_textdomain();
 		$this->load_hooks();
 		$this->load();

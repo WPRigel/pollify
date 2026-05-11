@@ -49,7 +49,7 @@ const OptionsWrapper = ( { attributes, setAttributes } ) => {
 				],
 			} );
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [] );
 
 	const handleChangeOption = ( index, value ) => {
@@ -93,7 +93,10 @@ const OptionsWrapper = ( { attributes, setAttributes } ) => {
 				],
 			} );
 
-			shiftAnswerFocus( optionsWrapperRef.current, Math.min( insertAt, options.length ) );
+			shiftAnswerFocus(
+				optionsWrapperRef.current,
+				Math.min( insertAt, options.length )
+			);
 		}
 	};
 
@@ -111,20 +114,21 @@ const OptionsWrapper = ( { attributes, setAttributes } ) => {
 
 	return (
 		<div className="poll-options-wrapper" ref={ optionsWrapperRef }>
-			{
-				options.length && options.map( ( option, index ) => {
-					return <Option
-						attributes={ attributes }
-						key={ index }
-						parentRef={ optionsWrapperRef }
-						index={ index }
-						option={ option }
-						onChange={ handleChangeOption }
-						onNewOption={ handleNewOption }
-						onDelete={ handleOnDelete }
-					/>;
-				} )
-			}
+			{ options.length &&
+				options.map( ( option, index ) => {
+					return (
+						<Option
+							attributes={ attributes }
+							key={ index }
+							parentRef={ optionsWrapperRef }
+							index={ index }
+							option={ option }
+							onChange={ handleChangeOption }
+							onNewOption={ handleNewOption }
+							onDelete={ handleOnDelete }
+						/>
+					);
+				} ) }
 		</div>
 	);
 };

@@ -142,7 +142,7 @@ abstract class Feedback {
 	}
 
 	/**
-	 * Get poll updated at.
+	 * Get all poll data.
 	 *
 	 * @return array
 	 */
@@ -156,7 +156,7 @@ abstract class Feedback {
 	 * @return array
 	 */
 	public function get_settings(): array {
-		return maybe_unserialize( $this->data['settings'] );
+		return (array) ( $this->data['settings'] ?? [] );
 	}
 
 	/**

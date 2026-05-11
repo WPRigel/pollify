@@ -89,6 +89,15 @@ class PollsListTable extends \WP_List_Table {
 	}
 
 	/**
+	 * Get the primary column name for responsive table behaviour.
+	 *
+	 * @return string
+	 */
+	protected function get_primary_column_name(): string {
+		return 'title';
+	}
+
+	/**
 	 * Get sortable columns.
 	 *
 	 * @return array
@@ -134,19 +143,80 @@ class PollsListTable extends \WP_List_Table {
 		// Different actions for trash vs normal polls.
 		if ( 'trash' === $item->get_status() ) {
 			$actions = array(
-				'view'               => sprintf( '<a href="?page=%s&action=%s&poll_id=%s">' . __( 'View results', 'poll-creator' ) . '</a>', $page, 'view_results', $item->get_client_id() ),
-				'delete_permanently' => sprintf( '<a class="submitdelete pollify-delete-permanently" data-poll-id="%s" href="#">' . __( 'Delete Permanently', 'poll-creator' ) . '</a>', $item->get_client_id() ),
+				'view'               => sprintf(
+					'<a href="%s">' . __( 'View results', 'poll-creator' ) . '</a>',
+					esc_url(
+						add_query_arg(
+							[
+								'page'    => $page,
+								'action'  => 'view_results',
+								'poll_id' => $item->get_client_id(),
+							]
+						)
+					)
+				),
+				'delete_permanently' => sprintf( '<a class="submitdelete pollify-delete-permanently" data-poll-id="%s" href="#">' . __( 'Delete Permanently', 'poll-creator' ) . '</a>', esc_attr( $item->get_client_id() ) ),
 			);
 		} else {
 			$actions = array(
-				'view'  => sprintf( '<a href="?page=%s&action=%s&poll_id=%s">' . __( 'View results', 'poll-creator' ) . '</a>', $page, 'view_results', $item->get_client_id() ),
-				'reset' => sprintf( '<a class="submitdelete" onclick="return confirm(\'%s\')" href="?page=%s&action=%s&poll_id=%s&_nonce=%s">' . __( 'Reset Results', 'poll-creator' ) . '</a>', $confirm_text, $page, 'reset_results', $item->get_client_id(), $nonce ),
-				'trash' => sprintf( '<a class="submitdelete" onclick="return confirm(\'%s\')" href="?page=%s&action=%s&poll_id=%s&reference_id=%s&_nonce=%s">' . __( 'Trash', 'poll-creator' ) . '</a>', $confirm_trash_text, $page, 'trash_poll', $item->get_client_id(), $item->get_reference(), $trash_nonce ),
+				'view'  => sprintf(
+					'<a href="%s">' . __( 'View results', 'poll-creator' ) . '</a>',
+					esc_url(
+						add_query_arg(
+							[
+								'page'    => $page,
+								'action'  => 'view_results',
+								'poll_id' => $item->get_client_id(),
+							]
+						)
+					)
+				),
+				'reset' => sprintf(
+					'<a class="submitdelete" onclick="return confirm(\'%s\')" href="%s">' . __( 'Reset Results', 'poll-creator' ) . '</a>',
+					esc_js( $confirm_text ),
+					esc_url(
+						add_query_arg(
+							[
+								'page'    => $page,
+								'action'  => 'reset_results',
+								'poll_id' => $item->get_client_id(),
+								'_nonce'  => $nonce,
+							]
+						)
+					)
+				),
+				'trash' => sprintf(
+					'<a class="submitdelete" onclick="return confirm(\'%s\')" href="%s">' . __( 'Trash', 'poll-creator' ) . '</a>',
+					esc_js( $confirm_trash_text ),
+					esc_url(
+						add_query_arg(
+							[
+								'page'         => $page,
+								'action'       => 'trash_poll',
+								'poll_id'      => $item->get_client_id(),
+								'reference_id' => $item->get_reference(),
+								'_nonce'       => $trash_nonce,
+							]
+						)
+					)
+				),
 			);
 		}
 
 		// Wrap the title with view result link.
-		$title = sprintf( '<a href="?page=%s&action=%s&poll_id=%s">%s</a>', $page, 'view_results', $item->get_client_id(), $item->get_title() );
+		$title = sprintf(
+			'<a href="%s">%s</a>',
+			esc_url(
+				add_query_arg(
+					[
+						'page'    => $page,
+						'action'  => 'view_results',
+						'poll_id' => $item->get_client_id(),
+					]
+				)
+			),
+			esc_html( $item->get_title() )
+		);
 
 		return sprintf( '<strong>%1$s</strong> %2$s', $title, $this->row_actions( $actions ) );
 	}
@@ -197,7 +267,7 @@ class PollsListTable extends \WP_List_Table {
 				$reference = sprintf( '<strong>%1$s</strong> %2$s', $title, $this->row_actions( $actions ) );
 			}
 		} else {
-			$reference = $item->get_reference();
+			$reference = esc_html( $item->get_reference() );
 		}
 
 		return $reference;
@@ -227,17 +297,17 @@ class PollsListTable extends \WP_List_Table {
 
 			// Check if the poll ended.
 			if ( strtotime( $settins['endDate'] ) < time() ) {
-				return sprintf( '<span tooltip="%s" flow="right" class="pollify-status status-%s">%s <span class="dashicons dashicons-info"></span></span>', $ended_text, 'draft', __( 'Closed', 'poll-creator' ) );
+				return sprintf( '<span tooltip="%s" flow="right" class="pollify-status status-draft">%s <span class="dashicons dashicons-info"></span></span>', esc_attr( $ended_text ), esc_html__( 'Closed', 'poll-creator' ) );
 			}
 
 			/* translators: %s: poll end date */
 			$end_date_text = sprintf( __( 'Will be ended on %s', 'poll-creator' ), $end_date );
 
-			return sprintf( '<span tooltip="%s" flow="right" class="pollify-status status-%s">%s <span class="dashicons dashicons-info"></span></span>', $end_date_text, $item->get_status(), $statuses[ $item->get_status() ] );
+			return sprintf( '<span tooltip="%s" flow="right" class="pollify-status status-%s">%s <span class="dashicons dashicons-info"></span></span>', esc_attr( $end_date_text ), esc_attr( $item->get_status() ), esc_html( $statuses[ $item->get_status() ] ?? '' ) );
 		}
 
 		// Wrap the status with span tag so later I can style it.
-		return sprintf( '<span class="pollify-status status-%s">%s</span>', $item->get_status(), $statuses[ $item->get_status() ] );
+		return sprintf( '<span class="pollify-status status-%s">%s</span>', esc_attr( $item->get_status() ), esc_html( $statuses[ $item->get_status() ] ?? '' ) );
 	}
 
 	/**
@@ -298,13 +368,35 @@ class PollsListTable extends \WP_List_Table {
 	 */
 	protected function get_views() {
 		$current_status = pollify_filter_input( INPUT_GET, 'status', POLLIFY_FILTER_SANITIZE_STRING );
+		$current_type   = pollify_filter_input( INPUT_POST, 'type', POLLIFY_FILTER_SANITIZE_STRING );
 
-		// Get counts for each status.
+		// Get counts for each status, filtered to the same type as the list.
 		global $wpdb;
-		$counts = $wpdb->get_results(
-			"SELECT status, COUNT(*) as count FROM {$wpdb->prefix}pollify_poll GROUP BY status",
-			ARRAY_A
-		);
+
+		if ( ! empty( $current_type ) && 'all' !== $current_type ) {
+			$counts = $wpdb->get_results(
+				$wpdb->prepare(
+					'SELECT status, COUNT(*) as count FROM %i WHERE type = %s GROUP BY status',
+					$wpdb->prefix . 'pollify_poll',
+					$current_type
+				),
+				ARRAY_A
+			);
+		} else {
+			$registered_types = array_keys( apply_filters( 'pollify_map_feedback_classes', [ 'poll' => true ], null ) );
+			$placeholders     = implode( ', ', array_fill( 0, count( $registered_types ), '%s' ) );
+
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+			$counts = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT status, COUNT(*) as count FROM %i WHERE type IN ($placeholders) GROUP BY status",
+					$wpdb->prefix . 'pollify_poll',
+					...$registered_types
+				),
+				ARRAY_A
+			);
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+		}
 
 		$status_counts = [
 			'all'     => 0,
@@ -399,10 +491,10 @@ class PollsListTable extends \WP_List_Table {
 			'page'     => $this->get_pagenum(),
 		];
 
-		// Set type from extra nav filter.
+		// Set type from extra nav filter; default to registered types so count matches display.
 		$type = pollify_filter_input( INPUT_POST, 'type', POLLIFY_FILTER_SANITIZE_STRING );
 
-		if ( ! empty( $type ) ) {
+		if ( ! empty( $type ) && 'all' !== $type ) {
 			$args['type'] = $type;
 		}
 

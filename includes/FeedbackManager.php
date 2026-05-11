@@ -73,11 +73,18 @@ class FeedbackManager {
 		// If type is set then add where condition for type.
 		if ( ! empty( $args['type'] ) && 'all' !== $args['type'] ) {
 			$where .= $wpdb->prepare( ' AND type = %s', $args['type'] );
+		} elseif ( empty( $args['type'] ) ) {
+			// No type filter: restrict to registered types so count matches displayed rows.
+			$registered_types = array_keys( apply_filters( 'pollify_map_feedback_classes', [ 'poll' => true ], null ) );
+			$placeholders     = implode( ', ', array_fill( 0, count( $registered_types ), '%s' ) );
+
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+			$where .= $wpdb->prepare( " AND type IN ($placeholders)", ...$registered_types );
 		}
 
 		// If search is set then add where condition for search.
 		if ( ! empty( $args['search'] ) ) {
-			$where .= $wpdb->prepare( ' AND poll.title LIKE %s', '%' . $args['search'] . '%' );
+			$where .= $wpdb->prepare( ' AND poll.title LIKE %s', '%' . $wpdb->esc_like( $args['search'] ) . '%' );
 		}
 
 		// Set the pagination data.
@@ -90,6 +97,10 @@ class FeedbackManager {
 
 		// Join with wp_pollify_vote table and get the total count of votes related to client id.
 		$join = $wpdb->prepare( 'LEFT JOIN %i AS vote ON vote.client_id = poll.client_id', $wpdb->prefix . 'pollify_vote' );
+
+		// Apply WHERE/JOIN filters before both count and list queries so they stay consistent.
+		$where = apply_filters( 'pollify_all_polls_where_sql', $where, $args );
+		$join  = apply_filters( 'pollify_all_polls_join_sql', $join, $args );
 
 		// If we pass count parament true in args then just count the polls and return the count.
 		if ( ! empty( $args['count'] ) && $args['count'] ) {
@@ -111,18 +122,6 @@ class FeedbackManager {
 
 			return intval( $count );
 		}
-
-		$where = apply_filters(
-			'pollify_all_polls_where_sql',
-			$where,
-			$args
-		);
-
-		$join = apply_filters(
-			'pollify_all_polls_join_sql',
-			$join,
-			$args
-		);
 
 		$select = apply_filters(
 			'pollify_all_polls_select_sql',
@@ -152,7 +151,7 @@ class FeedbackManager {
 			$polls = array_filter(
 				array_map(
 					function ( $poll ) {
-						$feedback = FeedbackFactory::get_instance( $poll )->get();
+						$feedback = ( new FeedbackFactory( $poll ) )->get();
 						return ! is_wp_error( $feedback ) ? $feedback : null;
 					},
 					$polls
@@ -271,7 +270,7 @@ class FeedbackManager {
 				[ '%s' ]
 			);
 
-			if ( ! $updated ) {
+			if ( false === $updated ) {
 				return new WP_Error( 'update-failed', __( 'Poll not updated successfully', 'poll-creator' ), [ 'status' => 422 ] );
 			}
 
@@ -318,7 +317,7 @@ class FeedbackManager {
 			wp_cache_flush_group( 'pollify_poll_cache' );
 		}
 
-		return $this->get( $args['id'] );
+		return $this->get( $args['client_id'] );
 	}
 
 	/**
@@ -364,7 +363,7 @@ class FeedbackManager {
 			wp_cache_set( $cache_key, $poll, 'pollify_poll_cache', 15 * MINUTE_IN_SECONDS );
 		}
 
-		return FeedbackFactory::get_instance( $poll )->get();
+		return ( new FeedbackFactory( $poll ) )->get();
 	}
 
 	/**
@@ -443,7 +442,8 @@ class FeedbackManager {
 		} else {
 			$unique_voters = $wpdb->get_var(
 				$wpdb->prepare(
-					'SELECT COUNT(DISTINCT CASE WHEN user_id > 0 THEN user_id ELSE user_ip END) FROM ' . $wpdb->prefix . 'pollify_vote WHERE client_id = %s',
+					'SELECT COUNT(DISTINCT CASE WHEN user_id > 0 THEN user_id ELSE user_ip END) FROM %i WHERE client_id = %s',
+					$wpdb->prefix . 'pollify_vote',
 					$client_id
 				)
 			);
@@ -492,7 +492,7 @@ class FeedbackManager {
 			[ '%d' ]
 		);
 
-		if ( ! $deleted ) {
+		if ( false === $deleted ) {
 			return new WP_Error( 'deletion-failed', __( 'Poll not deleted successfully', 'poll-creator' ), [ 'status' => 422 ] );
 		}
 
@@ -503,7 +503,7 @@ class FeedbackManager {
 			[ '%s' ]
 		);
 
-		if ( ! $deleted ) {
+		if ( false === $deleted ) {
 			return new WP_Error( 'deletion-failed', __( 'Poll not deleted successfully', 'poll-creator' ), [ 'status' => 422 ] );
 		}
 
@@ -544,18 +544,17 @@ class FeedbackManager {
 
 		// Delete those options if has any in a single query.
 		if ( count( $deleted_options ) ) {
+			$placeholders = implode( ', ', array_fill( 0, count( $deleted_options ), '%s' ) );
+
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
 			$wpdb->query(
-				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-				str_replace(
-					'\\',
-					'',
-					$wpdb->prepare(
-						'DELETE FROM %i WHERE option_id IN (%s)',
-						$wpdb->prefix . 'pollify_poll_options',
-						implode( "','", $deleted_options )
-					)
+				$wpdb->prepare(
+					"DELETE FROM %i WHERE option_id IN ($placeholders)",
+					$wpdb->prefix . 'pollify_poll_options',
+					...$deleted_options
 				)
 			);
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
 		}
 
 		// Filter those array from $options where id key is not set or id is 0 or null.
