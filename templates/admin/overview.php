@@ -26,11 +26,11 @@ $updated_message = pollify_filter_input( INPUT_GET, 'updated', POLLIFY_FILTER_SA
 			<span><?php echo wp_kses_post( $poll->get_title() ); ?></span>
 		</h3>
 		<div class="action-wrapper">
-			<a href="<?php echo esc_url( get_permalink( $poll->get_reference() ) ); ?>" class="page-title-action" target="_blank">
+			<a href="<?php echo esc_url( get_permalink( $poll->get_reference() ) ); ?>" class="button" target="_blank">
 				<span><?php esc_html_e( 'View on frontend', 'poll-creator' ); ?></span>
 				<span class="dashicons dashicons-external"></span>
 			</a>
-			<a href="<?php echo esc_url( add_query_arg( [ 'page' => 'pollify' ], admin_url( 'admin.php' ) ) ); ?>" class="page-title-action button-primary">
+			<a href="<?php echo esc_url( add_query_arg( [ 'page' => 'pollify' ], admin_url( 'admin.php' ) ) ); ?>" class="button button-primary">
 				<?php esc_html_e( 'Back to list', 'poll-creator' ); ?>
 			</a>
 		</div>

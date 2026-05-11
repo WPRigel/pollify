@@ -1,6 +1,7 @@
 # Pollify #
 
-**Contributors:** [wprigel](https://profiles.wordpress.org/wprigel)
+**Contributors:** [sabbir1991](https://profiles.wordpress.org/sabbir1991), [wprigel](https://profiles.wordpress.org/wprigel)
+**Author:** [Sabbir Ahmed](https://profiles.wordpress.org/sabbir1991)
 **Tags:** poll, survey, vote, gutenberg, block
 **Requires at least:** 6.2
 **Tested up to:** 6.9.1

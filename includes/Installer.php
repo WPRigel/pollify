@@ -28,6 +28,7 @@ class Installer {
 	 * @return void
 	 */
 	public function run(): void {
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 		$this->add_version();
 		$this->create_tables();
 	}

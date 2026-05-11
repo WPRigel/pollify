@@ -15,7 +15,7 @@
 		"lint:php": "composer run cs",
 		"fix:php": "composer run cs:fix",
 		"packages-update": "wp-scripts packages-update",
-		"zip": "rm -rf poll-creator.zip && wp-scripts plugin-zip",
+		"zip": "rm -rf poll-creator.zip && composer install --no-dev --no-interaction && wp-scripts plugin-zip && composer install --no-interaction",
 		"start": "wp-scripts start",
 		"start:custom": "wp-scripts start src/global/js/admin.js --output-path=assets/build",
 		"build:custom": "wp-scripts build src/global/js/admin.js --output-path=assets/build",

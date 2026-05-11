@@ -3,7 +3,7 @@
  * Plugin Name: Pollify
  * Plugin URI: https://wprigel.com/pollify/
  * Description: Pollify is the ultimate poll creator and survey maker plugin for WordPress, 100% powered by the Gutenberg editor. No short code required, no capping on vote counts. Enjoy the freedom & boost user engagement.
- * Version: 1.0.13
+ * Version: 1.0.12
  * Author: wprigel
  * Author URI: http://wprigel.com/
  * License: GPL2
@@ -49,7 +49,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define some constant for getting path and urls and version of the plugin.
-define( 'POLLIFY_VERSION', '1.0.13' );
+define( 'POLLIFY_VERSION', '1.0.12' );
 define( 'POLLIFY_PATH', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
 define( 'POLLIFY_ASSET_PATH', untrailingslashit( POLLIFY_PATH . '/assets' ) );
 define( 'POLLIFY_ASSET_BUILD_PATH', untrailingslashit( POLLIFY_PATH . '/assets/build' ) );

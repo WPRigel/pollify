@@ -89,6 +89,15 @@ class PollsListTable extends \WP_List_Table {
 	}
 
 	/**
+	 * Get the primary column name for responsive table behaviour.
+	 *
+	 * @return string
+	 */
+	protected function get_primary_column_name(): string {
+		return 'title';
+	}
+
+	/**
 	 * Get sortable columns.
 	 *
 	 * @return array

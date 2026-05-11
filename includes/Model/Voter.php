@@ -96,7 +96,12 @@ class Voter {
 	public function get_user_ip(): string {
 		$ip = '';
 
-		if ( apply_filters( 'pollify_trust_proxy_headers', false ) ) {
+		// Cloudflare: CF-Connecting-IP is injected by Cloudflare on every proxied request
+		// and stripped from end-user requests, so its presence reliably indicates CF.
+		if ( isset( $_SERVER['HTTP_CF_CONNECTING_IP'] ) && filter_var( wp_unslash( $_SERVER['HTTP_CF_CONNECTING_IP'] ), FILTER_VALIDATE_IP ) ) {
+			$ip = sanitize_text_field( wp_unslash( $_SERVER['HTTP_CF_CONNECTING_IP'] ) );
+		} elseif ( apply_filters( 'pollify_trust_proxy_headers', false ) ) {
+			// Other trusted reverse proxies (opt-in via filter).
 			if ( isset( $_SERVER['HTTP_CLIENT_IP'] ) && filter_var( wp_unslash( $_SERVER['HTTP_CLIENT_IP'] ), FILTER_VALIDATE_IP ) ) {
 				$ip = sanitize_text_field( wp_unslash( $_SERVER['HTTP_CLIENT_IP'] ) );
 			} elseif ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {

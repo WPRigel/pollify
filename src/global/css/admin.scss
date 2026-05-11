@@ -123,6 +123,7 @@ $normal_text_color: #3d3d3d;
 				animation: tooltips-vert 300ms ease-out forwards;
 			}
 		}
+
 	}
 }
 
@@ -423,7 +424,7 @@ table.toplevel_page_pollify {
 			gap: 10px;
 			align-items: center;
 
-			a.page-title-action {
+			a {
 				display: flex;
 				align-items: center;
 				gap: 6px;
@@ -902,6 +903,151 @@ table.toplevel_page_pollify {
 					align-items: center;
 					font-size: 0.8125rem;
 				}
+			}
+		}
+	}
+}
+
+// Tablet: keep poll admin controls readable before the mobile breakpoint.
+@media screen and (max-width: 1024px) {
+
+	.pollify-poll-details-wrap {
+
+		.heading-wrap {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 12px;
+
+			.action-wrapper {
+				flex-wrap: wrap;
+			}
+		}
+
+		.navigation ul {
+			flex-wrap: wrap;
+			gap: 0;
+
+			li a {
+				padding: 10px 12px;
+				font-size: 13px;
+			}
+		}
+
+		.popular-location .meta-card-content.location-data {
+			flex-direction: column;
+			align-items: stretch;
+
+			.location-map,
+			.location-list {
+				flex: 0 0 auto;
+				width: 100%;
+				max-width: 100%;
+			}
+
+			.location-map {
+				overflow: hidden;
+			}
+
+			.location-map .geo-chart-map {
+				height: 280px;
+				overflow: hidden;
+			}
+
+			.location-list {
+				max-height: none;
+			}
+		}
+
+		.recent-votes ul.vote-list li {
+
+			.vote-info {
+				flex-wrap: wrap;
+				gap: 6px;
+
+				.user-name {
+					flex: 1 1 100%;
+				}
+
+				.other-details {
+					flex: 1 1 100%;
+					flex-wrap: wrap;
+				}
+			}
+
+			.vote-details {
+				flex-wrap: wrap;
+				gap: 4px;
+
+				span.option {
+					flex: 0 0 100%;
+				}
+
+				span.time {
+					flex: 0 0 100%;
+					text-align: left;
+				}
+			}
+		}
+
+		.details-content .ip-address-data {
+			flex-wrap: wrap;
+
+			.ip-actions {
+				display: flex;
+				gap: 10px;
+				align-items: center;
+				font-size: 0.8125rem;
+			}
+		}
+	}
+}
+
+// Mobile admin breakpoint.
+@media screen and (max-width: 782px) {
+
+	table.toplevel_page_pollify {
+
+		thead th.column-title {
+			width: 100%;
+		}
+	}
+
+	body.toplevel_page_pollify #wp-pollify-header {
+		flex-direction: column;
+		gap: 12px;
+		position: relative;
+		top: 46px;
+		padding: 16px;
+		margin-left: -10px;
+
+		.quick-links {
+			flex-wrap: wrap;
+			gap: 12px;
+		}
+	}
+
+	.pollify-poll-details-wrap {
+
+		.navigation ul {
+			column-gap: 16px;
+			row-gap: 8px;
+		}
+
+		.details-content {
+
+			.meta-cards {
+				flex-direction: column;
+
+				.meta-card-column,
+				.meta-card-column.secondary {
+					flex: 0 0 auto;
+					width: 100%;
+					max-width: 100%;
+				}
+			}
+
+			.meta-card {
+				width: 100%;
 			}
 		}
 	}
