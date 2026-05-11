@@ -428,6 +428,11 @@ table.toplevel_page_pollify {
 				display: flex;
 				align-items: center;
 				gap: 6px;
+
+				span.dashicons {
+					display: flex;
+					align-items: center;
+				}
 			}
 		}
 	}

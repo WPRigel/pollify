@@ -7,8 +7,8 @@
 **Tested up to:** 6.9.1
 **Requires PHP:** 8.0
 **Stable tag:** 1.0.12
-**License:** GPLv3 or later
-**License URI:** https://www.gnu.org/licenses/gpl-3.0.html
+**License:** GPLv2 or later
+**License URI:** https://www.gnu.org/licenses/gpl-2.0.html
 
 Create and manage polls natively inside the WordPress block editor.
 
@@ -138,6 +138,14 @@ This project follows [Git Flow](https://nvie.com/posts/a-successful-git-branchin
 ### Pull requests ###
 
 Target `develop` for all non-hotfix work. The PR template at `.github/PULL_REQUEST_TEMPLATE.md` lists the required checklist (tests, linting, manual testing).
+
+## Contributing ##
+
+Contributions, bug reports, and feature requests are welcome.
+
+- **Bug reports / feature requests** — open an issue on GitHub
+- **Pull requests** — fork the repo, branch off `develop`, submit a PR against `develop`
+- **Author:** [Sabbir Ahmed](https://profiles.wordpress.org/sabbir1991) — WordPress developer and maintainer of Pollify
 
 ## Changelog ##
 

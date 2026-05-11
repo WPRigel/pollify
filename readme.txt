@@ -1,12 +1,12 @@
 === Pollify - Feedback Polls, Anonymous Polls, Up/down Voting, NPS Surveys, Export data ===
-Contributors: wprigel
+Contributors: sabbir1991, wprigel
 Tags: poll plugin, poll, poll maker, vote, survey
 Requires at least: 6.0
 Tested up to: 6.9.1
 Requires PHP: 8.0
 Stable tag: 1.0.12
 License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Poll creator lets you create a poll website in WordPress Gutenberg with advanced polling/voting features to engage your audience like never before
 
@@ -164,7 +164,13 @@ This plugin utilizes the **ipinfo** service to provide geolocation functionality
 Additionally, our plugin uses Google Charts (https://www.gstatic.com/charts/loader.js) for charting and data visualization. For more information on Google Charts' terms of use and privacy policies, please visit Google Charts [Terms of Service](https://developers.google.com/chart/terms) and Google [Privacy Policy](https://developers.google.com/chart/interactive/docs/security_privacy).
 
 = Author =
-Created by [wpRigel](https://wprigel.com)
+Created by [Sabbir Ahmed](https://profiles.wordpress.org/sabbir1991)
+
+= Contributing =
+Bug reports, feature requests, and pull requests are welcome on [GitHub](https://github.com/WPRigel/pollify)
+
+* **Issues** — open a GitHub issue for bugs or feature requests
+* **Pull requests** — fork the repo, branch off `develop`, and submit a PR against `develop`
 
 == Installation ==
 How to Install the Pollify Plugin:
