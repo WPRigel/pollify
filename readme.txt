@@ -4,7 +4,7 @@ Tags: poll plugin, poll, poll maker, vote, survey
 Requires at least: 6.0
 Tested up to: 6.9.1
 Requires PHP: 8.0
-Stable tag: 1.0.12
+Stable tag: 1.0.13
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -208,6 +208,20 @@ Sure, there is! Check out our [official documentation](https://wprigel.com/docs/
 
 == Changelog ==
 
+v1.0.13 -> May 11, 2026
+--------------------------------------------
+- [Refactor] Removed Singleton pattern from FeedbackFactory for correct per-call instantiation
+- [Refactor] Moved block.json parsing outside loop in Blocks class for better performance
+- [Improvement] Primed WordPress user object cache before vote list rendering to eliminate N+1 queries
+- [Improvement] Admin list table now correctly identifies primary column for responsive behaviour
+- [Improvement] Responsive layout for poll details page — meta-cards stack to single column on tablet and mobile
+- [Improvement] Mobile responsive fixes for admin pages — header, navigation tabs, vote rows, and location data all stack correctly below 1024px
+- [Improvement] Minor style tweaks across admin UI for better spacing and readability on smaller screens
+- [Fix] FeedbackManager now correctly detects update failure vs unchanged data
+- [Fix] FeedbackManager no longer treats polls with zero options as a deletion error
+- [Fix] wp_safe_redirect calls now followed by exit to prevent continued execution
+- [Fix] wp_localize_script now targets the correct enqueued script handle
+
 v1.0.12 -> February 14, 2026
 --------------------------------------------
 - [New] Introduced user logged in restriction features for all types of poll
@@ -305,4 +319,6 @@ v1.0.0 -> June 29, 2024
 
 
 == Upgrade Notice ==
-No upgrade notice
+
+= 1.0.13 =
+Refactoring and bug fixes. No database changes required.

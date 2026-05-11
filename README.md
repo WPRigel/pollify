@@ -6,7 +6,7 @@
 **Requires at least:** 6.2
 **Tested up to:** 6.9.1
 **Requires PHP:** 8.0
-**Stable tag:** 1.0.12
+**Stable tag:** 1.0.13
 **License:** GPLv2 or later
 **License URI:** https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -148,6 +148,19 @@ Contributions, bug reports, and feature requests are welcome.
 - **Author:** [Sabbir Ahmed](https://profiles.wordpress.org/sabbir1991) — WordPress developer and maintainer of Pollify
 
 ## Changelog ##
+
+= 1.0.13 =
+* Removed Singleton pattern from FeedbackFactory for correct per-call instantiation
+* Moved block.json parsing outside loop in Blocks class for better performance
+* Primed WordPress user cache before vote list rendering to eliminate N+1 queries
+* Admin list table now correctly identifies primary column for responsive behaviour
+* Responsive layout for poll details — meta-cards stack to single column on tablet/mobile
+* Mobile responsive fixes for admin pages — header, nav tabs, vote rows, and location data stack correctly below 1024px
+* Minor style tweaks across admin UI for better spacing and readability on smaller screens
+* Fixed FeedbackManager incorrectly treating unchanged data as an update failure
+* Fixed FeedbackManager treating polls with zero options as a deletion error
+* Fixed wp_safe_redirect calls not followed by exit
+* Fixed wp_localize_script targeting wrong script handle
 
 = 1.0.12 =
 * Added login restriction feature
