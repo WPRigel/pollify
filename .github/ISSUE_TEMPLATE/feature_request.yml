@@ -1,0 +1,58 @@
+name: Feature Request
+description: Request a new feature or enhancement
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe the feature clearly. The AI agent reads this to understand what to build.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Feature description
+      description: What should this feature do?
+      placeholder: "Add a timer that automatically closes a poll after a set date."
+    validations:
+      required: true
+
+  - type: textarea
+    id: user_story
+    attributes:
+      label: User story
+      description: Who benefits and how?
+      placeholder: |
+        As a site admin, I want to set an expiry date on a poll,
+        so that voting closes automatically without manual intervention.
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Explicit conditions that must be true for this feature to be complete. The AI agent uses these as the definition of done.
+      placeholder: |
+        - [ ] Block editor shows a date/time picker in the poll block settings
+        - [ ] After the expiry date, the Vote button is replaced with a "Poll closed" message
+        - [ ] Existing votes are still visible after poll closes
+        - [ ] Expiry date is stored in the poll's post meta
+    validations:
+      required: true
+
+  - type: textarea
+    id: out_of_scope
+    attributes:
+      label: Out of scope
+      description: What should NOT be included in this implementation?
+      placeholder: "Email notifications when poll closes — that is a separate issue."
+    validations:
+      required: false
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Additional context / mockups
+      description: Wireframes, screenshots, or references.
+    validations:
+      required: false
