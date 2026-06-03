@@ -1,0 +1,69 @@
+name: Bug Report
+description: Report a bug in Pollify
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Fill in as much detail as possible. Claude Code reads this to understand and fix the bug.
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened?
+      description: Describe the actual (broken) behavior.
+      placeholder: "When I click Vote, nothing happens and no error is shown."
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should happen instead?
+      placeholder: "The vote should be recorded and the results should update."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Exact steps to trigger the bug.
+      placeholder: |
+        1. Create a poll block in a new post
+        2. Publish the post
+        3. Visit the frontend
+        4. Click the Vote button
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Explicit conditions that must be true for this issue to be fixed. Used as definition of done.
+      placeholder: |
+        - [ ] Clicking Vote submits the vote via REST API
+        - [ ] Vote count updates on the page without reload
+        - [ ] Error message shows if user already voted
+    validations:
+      required: true
+
+  - type: input
+    id: wp_version
+    attributes:
+      label: WordPress version
+      placeholder: "6.5.3"
+
+  - type: input
+    id: plugin_version
+    attributes:
+      label: Plugin version
+      placeholder: "1.0.13"
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Additional context / screenshots
+      description: Paste screenshots, console errors, or any other relevant info.
