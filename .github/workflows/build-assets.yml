@@ -1,21 +1,21 @@
 name: Build Assets
 
 on:
-  push:
-    paths:
-      - 'src/**'
-      - 'composer.json'
-      - 'composer.lock'
-      - 'package.json'
-      - 'package-lock.json'
+  pull_request:
+    types: [opened, synchronize, reopened]
   workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to build and update'
+        required: true
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   build:
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -24,6 +24,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.head_ref || github.ref_name }}
           fetch-depth: 0
 
       - name: Setup Node
@@ -38,7 +39,7 @@ jobs:
       - name: Build JS/CSS assets
         run: npx wp-scripts build && npm run build:custom
 
-      - name: Install Composer dependencies (no dev, includes Freemius)
+      - name: Install Composer dependencies (no dev)
         run: composer install --no-dev --no-interaction --prefer-dist
 
       - name: Stage built artifacts
@@ -51,10 +52,58 @@ jobs:
             echo "changed=true" >> $GITHUB_OUTPUT
           fi
 
-      - name: Commit and push
+      - name: Commit and push built artifacts
         if: steps.diff.outputs.changed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git commit --no-verify -m "chore: build assets [skip ci]"
-          git push origin HEAD:${{ github.ref_name }}
+          git push origin HEAD:${{ github.head_ref || github.ref_name }}
+
+      - name: Generate Playground URL
+        id: playground
+        run: |
+          BRANCH="${{ github.head_ref || github.ref_name }}"
+          REPO="${{ github.repository }}"
+          URL=$(python3 -c "
+          import json, urllib.parse, sys
+          branch = sys.argv[1]
+          repo = sys.argv[2]
+          bp = {'steps': [{'step': 'installPlugin', 'pluginData': {'resource': 'url', 'url': 'https://github.com/' + repo + '/archive/refs/heads/' + branch + '.zip'}, 'options': {'activate': True}}]}
+          print('https://playground.wordpress.net/#' + urllib.parse.quote(json.dumps(bp, separators=(',', ':'))))
+          " "$BRANCH" "$REPO")
+          echo "url=$URL" >> $GITHUB_OUTPUT
+
+      - name: Update PR description with Playground URL
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number || github.event.inputs.pr_number }}
+          PLAYGROUND_URL: ${{ steps.playground.outputs.url }}
+        run: |
+          python3 - << 'PYEOF'
+          import os, re, subprocess
+
+          pr_num  = os.environ['PR_NUMBER']
+          new_url = os.environ['PLAYGROUND_URL']
+
+          body = subprocess.run(
+              ['gh', 'pr', 'view', pr_num, '--json', 'body', '-q', '.body'],
+              capture_output=True, text=True
+          ).stdout
+
+          # Replace existing Playground link (handles both template placeholder and real URLs).
+          pattern     = r'\[▶ Test in WP Playground\]\([^)]+\)'
+          replacement = '[▶ Test in WP Playground](' + new_url + ')'
+
+          if re.search(pattern, body):
+              updated = re.sub(pattern, replacement, body)
+          elif 'BRANCH_NAME' in body:
+              # Template not yet filled — replace placeholder URL entirely.
+              updated = re.sub(r'BRANCH_NAME(?=\.zip)', os.environ.get('GITHUB_HEAD_REF', ''), body)
+          else:
+              # No Playground section found — append one.
+              updated = body.rstrip() + '\n\n## Test in WP Playground\n' + replacement + '\n'
+
+          subprocess.run(['gh', 'pr', 'edit', pr_num, '--body', updated], check=True)
+          print(f'PR #{pr_num} updated with Playground URL.')
+          PYEOF
