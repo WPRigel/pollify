@@ -3,7 +3,7 @@
         'name' => 'wprigel/pollify',
         'pretty_version' => 'dev-develop',
         'version' => 'dev-develop',
-        'reference' => '5264522e7ea767dafd559b9436eeb863ddc15d29',
+        'reference' => 'd4cf8aa237f3b603da43442c16d174c126b251e1',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -22,7 +22,7 @@
         'wprigel/pollify' => array(
             'pretty_version' => 'dev-develop',
             'version' => 'dev-develop',
-            'reference' => '5264522e7ea767dafd559b9436eeb863ddc15d29',
+            'reference' => 'd4cf8aa237f3b603da43442c16d174c126b251e1',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
