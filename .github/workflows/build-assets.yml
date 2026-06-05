@@ -1,4 +1,4 @@
-name: Build Assets
+name: Update Playground URL
 
 on:
   pull_request:
@@ -6,60 +6,17 @@ on:
   workflow_dispatch:
     inputs:
       pr_number:
-        description: 'PR number to build and update'
+        description: 'PR number to update'
         required: true
 
 permissions:
-  contents: write
   pull-requests: write
 
 jobs:
-  build:
-    if: github.actor != 'github-actions[bot]'
+  update-playground-url:
     runs-on: ubuntu-latest
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
-      - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          ref: ${{ github.head_ref || github.ref_name }}
-          fetch-depth: 0
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install Node dependencies
-        run: npm ci
-
-      - name: Build JS/CSS assets
-        run: npx wp-scripts build && npm run build:custom
-
-      - name: Install Composer dependencies (no dev)
-        run: composer install --no-dev --no-interaction --prefer-dist
-
-      - name: Stage built artifacts
-        id: diff
-        run: |
-          git add -f build/ assets/build/ vendor/
-          if git diff --cached --quiet; then
-            echo "changed=false" >> $GITHUB_OUTPUT
-          else
-            echo "changed=true" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Commit and push built artifacts
-        if: steps.diff.outputs.changed == 'true'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git commit --no-verify -m "chore: build assets [skip ci]"
-          git push origin HEAD:${{ github.head_ref || github.ref_name }}
-
       - name: Generate Playground URL
         id: playground
         run: |
@@ -73,6 +30,9 @@ jobs:
           print('https://playground.wordpress.net/#' + urllib.parse.quote(json.dumps(bp, separators=(',', ':'))))
           " "$BRANCH" "$REPO")
           echo "url=$URL" >> $GITHUB_OUTPUT
+
+      - name: Checkout (for gh CLI)
+        uses: actions/checkout@v4
 
       - name: Update PR description with Playground URL
         env:
@@ -98,10 +58,8 @@ jobs:
           if re.search(pattern, body):
               updated = re.sub(pattern, replacement, body)
           elif 'BRANCH_NAME' in body:
-              # Template not yet filled — replace placeholder URL entirely.
               updated = re.sub(r'BRANCH_NAME(?=\.zip)', os.environ.get('GITHUB_HEAD_REF', ''), body)
           else:
-              # No Playground section found — append one.
               updated = body.rstrip() + '\n\n## Test in WP Playground\n' + replacement + '\n'
 
           subprocess.run(['gh', 'pr', 'edit', pr_num, '--body', updated], check=True)

@@ -59,3 +59,10 @@ if ( ! function_exists( 'is_wp_error' ) ) {
 		return $thing instanceof WP_Error;
 	}
 }
+
+// Constants required by helpers/functions.php.
+defined( 'POLLIFY_FILTER_SANITIZE_STRING' ) || define( 'POLLIFY_FILTER_SANITIZE_STRING', 999 );
+defined( 'POLLIFY_PATH' ) || define( 'POLLIFY_PATH', dirname( __DIR__ ) );
+
+// Load helper functions (not PSR-4 autoloaded).
+require dirname( __DIR__ ) . '/includes/helpers/functions.php';
