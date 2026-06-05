@@ -116,4 +116,60 @@ class VoterTest extends AbstractTestCase {
 
 		unset( $_SERVER['HTTP_CLIENT_IP'] );
 	}
+
+	// -----------------------------------------------------------------------
+	// get_user_agent()
+	// -----------------------------------------------------------------------
+
+	public function test_get_user_agent_returns_http_user_agent_from_server(): void {
+		$voter = $this->make_voter(); // HTTP_USER_AGENT is set to 'PHPUnit' by make_voter
+		$this->assertSame( 'PHPUnit', $voter->get_user_agent() );
+	}
+
+	// -----------------------------------------------------------------------
+	// is_local_ip() — Class B private range
+	// -----------------------------------------------------------------------
+
+	public function test_is_local_ip_returns_true_for_class_b_private_range(): void {
+		$voter = $this->make_voter();
+		$this->assertTrue( $voter->is_local_ip( '172.16.0.1' ) );
+		$this->assertTrue( $voter->is_local_ip( '172.31.255.255' ) );
+	}
+
+	// -----------------------------------------------------------------------
+	// get_user_ip() — Cloudflare and proxy headers
+	// -----------------------------------------------------------------------
+
+	public function test_get_user_ip_uses_cloudflare_cf_connecting_ip_header(): void {
+		$_SERVER['HTTP_CF_CONNECTING_IP'] = '8.8.8.8';
+		$_SERVER['REMOTE_ADDR']           = '1.1.1.1';
+		$_SERVER['HTTP_USER_AGENT']       = 'PHPUnit';
+		unset( $_SERVER['HTTP_CLIENT_IP'], $_SERVER['HTTP_X_FORWARDED_FOR'] );
+
+		Functions\when( 'is_user_logged_in' )->justReturn( false );
+		Functions\when( 'get_current_user_id' )->justReturn( 0 );
+		Functions\when( 'sanitize_text_field' )->returnArg();
+
+		$voter = new Voter();
+		$this->assertSame( '8.8.8.8', $voter->get_user_ip() );
+
+		unset( $_SERVER['HTTP_CF_CONNECTING_IP'] );
+	}
+
+	public function test_get_user_ip_ignores_x_forwarded_for_when_proxy_not_trusted(): void {
+		$_SERVER['HTTP_X_FORWARDED_FOR'] = '9.9.9.9';
+		$_SERVER['REMOTE_ADDR']          = '8.8.8.8';
+		$_SERVER['HTTP_USER_AGENT']      = 'PHPUnit';
+		unset( $_SERVER['HTTP_CF_CONNECTING_IP'], $_SERVER['HTTP_CLIENT_IP'] );
+
+		Functions\when( 'is_user_logged_in' )->justReturn( false );
+		Functions\when( 'get_current_user_id' )->justReturn( 0 );
+		Functions\when( 'sanitize_text_field' )->returnArg();
+		Functions\when( 'apply_filters' )->justReturn( false ); // proxy not trusted
+
+		$voter = new Voter();
+		$this->assertSame( '8.8.8.8', $voter->get_user_ip() );
+
+		unset( $_SERVER['HTTP_X_FORWARDED_FOR'] );
+	}
 }
