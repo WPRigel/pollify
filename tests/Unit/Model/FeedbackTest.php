@@ -43,13 +43,23 @@ class FeedbackTest extends AbstractTestCase {
 
 	public function test_is_poll_closed_returns_true_for_expired_schedule(): void {
 		$past     = gmdate( 'c', strtotime( '-1 day' ) );
-		$feedback = $this->make_feedback( [ 'status' => 'schedule', 'endDate' => $past ] );
+		$feedback = $this->make_feedback(
+			[
+				'status'  => 'schedule',
+				'endDate' => $past,
+			]
+		);
 		$this->assertTrue( $feedback->is_poll_closed() );
 	}
 
 	public function test_is_poll_closed_returns_false_for_future_schedule(): void {
 		$future   = gmdate( 'c', strtotime( '+1 day' ) );
-		$feedback = $this->make_feedback( [ 'status' => 'schedule', 'endDate' => $future ] );
+		$feedback = $this->make_feedback(
+			[
+				'status'  => 'schedule',
+				'endDate' => $future,
+			]
+		);
 		$this->assertFalse( $feedback->is_poll_closed() );
 	}
 
@@ -64,10 +74,10 @@ class FeedbackTest extends AbstractTestCase {
 
 	public function test_validate_returns_error_for_empty_options(): void {
 		$settings = [
-			'status'                    => 'publish',
+			'status'                     => 'publish',
 			'allowedPerComputerResponse' => false,
-			'requireLogin'              => false,
-			'anonymousVoting'           => false,
+			'requireLogin'               => false,
+			'anonymousVoting'            => false,
 		];
 		$feedback = $this->make_feedback( $settings );
 
@@ -83,11 +93,11 @@ class FeedbackTest extends AbstractTestCase {
 
 	public function test_validate_returns_error_when_poll_is_closed(): void {
 		$settings = [
-			'status'                    => 'draft',
+			'status'                     => 'draft',
 			'allowedPerComputerResponse' => false,
-			'requireLogin'              => false,
-			'anonymousVoting'           => false,
-			'closePollmessage'          => 'Closed',
+			'requireLogin'               => false,
+			'anonymousVoting'            => false,
+			'closePollmessage'           => 'Closed',
 		];
 		$feedback = $this->make_feedback( $settings );
 
@@ -104,11 +114,11 @@ class FeedbackTest extends AbstractTestCase {
 
 	public function test_validate_returns_error_when_login_required_and_guest(): void {
 		$settings = [
-			'status'                    => 'publish',
-			'requireLogin'              => true,
-			'requireLoginMessage'       => 'Please log in.',
+			'status'                     => 'publish',
+			'requireLogin'               => true,
+			'requireLoginMessage'        => 'Please log in.',
 			'allowedPerComputerResponse' => false,
-			'anonymousVoting'           => false,
+			'anonymousVoting'            => false,
 		];
 		$feedback = $this->make_feedback( $settings );
 
@@ -125,9 +135,9 @@ class FeedbackTest extends AbstractTestCase {
 
 	public function test_validate_returns_true_when_valid(): void {
 		$settings = [
-			'status'                    => 'publish',
-			'requireLogin'              => false,
-			'anonymousVoting'           => false,
+			'status'                     => 'publish',
+			'requireLogin'               => false,
+			'anonymousVoting'            => false,
 			'allowedPerComputerResponse' => false,
 		];
 		$feedback = $this->make_feedback( $settings );
@@ -140,5 +150,102 @@ class FeedbackTest extends AbstractTestCase {
 		$result = $feedback->call_validate( [ 'option-1' ] );
 
 		$this->assertTrue( $result );
+	}
+
+	// -----------------------------------------------------------------------
+	// is_valid_poll_option()
+	// -----------------------------------------------------------------------
+
+	public function test_is_valid_poll_option_returns_true_for_known_option_id(): void {
+		Functions\when( 'maybe_unserialize' )->returnArg();
+		$feedback = new class( [ 'options' => [ [ 'option_id' => 'opt1' ] ] ] ) extends Feedback {
+			public function vote( array $options = [], $request = [] ): void {} // phpcs:ignore
+		};
+
+		$this->assertTrue( $feedback->is_valid_poll_option( [ 'opt1' ] ) );
+	}
+
+	public function test_is_valid_poll_option_returns_false_for_unknown_option_id(): void {
+		Functions\when( 'maybe_unserialize' )->returnArg();
+		$feedback = new class( [ 'options' => [ [ 'option_id' => 'opt1' ] ] ] ) extends Feedback {
+			public function vote( array $options = [], $request = [] ): void {} // phpcs:ignore
+		};
+
+		$this->assertFalse( $feedback->is_valid_poll_option( [ 'opt2' ] ) );
+	}
+
+	// -----------------------------------------------------------------------
+	// get_settings()
+	// -----------------------------------------------------------------------
+
+	public function test_get_settings_returns_decoded_array(): void {
+		$feedback = $this->make_feedback(
+			[
+				'status'       => 'publish',
+				'requireLogin' => true,
+			]
+		);
+
+		$this->assertSame(
+			[
+				'status'       => 'publish',
+				'requireLogin' => true,
+			],
+			$feedback->get_settings()
+		);
+	}
+
+	public function test_get_settings_returns_empty_array_when_settings_field_is_null(): void {
+		Functions\when( 'maybe_unserialize' )->returnArg();
+		$feedback = new class( [ 'settings' => null ] ) extends Feedback {
+			public function vote( array $options = [], $request = [] ): void {} // phpcs:ignore
+		};
+
+		$this->assertSame( [], $feedback->get_settings() );
+	}
+
+	// -----------------------------------------------------------------------
+	// get_data()
+	// -----------------------------------------------------------------------
+
+	public function test_get_data_contains_all_expected_keys(): void {
+		$feedback = $this->make_feedback( [] );
+		$data     = $feedback->get_data();
+
+		foreach ( [ 'id', 'client_id', 'title', 'description', 'type', 'status', 'reference', 'options', 'created_at', 'updated_at', 'settings', 'response' ] as $key ) {
+			$this->assertArrayHasKey( $key, $data );
+		}
+	}
+
+	// -----------------------------------------------------------------------
+	// get_options()
+	// -----------------------------------------------------------------------
+
+	public function test_get_options_returns_options_array(): void {
+		$options = [
+			[
+				'option_id' => 'opt1',
+				'option'    => 'Option 1',
+			],
+		];
+		Functions\when( 'maybe_unserialize' )->returnArg();
+		$feedback = new class( [ 'options' => $options ] ) extends Feedback {
+			public function vote( array $options = [], $request = [] ): void {} // phpcs:ignore
+		};
+
+		$this->assertSame( $options, $feedback->get_options() );
+	}
+
+	// -----------------------------------------------------------------------
+	// get_response()
+	// -----------------------------------------------------------------------
+
+	public function test_get_response_returns_integer_vote_count(): void {
+		Functions\when( 'maybe_unserialize' )->returnArg();
+		$feedback = new class( [ 'response' => 7 ] ) extends Feedback {
+			public function vote( array $options = [], $request = [] ): void {} // phpcs:ignore
+		};
+
+		$this->assertSame( 7, $feedback->get_response() );
 	}
 }
