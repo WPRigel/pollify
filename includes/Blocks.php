@@ -230,12 +230,10 @@ class Blocks {
 	 * @return void
 	 */
 	public function localize_script() {
-		wp_localize_script(
-			'pollify-poll-view-script',
-			'pollify',
-			array(
-				'nonce' => wp_create_nonce( 'pollify-vote' ),
-			)
-		);
+		$data    = array( 'nonce' => wp_create_nonce( 'pollify-vote' ) );
+		$handles = apply_filters( 'pollify_view_script_handles', array( 'pollify-poll-view-script' ) );
+		foreach ( $handles as $handle ) {
+			wp_localize_script( $handle, 'pollify', $data );
+		}
 	}
 }
