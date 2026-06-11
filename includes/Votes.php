@@ -94,6 +94,12 @@ class Votes {
 			$args['user_location'] = $voter->get_user_country();
 		}
 
+		// Insert all options atomically — a multi-option (checkbox) vote must not
+		// be stored partially when one of the inserts fails.
+		$wpdb->query( 'START TRANSACTION' );
+
+		$inserted_ids = [];
+
 		// Loop through all option ids and set vote for each option.
 		foreach ( $args['option_ids'] ?? [] as $option_id ) {
 			// Insert vote data into database.
@@ -120,12 +126,18 @@ class Votes {
 			);
 
 			if ( ! $inserted ) {
+				$wpdb->query( 'ROLLBACK' );
 				return new WP_Error( 'vote_not_inserted', __( 'Sorry vote not accepted.', 'poll-creator' ) );
 			}
+
+			$inserted_ids[] = $wpdb->insert_id;
 		}
 
-		$vote_data       = $args;
-		$vote_data['id'] = $wpdb->insert_id;
+		$wpdb->query( 'COMMIT' );
+
+		$vote_data        = $args;
+		$vote_data['id']  = end( $inserted_ids );
+		$vote_data['ids'] = $inserted_ids;
 
 		// Reset cache group for rendering the cache again.
 		if ( wp_cache_supports( 'flush_group' ) ) {
@@ -223,7 +235,7 @@ class Votes {
 				wp_cache_set( $cache_count_key, $votes, 'pollify_vote_cache', 15 * MINUTE_IN_SECONDS );
 			}
 
-			return intval( $votes ) ?? 0;
+			return intval( $votes );
 		}
 
 		// Implement cache for getting rows.
@@ -313,8 +325,8 @@ class Votes {
 							$options[ $key ]['votes']        = (int) $vote['votes'];
 							$options[ $key ]['unique_votes'] = (int) $vote['unique_votes'];
 
-							// Calculate percentage.
-							$options[ $key ]['percentage'] = (int) $vote['votes'] > 0 ? number_format_i18n( ( (int) $vote['votes'] / (int) $total_votes ) * 100, 2 ) : 0;
+							// Calculate percentage. Keep it numeric — locale formatting happens at render time.
+							$options[ $key ]['percentage'] = (int) $vote['votes'] > 0 ? round( ( (int) $vote['votes'] / (int) $total_votes ) * 100, 2 ) : 0;
 						}
 					}
 				}
@@ -415,7 +427,7 @@ class Votes {
 				wp_cache_set( $cache_count_key, $votes, 'pollify_vote_cache', 15 * MINUTE_IN_SECONDS );
 			}
 
-			return intval( $votes ) ?? 0;
+			return intval( $votes );
 		}
 
 		$cache_key = 'pollify_ip_votes_' . md5( maybe_serialize( $args ) );

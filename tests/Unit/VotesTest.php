@@ -65,6 +65,8 @@ class VotesTest extends AbstractTestCase {
 		Functions\when( 'is_user_logged_in' )->justReturn( false );
 		Functions\when( 'get_current_user_id' )->justReturn( 0 );
 		Functions\when( 'wp_remote_get' )->justReturn( new WP_Error( 'no-remote', 'No remote in tests' ) );
+		Functions\when( 'get_transient' )->justReturn( false );
+		Functions\when( 'set_transient' )->justReturn( true );
 
 		Functions\when( 'wp_list_pluck' )->alias(
 			function ( array $list, string $field ) {
@@ -114,8 +116,16 @@ class VotesTest extends AbstractTestCase {
 			/** @var array|null Last data passed to insert() */
 			public ?array $last_insert = null;
 
+			/** @var list<string> Raw SQL passed to query() (transactions, locks). */
+			public array $queries = [];
+
 			public function prepare( string $sql, ...$args ): string {
 				return $sql;
+			}
+
+			public function query( string $sql ): bool {
+				$this->queries[] = $sql;
+				return true;
 			}
 
 			public function get_row( $sql, $output = null ): mixed {
@@ -443,8 +453,8 @@ class VotesTest extends AbstractTestCase {
 		$opt1 = current( array_filter( $options, fn( $o ) => 'opt1' === $o['option_id'] ) );
 		$opt2 = current( array_filter( $options, fn( $o ) => 'opt2' === $o['option_id'] ) );
 
-		$this->assertSame( '75.00', $opt1['percentage'] );
-		$this->assertSame( '25.00', $opt2['percentage'] );
+		$this->assertSame( 75.0, $opt1['percentage'] );
+		$this->assertSame( 25.0, $opt2['percentage'] );
 	}
 
 	public function test_get_results_zeros_options_with_no_votes(): void {

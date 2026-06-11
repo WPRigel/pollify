@@ -216,11 +216,13 @@ abstract class Feedback {
 	public function is_poll_closed(): bool {
 		$settings = $this->get_settings();
 
-		if ( 'draft' === $settings['status'] ) {
+		$status = $settings['status'] ?? '';
+
+		if ( 'draft' === $status ) {
 			return true;
 		}
 
-		if ( 'schedule' === $settings['status'] && ! empty( $settings['endDate'] ) ) {
+		if ( 'schedule' === $status && ! empty( $settings['endDate'] ) ) {
 			$end_date = strtotime( $settings['endDate'] );
 
 			if ( $end_date < time() ) {

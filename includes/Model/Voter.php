@@ -141,6 +141,18 @@ class Voter {
 	 * @return string
 	 */
 	public function get_user_country(): string {
+		/**
+		 * Allow disabling the remote geo lookup entirely.
+		 *
+		 * The lookup sends the visitor IP to a third-party service (ipinfo.io)
+		 * and adds a blocking HTTP request to every vote, so sites can opt out.
+		 *
+		 * @param bool $enabled Whether the geo lookup is enabled. Default true.
+		 */
+		if ( ! apply_filters( 'pollify_enable_geo_lookup', true ) ) {
+			return '';
+		}
+
 		$ip = $this->get_user_ip();
 
 		// If someone is using localhost or local network then don't need to pass the IP.
@@ -149,10 +161,13 @@ class Voter {
 			$ip = '';
 		}
 
-		static $cache = [];
+		// Persistent cache avoids one external HTTP request per vote and keeps
+		// repeat voters from burning through the unauthenticated API quota.
+		$transient_key = 'pollify_geo_' . md5( $ip );
+		$cached        = get_transient( $transient_key );
 
-		if ( isset( $cache[ $ip ] ) ) {
-			return $cache[ $ip ];
+		if ( false !== $cached ) {
+			return (string) $cached;
 		}
 
 		$url      = 'https://ipinfo.io/' . $ip . '/json';
@@ -165,9 +180,12 @@ class Voter {
 			$response = json_decode( $body, true ) ?? [];
 		}
 
-		$cache[ $ip ] = $response['country'] ?? '';
+		$country = $response['country'] ?? '';
 
-		return $cache[ $ip ];
+		// Cache failures briefly so an unreachable API does not block every vote.
+		set_transient( $transient_key, $country, '' !== $country ? WEEK_IN_SECONDS : 5 * MINUTE_IN_SECONDS );
+
+		return $country;
 	}
 
 	/**

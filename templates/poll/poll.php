@@ -95,16 +95,21 @@ if ( 'draft' === $attributes['status'] && 'hide-poll' === $attributes['closePoll
 	return;
 }
 
+// Schedule close check needs a non-empty endDate — strtotime( null ) is deprecated on PHP 8.1+.
+$is_schedule_ended = 'schedule' === $attributes['status']
+	&& ! empty( $attributes['endDate'] )
+	&& strtotime( $attributes['endDate'] ) < time();
+
 // If poll status is schedule and $attribute['endDate'] is less than to current time and close poll status is hide-poll then return.
-if ( 'schedule' === $attributes['status'] && strtotime( $attributes['endDate'] ) < time() && 'hide-poll' === $attributes['closePollState'] ) {
+if ( $is_schedule_ended && 'hide-poll' === $attributes['closePollState'] ) {
 	return;
 }
 
 $is_draft_with_show_results    = ( 'draft' === $attributes['status'] && 'show-result' === $attributes['closePollState'] );
-$is_schedule_with_show_results = ( 'schedule' === $attributes['status'] && strtotime( $attributes['endDate'] ) < time() && 'show-result' === $attributes['closePollState'] );
+$is_schedule_with_show_results = ( $is_schedule_ended && 'show-result' === $attributes['closePollState'] );
 
 $is_draft_with_show_close_banner    = ( 'draft' === $attributes['status'] && 'show-message' === $attributes['closePollState'] );
-$is_schedule_with_show_close_banner = ( 'schedule' === $attributes['status'] && strtotime( $attributes['endDate'] ) < time() && 'show-message' === $attributes['closePollState'] );
+$is_schedule_with_show_close_banner = ( $is_schedule_ended && 'show-message' === $attributes['closePollState'] );
 
 $voter        = new \wpRigel\Pollify\Model\Voter();
 $results      = \wpRigel\Pollify\Votes::get_instance()->get_results( $attributes['pollClientId'] );
