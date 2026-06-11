@@ -1,4 +1,4 @@
-name: Update Playground URL
+name: Playground Build
 
 on:
   pull_request:
@@ -10,29 +10,66 @@ on:
         required: true
 
 permissions:
+  contents: read
   pull-requests: write
 
 jobs:
-  update-playground-url:
+  build-playground-zip:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer
+
+      - name: Install JS dependencies and build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Install production PHP dependencies
+        run: composer install --no-dev --optimize-autoloader --no-interaction
+
+      - name: Create plugin zip
+        run: npx wp-scripts plugin-zip
+
+      - name: Upload plugin zip artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: poll-creator
+          path: poll-creator.zip
+
       - name: Generate Playground URL
         id: playground
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number || github.event.inputs.pr_number }}
         run: |
-          BRANCH="${{ github.head_ref || github.ref_name }}"
           REPO="${{ github.repository }}"
           URL=$(python3 -c "
           import json, urllib.parse, sys
-          branch = sys.argv[1]
-          repo = sys.argv[2]
-          bp = {'steps': [{'step': 'installPlugin', 'pluginData': {'resource': 'url', 'url': 'https://github.com/' + repo + '/archive/refs/heads/' + branch + '.zip'}, 'options': {'activate': True}}]}
+          repo, pr = sys.argv[1], sys.argv[2]
+          org, name = repo.split('/')
+          proxy = (
+              'https://playground.wordpress.net/plugin-proxy.php'
+              '?org=' + org + '&repo=' + name
+              + '&workflow=' + urllib.parse.quote('Playground Build')
+              + '&artifact=poll-creator&pr=' + pr
+          )
+          bp = {'steps': [{'step': 'installPlugin', 'pluginData': {'resource': 'url', 'url': proxy}, 'options': {'activate': True}}]}
           print('https://playground.wordpress.net/#' + urllib.parse.quote(json.dumps(bp, separators=(',', ':'))))
-          " "$BRANCH" "$REPO")
+          " "$REPO" "$PR_NUMBER")
           echo "url=$URL" >> $GITHUB_OUTPUT
-
-      - name: Checkout (for gh CLI)
-        uses: actions/checkout@v4
 
       - name: Update PR description with Playground URL
         env:
@@ -57,8 +94,6 @@ jobs:
 
           if re.search(pattern, body):
               updated = re.sub(pattern, replacement, body)
-          elif 'BRANCH_NAME' in body:
-              updated = re.sub(r'BRANCH_NAME(?=\.zip)', os.environ.get('GITHUB_HEAD_REF', ''), body)
           else:
               updated = body.rstrip() + '\n\n## Test in WP Playground\n' + replacement + '\n'
 
