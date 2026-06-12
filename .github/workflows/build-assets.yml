@@ -10,7 +10,7 @@ on:
         required: true
 
 permissions:
-  contents: read
+  contents: write
   pull-requests: write
 
 jobs:
@@ -51,25 +51,56 @@ jobs:
           name: poll-creator
           path: poll-creator.zip
 
+      # raw.githubusercontent.com serves with `access-control-allow-origin: *`,
+      # which WP Playground requires. plugin-proxy.php only allows approved orgs.
+      - name: Publish zip to playground-builds branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number || github.event.inputs.pr_number }}
+        run: |
+          set -e
+          WORK=/tmp/playground-builds
+          REPO_URL="https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git"
+
+          # Reuse existing branch contents so other PRs' zips survive the force push.
+          if git clone --depth 1 --branch playground-builds "$REPO_URL" "$WORK" 2>/dev/null; then
+            cd "$WORK"
+          else
+            mkdir -p "$WORK" && cd "$WORK"
+            git init -b playground-builds
+            git remote add origin "$REPO_URL"
+          fi
+
+          mkdir -p "pr-${PR_NUMBER}"
+          cp "$GITHUB_WORKSPACE/poll-creator.zip" "pr-${PR_NUMBER}/poll-creator.zip"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Single orphan commit keeps the branch free of binary history bloat.
+          git checkout --orphan latest-build
+          git add -A
+          git commit -m "Playground build for PR #${PR_NUMBER} (${{ github.event.pull_request.head.sha || github.sha }})"
+          git push -f origin latest-build:playground-builds
+
       - name: Generate Playground URL
         id: playground
         env:
           PR_NUMBER: ${{ github.event.pull_request.number || github.event.inputs.pr_number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
           REPO="${{ github.repository }}"
           URL=$(python3 -c "
           import json, urllib.parse, sys
-          repo, pr = sys.argv[1], sys.argv[2]
-          org, name = repo.split('/')
-          proxy = (
-              'https://playground.wordpress.net/plugin-proxy.php'
-              '?org=' + org + '&repo=' + name
-              + '&workflow=' + urllib.parse.quote('Playground Build')
-              + '&artifact=poll-creator&pr=' + pr
+          repo, pr, sha = sys.argv[1], sys.argv[2], sys.argv[3]
+          # Cache-buster sha keeps the link pointing at this exact build despite CDN caching.
+          zip_url = (
+              'https://raw.githubusercontent.com/' + repo
+              + '/playground-builds/pr-' + pr + '/poll-creator.zip?cb=' + sha
           )
-          bp = {'steps': [{'step': 'installPlugin', 'pluginData': {'resource': 'url', 'url': proxy}, 'options': {'activate': True}}]}
+          bp = {'steps': [{'step': 'installPlugin', 'pluginData': {'resource': 'url', 'url': zip_url}, 'options': {'activate': True}}]}
           print('https://playground.wordpress.net/#' + urllib.parse.quote(json.dumps(bp, separators=(',', ':'))))
-          " "$REPO" "$PR_NUMBER")
+          " "$REPO" "$PR_NUMBER" "$HEAD_SHA")
           echo "url=$URL" >> $GITHUB_OUTPUT
 
       - name: Update PR description with Playground URL
