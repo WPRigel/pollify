@@ -1,0 +1,39 @@
+# Directories not part of the distributed plugin
+/.claude
+/.git
+/.github
+/.wordpress-org
+/node_modules
+/src
+/tests
+/bin
+
+# Dev / tooling files
+.distignore
+.svnignore
+.gitignore
+.editorconfig
+.nvmrc
+.stylelintignore
+.phpunit.result.cache
+.DS_Store
+eslint.config.js
+lefthook.yml
+composer.json
+composer.lock
+package.json
+package-lock.json
+phpcs.xml.dist
+phpunit.xml.dist
+webpack.config.js
+
+# Docs / reports not for wp.org
+README.md
+CLAUDE.md
+AGENTS.md
+audit-report.md
+
+# Artifacts
+*.zip
+debug.log
+*.log

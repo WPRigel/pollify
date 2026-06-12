@@ -33,6 +33,7 @@
 		"templates",
 		"vendor",
 		"pollify.php",
+		"uninstall.php",
 		"readme.txt",
 		"languages",
 		"package.json",
