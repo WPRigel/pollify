@@ -36,7 +36,8 @@ jobs:
       - name: Install JS dependencies and build
         run: |
           npm ci
-          npm run build
+          npx wp-scripts build
+          npm run build:custom
 
       - name: Install production PHP dependencies
         run: composer install --no-dev --optimize-autoloader --no-interaction
