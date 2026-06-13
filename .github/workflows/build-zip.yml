@@ -1,0 +1,51 @@
+name: Build Test Zip
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer
+
+      - name: Install WP-CLI
+        run: |
+          curl -sLO https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+          chmod +x wp-cli.phar
+          sudo mv wp-cli.phar /usr/local/bin/wp
+
+      - name: Build JS assets and translation file
+        run: |
+          npm ci
+          npm run build
+
+      - name: Install production PHP dependencies
+        run: composer install --no-dev --optimize-autoloader --no-interaction
+
+      - name: Create zip using .distignore
+        run: |
+          mkdir -p /tmp/poll-creator
+          rsync -rc --exclude-from=".distignore" --exclude=".git" . /tmp/poll-creator/
+          cd /tmp && zip -r poll-creator.zip poll-creator/
+          mv /tmp/poll-creator.zip $GITHUB_WORKSPACE/poll-creator.zip
+
+      - name: Upload zip artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: poll-creator-test-zip
+          path: poll-creator.zip
