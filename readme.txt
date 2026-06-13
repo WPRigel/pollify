@@ -4,7 +4,7 @@ Tags: poll plugin, poll, poll maker, vote, survey
 Requires at least: 6.0
 Tested up to: 6.9.1
 Requires PHP: 8.0
-Stable tag: 1.0.13
+Stable tag: 1.0.14
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -207,6 +207,21 @@ Sure, there is! Check out our [official documentation](https://wprigel.com/docs/
 8. IP details
 
 == Changelog ==
+
+v1.0.14 -> June 13, 2026
+--------------------------------------------
+- [Fix] Vote lock name now fits MySQL's 64-character GET_LOCK limit — race protection was silently skipped before
+- [Fix] Voting no longer fails on SQLite-based environments (WP Playground)
+- [Fix] Multi-option votes wrapped in database transaction — prevents partial inserts on failure
+- [Fix] Schedule end-date check no longer triggers PHP 8.1 deprecation warning
+- [Fix] Poll closed status check no longer causes undefined array index notice
+- [Improvement] Staled nonce recovery — cached pages refresh nonce and retry vote automatically
+- [Improvement] Per-IP rate limiting on vote endpoint (30 requests/minute)
+- [Improvement] Geo IP lookups cached via transients — eliminates blocking HTTP call on repeat votes
+- [Improvement] Real visitor IP detected behind Cloudflare (CF-Connecting-IP)
+- [New] `uninstall.php` added with opt-in data cleanup on plugin removal
+- [New] `pollify_enable_geo_lookup` filter to disable geo lookups
+- [New] `pollify_trust_proxy_headers` filter for reverse proxy environments
 
 v1.0.13 -> May 11, 2026
 --------------------------------------------
