@@ -77,7 +77,7 @@ jobs:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
           SLUG: poll-creator
-          BUILD_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.version || '' }}
+          BUILD_TAG: ${{ github.event_name == 'workflow_dispatch' && (inputs.version || '0.0.0') || '' }}
 
       - name: Attach zip to GitHub Release
         if: github.event_name == 'release'
