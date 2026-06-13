@@ -17,6 +17,27 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer
+
+      - name: Build JS assets
+        run: |
+          npm ci
+          npx wp-scripts build
+          npm run build:custom
+
+      - name: Install production PHP dependencies
+        run: composer install --no-dev --optimize-autoloader --no-interaction
+
       - name: Sync assets and readme to WordPress.org
         uses: 10up/action-wordpress-plugin-asset-update@stable
         env:
