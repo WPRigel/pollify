@@ -1,4 +1,4 @@
-name: Update Playground URL
+name: Playground Build
 
 on:
   pull_request:
@@ -10,29 +10,98 @@ on:
         required: true
 
 permissions:
+  contents: write
   pull-requests: write
 
 jobs:
-  update-playground-url:
+  build-playground-zip:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer
+
+      - name: Install JS dependencies and build
+        run: |
+          npm ci
+          npx wp-scripts build
+          npm run build:custom
+
+      - name: Install production PHP dependencies
+        run: composer install --no-dev --optimize-autoloader --no-interaction
+
+      - name: Create plugin zip
+        run: npx wp-scripts plugin-zip
+
+      - name: Upload plugin zip artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: poll-creator
+          path: poll-creator.zip
+
+      # raw.githubusercontent.com serves with `access-control-allow-origin: *`,
+      # which WP Playground requires. plugin-proxy.php only allows approved orgs.
+      - name: Publish zip to playground-builds branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number || github.event.inputs.pr_number }}
+        run: |
+          set -e
+          WORK=/tmp/playground-builds
+          REPO_URL="https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git"
+
+          # Reuse existing branch contents so other PRs' zips survive the force push.
+          if git clone --depth 1 --branch playground-builds "$REPO_URL" "$WORK" 2>/dev/null; then
+            cd "$WORK"
+          else
+            mkdir -p "$WORK" && cd "$WORK"
+            git init -b playground-builds
+            git remote add origin "$REPO_URL"
+          fi
+
+          mkdir -p "pr-${PR_NUMBER}"
+          cp "$GITHUB_WORKSPACE/poll-creator.zip" "pr-${PR_NUMBER}/poll-creator.zip"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Single orphan commit keeps the branch free of binary history bloat.
+          git checkout --orphan latest-build
+          git add -A
+          git commit -m "Playground build for PR #${PR_NUMBER} (${{ github.event.pull_request.head.sha || github.sha }})"
+          git push -f origin latest-build:playground-builds
+
       - name: Generate Playground URL
         id: playground
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number || github.event.inputs.pr_number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
-          BRANCH="${{ github.head_ref || github.ref_name }}"
           REPO="${{ github.repository }}"
           URL=$(python3 -c "
           import json, urllib.parse, sys
-          branch = sys.argv[1]
-          repo = sys.argv[2]
-          bp = {'steps': [{'step': 'installPlugin', 'pluginData': {'resource': 'url', 'url': 'https://github.com/' + repo + '/archive/refs/heads/' + branch + '.zip'}, 'options': {'activate': True}}]}
+          repo, pr, sha = sys.argv[1], sys.argv[2], sys.argv[3]
+          # Cache-buster sha keeps the link pointing at this exact build despite CDN caching.
+          zip_url = (
+              'https://raw.githubusercontent.com/' + repo
+              + '/playground-builds/pr-' + pr + '/poll-creator.zip?cb=' + sha
+          )
+          bp = {'steps': [{'step': 'installPlugin', 'pluginData': {'resource': 'url', 'url': zip_url}, 'options': {'activate': True}}]}
           print('https://playground.wordpress.net/#' + urllib.parse.quote(json.dumps(bp, separators=(',', ':'))))
-          " "$BRANCH" "$REPO")
+          " "$REPO" "$PR_NUMBER" "$HEAD_SHA")
           echo "url=$URL" >> $GITHUB_OUTPUT
-
-      - name: Checkout (for gh CLI)
-        uses: actions/checkout@v4
 
       - name: Update PR description with Playground URL
         env:
@@ -57,8 +126,6 @@ jobs:
 
           if re.search(pattern, body):
               updated = re.sub(pattern, replacement, body)
-          elif 'BRANCH_NAME' in body:
-              updated = re.sub(r'BRANCH_NAME(?=\.zip)', os.environ.get('GITHUB_HEAD_REF', ''), body)
           else:
               updated = body.rstrip() + '\n\n## Test in WP Playground\n' + replacement + '\n'
 

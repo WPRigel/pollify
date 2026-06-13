@@ -222,8 +222,8 @@ const Poll = {
 		const formData = new FormData( event.target );
 		const pollId = formData.get( 'poll-client-id' );
 
-		// Check if the poll id is valid postive int no.
-		if ( ! pollId || parseInt( pollId ) <= 0 ) {
+		// Poll ID is a UUID string — only check it is non-empty.
+		if ( ! pollId || typeof pollId !== 'string' || pollId.trim() === '' ) {
 			return;
 		}
 
@@ -274,15 +274,31 @@ const Poll = {
 
 		Poll.startLoading( event.target );
 
-		// Need to send API request to vote.
-		apiFetch( {
-			path: `/pollify/v1/vote/${ pollId }`,
-			method: 'POST',
-			data: {
-				options: pollOptions,
-				nonce: pollify.nonce,
-			},
-		} )
+		// Need to send API request to vote. If the page came from a long-lived
+		// cache the embedded nonce may be expired — refresh it once and retry.
+		const sendVote = ( nonce ) =>
+			apiFetch( {
+				path: `/pollify/v1/vote/${ pollId }`,
+				method: 'POST',
+				data: {
+					options: pollOptions,
+					nonce,
+				},
+			} );
+
+		sendVote( pollify.nonce )
+			.catch( ( error ) => {
+				if ( error.code !== 'invalid_nonce' ) {
+					throw error;
+				}
+
+				return apiFetch( { path: '/pollify/v1/nonce' } ).then(
+					( res ) => {
+						pollify.nonce = res.nonce;
+						return sendVote( res.nonce );
+					}
+				);
+			} )
 			.then( ( response ) => {
 				const element = event.target;
 

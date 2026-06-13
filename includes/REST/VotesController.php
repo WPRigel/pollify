@@ -15,6 +15,7 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Controller;
 use wpRigel\Pollify\FeedbackManager;
+use wpRigel\Pollify\Model\Voter;
 
 /**
  * VotesController class.
@@ -64,6 +65,33 @@ class VotesController extends WP_REST_Controller {
 				],
 			],
 		);
+
+		register_rest_route(
+			$this->namespace,
+			'/nonce',
+			[
+				[
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => [ $this, 'get_nonce' ],
+					'permission_callback' => '__return_true',
+				],
+			],
+		);
+	}
+
+	/**
+	 * Return a fresh vote nonce.
+	 *
+	 * Pages served from a long-lived page cache can embed an expired nonce.
+	 * Clients call this endpoint to refresh the nonce and retry the vote.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public function get_nonce(): WP_REST_Response {
+		$response = rest_ensure_response( [ 'nonce' => wp_create_nonce( 'pollify-vote' ) ] );
+		$response->header( 'Cache-Control', 'no-store' );
+
+		return $response;
 	}
 
 	/**
@@ -96,7 +124,19 @@ class VotesController extends WP_REST_Controller {
 			return new WP_Error( 'no-poll', __( 'Invalid poll', 'poll-creator' ), [ 'status' => 404 ] );
 		}
 
-		$data = $feedback->vote( $args['options'] ?? [], $args );
+		// Serialize validate-then-insert per voter so concurrent requests
+		// cannot both pass the duplicate-vote check before either inserts.
+		$lock = $this->acquire_vote_lock( $args['client_id'] );
+
+		if ( is_wp_error( $lock ) ) {
+			return $lock;
+		}
+
+		try {
+			$data = $feedback->vote( $args['options'] ?? [], $args );
+		} finally {
+			$this->release_vote_lock( $args['client_id'] );
+		}
 
 		if ( is_wp_error( $data ) ) {
 			return $data;
@@ -106,9 +146,70 @@ class VotesController extends WP_REST_Controller {
 	}
 
 	/**
+	 * Build the per-voter MySQL lock name for a poll.
+	 *
+	 * @param string $client_id Poll client ID.
+	 *
+	 * @return string
+	 */
+	private function get_vote_lock_name( string $client_id ): string {
+		$voter    = new Voter();
+		$identity = $voter->get_user_id() > 0 ? 'u' . $voter->get_user_id() : 'ip' . $voter->get_user_ip();
+
+		// MySQL lock names are limited to 64 chars; SHA-256 hex is exactly 64 chars.
+		return hash( 'sha256', 'pollify_vote_' . $client_id . '|' . $identity );
+	}
+
+	/**
+	 * Acquire the per-voter vote lock.
+	 *
+	 * GET_LOCK is MySQL-specific and returns 1 when the lock is acquired,
+	 * 0 on timeout (another request holds it), and NULL on error or when the
+	 * backend does not support user-level locks (e.g. SQLite on WP Playground).
+	 * Only an explicit 0 represents real contention and should block the vote;
+	 * NULL degrades gracefully so voting still works without the lock.
+	 *
+	 * @param string $client_id Poll client ID.
+	 *
+	 * @return true|WP_Error True to proceed, WP_Error only on real contention.
+	 */
+	private function acquire_vote_lock( string $client_id ): bool|WP_Error {
+		global $wpdb;
+
+		$acquired = $wpdb->get_var(
+			$wpdb->prepare( 'SELECT GET_LOCK(%s, 3)', $this->get_vote_lock_name( $client_id ) )
+		);
+
+		if ( '0' === (string) $acquired ) {
+			return new WP_Error(
+				'vote_in_progress',
+				__( 'Another vote is being processed. Please try again.', 'poll-creator' ),
+				[ 'status' => 429 ]
+			);
+		}
+
+		return true;
+	}
+
+	/**
+	 * Release the per-voter vote lock.
+	 *
+	 * @param string $client_id Poll client ID.
+	 *
+	 * @return void
+	 */
+	private function release_vote_lock( string $client_id ): void {
+		global $wpdb;
+
+		$wpdb->query(
+			$wpdb->prepare( 'SELECT RELEASE_LOCK(%s)', $this->get_vote_lock_name( $client_id ) )
+		);
+	}
+
+	/**
 	 * Enforce per-IP rate limiting on vote submissions.
 	 *
-	 * Allows up to 10 attempts per IP per minute. Uses REMOTE_ADDR (the actual
+	 * Allows up to 30 attempts per IP per minute. Uses REMOTE_ADDR (the actual
 	 * connecting IP) so callers cannot bypass the limit via spoofed headers.
 	 *
 	 * @return bool|WP_Error True if allowed, WP_Error with 429 status if limited.
