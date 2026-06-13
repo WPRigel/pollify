@@ -156,8 +156,8 @@ class VotesController extends WP_REST_Controller {
 		$voter    = new Voter();
 		$identity = $voter->get_user_id() > 0 ? 'u' . $voter->get_user_id() : 'ip' . $voter->get_user_ip();
 
-		// MySQL lock names are limited to 64 chars; hash to stay within bounds.
-		return 'pollify_vote_' . hash( 'sha256', $client_id . '|' . $identity );
+		// MySQL lock names are limited to 64 chars; SHA-256 hex is exactly 64 chars.
+		return hash( 'sha256', 'pollify_vote_' . $client_id . '|' . $identity );
 	}
 
 	/**
