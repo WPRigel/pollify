@@ -163,9 +163,15 @@ class VotesController extends WP_REST_Controller {
 	/**
 	 * Acquire the per-voter vote lock.
 	 *
+	 * GET_LOCK is MySQL-specific and returns 1 when the lock is acquired,
+	 * 0 on timeout (another request holds it), and NULL on error or when the
+	 * backend does not support user-level locks (e.g. SQLite on WP Playground).
+	 * Only an explicit 0 represents real contention and should block the vote;
+	 * NULL degrades gracefully so voting still works without the lock.
+	 *
 	 * @param string $client_id Poll client ID.
 	 *
-	 * @return true|WP_Error True on success, WP_Error when the lock cannot be acquired.
+	 * @return true|WP_Error True to proceed, WP_Error only on real contention.
 	 */
 	private function acquire_vote_lock( string $client_id ): bool|WP_Error {
 		global $wpdb;
@@ -174,7 +180,7 @@ class VotesController extends WP_REST_Controller {
 			$wpdb->prepare( 'SELECT GET_LOCK(%s, 3)', $this->get_vote_lock_name( $client_id ) )
 		);
 
-		if ( '1' !== (string) $acquired ) {
+		if ( '0' === (string) $acquired ) {
 			return new WP_Error(
 				'vote_in_progress',
 				__( 'Another vote is being processed. Please try again.', 'poll-creator' ),
