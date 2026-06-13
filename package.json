@@ -1,6 +1,6 @@
 {
 	"name": "poll-creator",
-	"version": "1.0.13",
+	"version": "1.0.14",
 	"description": "Feedback Polls, Anonymous Polls, Up/down Voting and NPS Surveys",
 	"author": "wpRigel",
 	"license": "GPL-2.0-or-later",
@@ -33,6 +33,7 @@
 		"templates",
 		"vendor",
 		"pollify.php",
+		"uninstall.php",
 		"readme.txt",
 		"languages",
 		"package.json",

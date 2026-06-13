@@ -138,7 +138,7 @@ class Installer {
 		$charset_collate = $wpdb->get_charset_collate();
 		$table_name      = $wpdb->prefix . 'pollify_poll';
 
-		$sql = "CREATE TABLE IF NOT EXISTS $table_name (
+		$sql = "CREATE TABLE $table_name (
 			`id` int NOT NULL AUTO_INCREMENT,
 			`client_id` varchar(255) DEFAULT NULL,
 			`title` text NOT NULL,
@@ -167,7 +167,7 @@ class Installer {
 		$charset_collate = $wpdb->get_charset_collate();
 		$table_name      = $wpdb->prefix . 'pollify_poll_options';
 
-		$sql = "CREATE TABLE IF NOT EXISTS $table_name (
+		$sql = "CREATE TABLE $table_name (
 			`id` int NOT NULL AUTO_INCREMENT,
 			`poll_id` int NOT NULL,
 			`option_id` varchar(255) NOT NULL,
@@ -192,7 +192,7 @@ class Installer {
 		$charset_collate = $wpdb->get_charset_collate();
 		$table_name      = $wpdb->prefix . 'pollify_vote';
 
-		$sql = "CREATE TABLE IF NOT EXISTS $table_name (
+		$sql = "CREATE TABLE $table_name (
 			`id` bigint NOT NULL AUTO_INCREMENT,
 			`client_id` varchar(255) NOT NULL,
 			`option_id` varchar(255) NOT NULL,
