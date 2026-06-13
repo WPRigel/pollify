@@ -9,6 +9,10 @@ on:
         description: 'Dry run (build and show files, do not commit to SVN)'
         type: boolean
         default: true
+      version:
+        description: 'Plugin version for dry-run tag (e.g. 1.0.14)'
+        type: string
+        default: '0.0.0'
 
 permissions:
   contents: write
@@ -73,6 +77,7 @@ jobs:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
           SLUG: poll-creator
+          BUILD_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.version || '' }}
 
       - name: Attach zip to GitHub Release
         if: github.event_name == 'release'
