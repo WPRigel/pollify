@@ -67,6 +67,10 @@ jobs:
       - name: Install production PHP dependencies
         run: composer install --no-dev --optimize-autoloader --no-interaction
 
+      - name: Set BUILD_TAG for dry-run dispatch
+        if: github.event_name == 'workflow_dispatch'
+        run: echo "BUILD_TAG=${{ inputs.version || '0.0.0' }}" >> $GITHUB_ENV
+
       - name: Deploy to WordPress.org SVN
         id: deploy
         uses: 10up/action-wordpress-plugin-deploy@stable
@@ -77,7 +81,6 @@ jobs:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
           SLUG: poll-creator
-          BUILD_TAG: ${{ github.event_name == 'workflow_dispatch' && (inputs.version || '0.0.0') || '' }}
 
       - name: Attach zip to GitHub Release
         if: github.event_name == 'release'
