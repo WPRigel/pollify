@@ -9,10 +9,6 @@ on:
         description: 'Dry run (build and show files, do not commit to SVN)'
         type: boolean
         default: true
-      version:
-        description: 'Plugin version for dry-run tag (e.g. 1.0.14)'
-        type: string
-        default: '0.0.0'
 
 permissions:
   contents: write
@@ -67,16 +63,13 @@ jobs:
       - name: Install production PHP dependencies
         run: composer install --no-dev --optimize-autoloader --no-interaction
 
-      - name: Set BUILD_TAG for dry-run dispatch
-        if: github.event_name == 'workflow_dispatch'
-        run: echo "BUILD_TAG=${{ inputs.version || '0.0.0' }}" >> $GITHUB_ENV
-
       - name: Deploy to WordPress.org SVN
         id: deploy
         uses: 10up/action-wordpress-plugin-deploy@stable
         with:
           generate-zip: true
           dry-run: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+          mode: ${{ github.event_name == 'workflow_dispatch' && 'trunk' || 'all' }}
         env:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
